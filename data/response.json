@@ -1,0 +1,37 @@
+{
+	"ussddynmenurequest": {
+		"requestid": ["1018141941899733"],
+		"sessionid": ["1018141941899733"],
+		"msisdn": ["233574341472"],
+		"starcode": ["126"],
+		"keyword": ["yaususus"],
+		"dataset": [
+			{
+				"param": [
+					{
+						"id": ["CCMSISDN"],
+						"value": ["233307001941"]
+					},
+					{
+						"id": ["DYN_USER_RESP"],
+						"value": [""]
+					},
+					{
+						"id": ["IS_NEW_REQ"],
+						"value": ["1"]
+					},
+					{
+						"id": ["SESSION_ID"],
+						"value": ["1018141941899737"]
+					},
+					{
+						"id": ["UD"],
+						"value": ["*126#"]
+					}
+				]
+			}
+		],
+		"userdata": ["1"],
+		"timestamp": ["2018/04/20 08:36:32"]
+	}
+}

@@ -1,0 +1,20 @@
+{
+	"basic": {
+		"title": "Link your phone number with NIA card details\n",
+		"1": "Enter your Ghana card number",
+		"2": "Enter your Firstnames",
+		"3": "Enter your Surname",
+		"4": "Select your gender\n1.Male\n2.Female",
+		"5": "Enter your date of Birth(DDMMYYYY)",
+		"salute": "Thank you for your answers, you will be notified via SMS"
+	},
+	"security": {
+		"title": "Answer security questions to verify ownership",
+		"1": "Enter your last recharge Amount",
+		"2": "Enter a frequently dialled number",
+		"3": "Enter another frequently dialled number",
+		"4": "Enter your sim activation year",
+		"5": "Enter your AirtelTigo Money Balance.\nEnter 0 if you don't have AirtelTigo Money",
+		"salute": "Thank you for your answers, you will be notified"
+	}
+}
