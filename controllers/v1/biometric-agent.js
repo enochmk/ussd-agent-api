@@ -135,7 +135,6 @@ const AgentUSSD = asyncHandler(async (req, res, next) => {
 	// Check if there's next page;
 	if (AgentMenu[action][nextPage]) {
 		menu = AgentMenu[action][nextPage];
-
 		stmt = `INSERT INTO SIMREG_CORE_TBL_AGENT_USSD (MSISDN, SESSION, PAGE, INPUT, ACTION) VALUES('${msisdn}','${requestID}', '${nextPage}', 'awaiting input', '${action}')`;
 		await sql(stmt);
 
