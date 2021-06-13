@@ -5,6 +5,7 @@ const dotenv = require('dotenv').config();
 const morgan = require('morgan');
 
 const errorHandler = require('./middleware/error');
+const SessionExpiry = require('./middleware/sessionExpiry');
 
 const app = express();
 
@@ -12,7 +13,7 @@ app.use(cors());
 app.use(morgan('tiny'));
 app.use(xmlparser());
 
-app.use('/biometric-agent', require('./routes/biometric-agent'));
+app.use('/biometric-agent', SessionExpiry, require('./routes/biometric-agent'));
 app.use(errorHandler);
 
 // Set server port to listen
