@@ -20,5 +20,4 @@ const PORT = process.env.NODE_PORT;
 
 const MESSAGE = `BIOMETRIC AGENT USSD API started in ${process.env.NODE_ENV} on port: ${PORT}`;
 
-
 app.listen(PORT, () => console.log(MESSAGE));
