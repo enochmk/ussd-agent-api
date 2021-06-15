@@ -3,25 +3,6 @@ const dotenv = require('dotenv');
 
 dotenv.config();
 
-const nms_config = {
-	server: process.env.NMS_DB_HOST,
-	user: process.env.NMS_DB_USER,
-	database: process.env.NMS_DB_DATABASE,
-	password: process.env.NMS_DB_PASSWORD,
-	options: {
-		enableArithAbort: true,
-		trustedConnection: true,
-		encrypt: true,
-		enableArithAbort: true,
-		trustServerCertificate: true,
-	},
-	pool: {
-		max: 10,
-		min: 0,
-		idleTimeoutMillis: 30000,
-	},
-};
-
 const bsr_config = {
 	server: process.env.BSR_DB_HOST,
 	user: process.env.BSR_DB_USER,

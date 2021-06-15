@@ -17,15 +17,15 @@ const SessionExpiry = asyncHandler(async (req, res, next) => {
 
   // get previous session via MSISDN
   let stmt = null;
-  stmt = `SELECT TOP 1 TIMESTAMP FROM [SIMREG_CORE_TBL_AGENT_USSD] WHERE MSISDN='${msisdn}' ORDER BY ID DESC`;
-
-  response = await sql(stmt);
+  stmt = `SELECT TOP 1 ID, MSISDN, PAGE, TIMESTAMP FROM [SIMREG_CORE_TBL_AGENT_USSD] WHERE MSISDN='${msisdn}' ORDER BY ID DESC`;
+  let response = await sql(stmt);
 
   // No session found, continue
   if (!response.recordset.length) return next();
 
   // data found.. assess session time is not more than 1min
   const sessionTimestamp = moment(response.recordset[0].TIMESTAMP).add(ALLOCATED_INTERVAL, 'm');
+
   const currentTimestamp = moment();
 
   // if currentTimetstamp is greater, session has expired, clear from db
@@ -33,7 +33,6 @@ const SessionExpiry = asyncHandler(async (req, res, next) => {
     Logger(`${requestID}|${msisdn}|SessionExpiry|Session has expired|${sessionTimestamp}|${currentTimestamp}`);
 
     stmt = `DELETE FROM [SIMREG_CORE_TBL_AGENT_USSD] WHERE MSISDN='${msisdn}'`
-
     await sql(stmt);
   }
 

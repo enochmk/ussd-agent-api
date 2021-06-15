@@ -3,7 +3,7 @@ const logger = require('../utils/Logger');
 const errorHandler = (err, req, res, next) => {
 	// display error only in development
 	if (process.env.NODE_ENV === 'development') {
-		console.log(`${err}`);
+		console.log(err);
 	} else {
 		console.log(err.message);
 	}
@@ -15,9 +15,8 @@ const errorHandler = (err, req, res, next) => {
 
 	// log to the file
 	logger(
-		`${req.requestID}|errorhandler|${fullUrl}|${JSON.stringify(req.body)}|${
-			error.statusCode || 500
-		}|${error.message || 'Serverside Error. Please contact admin'}`
+		`${req.requestID}|errorhandler|${req.endpoint}|${error.message}|${fullUrl}|${error.statusCode || 500
+		}|${JSON.stringify(req.body)}\n`
 	);
 
 	// Return error response
