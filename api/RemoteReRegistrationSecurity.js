@@ -27,6 +27,8 @@ const ReRegistrationSecurity = async (data, requestID) => {
 			data: response.data,
 		};
 	} catch (error) {
+		console.error(error);
+
 		let message = '';
 
 		// Server unreachable

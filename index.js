@@ -10,7 +10,7 @@ const SessionExpiry = require('./middleware/sessionExpiry');
 const app = express();
 
 app.use(cors());
-app.use(morgan('tiny'));
+app.use(morgan('combined'));
 app.use(xmlparser());
 
 app.use('/biometric-agent', SessionExpiry, require('./routes/biometric-agent'));
