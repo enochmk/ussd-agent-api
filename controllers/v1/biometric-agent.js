@@ -1,5 +1,3 @@
-const uuid = require('uuid').v4;
-
 const asyncHandler = require('../../middleware/async');
 const AgentMenu = require('../../data/AgentMenu.json');
 const sendXMLResponse = require('../../utils/XMLResponse');
@@ -19,7 +17,7 @@ const AgentUSSD = asyncHandler(async (req, res, next) => {
 	const body = req.body.ussddynmenurequest;
 
 	// extract requestID, MSISDN, userData
-	const requestID = body.requestid[0];
+	const requestID = req.requestID;
 	const msisdn = body.msisdn[0];
 	const starcode = body.starcode[0];
 	const timestamp = body.timestamp[0];

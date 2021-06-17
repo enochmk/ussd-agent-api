@@ -10,7 +10,8 @@ const action = async (msisdn, answers, requestID) => {
     "channelID": "ussd",
     "cellID": "",
     "isMFS": 1,
-    "confirmed": answers[3]
+    "confirmed": answers[3],
+    "requestID": requestID,
   };
 
   Logger(`${requestID}|API|bio-re-registration|request|${JSON.stringify(data)}`);
@@ -20,6 +21,7 @@ const action = async (msisdn, answers, requestID) => {
 
     return "You have cancelled the request. Kindly retry to proceed"
   }
+
 
   const URL = process.env.RE_REGISTRATION_URL;
   const response = await axios.post(URL, data);
