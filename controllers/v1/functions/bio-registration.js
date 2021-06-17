@@ -11,7 +11,9 @@ const action = async (msisdn, answers, requestID = null) => {
     "channelID": "ussd",
     "cellID": "",
     "isMFS": 1,
-    "confirmed": answers[4]
+    "confirmed": answers[4],
+    "requestID": requestID,
+
   };
 
   Logger(`${requestID}|API|bio-registration|request|${JSON.stringify(data)}`);

@@ -13,6 +13,8 @@ const action = async (msisdn, answers, requestID = null) => {
     "dateOfBirth": answers[6],
     "isMFS": answers[7] == '1' ? 1 : 0,
     "channelID": "ussd",
+    "requestID": requestID,
+
   };
 
   Logger(`${requestID}|API|remote-registration|request|${JSON.stringify(data)}`);

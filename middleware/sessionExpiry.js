@@ -11,9 +11,8 @@ const SessionExpiry = asyncHandler(async (req, res, next) => {
   const body = req.body.ussddynmenurequest;
 
   // extract requestID, MSISDN, userData
-  const requestID = body.requestid[0];
+  const requestID = req.requestID;
   const msisdn = body.msisdn[0];
-  req.requestID = requestID;
 
   // get previous session via MSISDN
   let stmt = null;
@@ -25,7 +24,6 @@ const SessionExpiry = asyncHandler(async (req, res, next) => {
 
   // data found.. assess session time is not more than 1min
   const sessionTimestamp = moment(response.recordset[0].TIMESTAMP).add(ALLOCATED_INTERVAL, 'm');
-
   const currentTimestamp = moment();
 
   // if currentTimetstamp is greater, session has expired, clear from db
