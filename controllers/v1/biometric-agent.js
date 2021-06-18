@@ -18,6 +18,7 @@ const AgentUSSD = asyncHandler(async (req, res, next) => {
 
 	// extract requestID, MSISDN, userData
 	const requestID = req.requestID;
+	const sessionID = body.requestid[0];
 	const msisdn = body.msisdn[0];
 	const starcode = body.starcode[0];
 	const timestamp = body.timestamp[0];
@@ -35,7 +36,7 @@ const AgentUSSD = asyncHandler(async (req, res, next) => {
 
 	req.requestID = requestID;
 
-	Logger(`${requestID}|AgentMenu|request|${JSON.stringify(body)}`);
+	Logger(`${requestID}|${msisdn}|AgentMenu|request|${JSON.stringify(body)}`);
 
 	// get previous session via MSISDN
 	stmt = `SELECT ID, PAGE, ACTION FROM SIMREG_CORE_TBL_AGENT_USSD WHERE MSISDN='${msisdn}' ORDER BY ID DESC`;
@@ -45,6 +46,7 @@ const AgentUSSD = asyncHandler(async (req, res, next) => {
 	if (!response.recordset.length) {
 		response = await initSession(
 			requestID,
+			sessionID,
 			msisdn,
 			starcode,
 			1,
@@ -58,6 +60,7 @@ const AgentUSSD = asyncHandler(async (req, res, next) => {
 	if (userdata === '#99' || userdata === '#') {
 		response = await endSession(
 			requestID,
+			sessionID,
 			msisdn,
 			starcode,
 			"Process cancelled",
@@ -83,7 +86,7 @@ const AgentUSSD = asyncHandler(async (req, res, next) => {
 				action = 'verify_customer_details';
 				break;
 			default:
-				response = await initSession(requestID, msisdn, starcode, timestamp)
+				response = await initSession(requestID, sessionID, msisdn, starcode, timestamp)
 				return res.send(response);
 		}
 	} else {
@@ -105,10 +108,10 @@ const AgentUSSD = asyncHandler(async (req, res, next) => {
 		stmt = `INSERT INTO SIMREG_CORE_TBL_AGENT_USSD (MSISDN, SESSION, PAGE, INPUT, ACTION) VALUES('${msisdn}','${requestID}', '${currentPage}', 'awaiting input', '${action}')`;
 		await sql(stmt);
 
-		Logger(`${requestID}|AgentMenu|progress|1|Page: ${currentPage}|${action}|${JSON.stringify(menu)}|'Awaiting input'`);
+		Logger(`${requestID}|${msisdn}|AgentMenu|progress|1|Page: 1|${action}|${JSON.stringify(menu)}|'Awaiting input'`);
 
 		return res.send(
-			sendXMLResponse(requestID, msisdn, starcode, menu, 1, timestamp)
+			sendXMLResponse(sessionID, msisdn, starcode, menu, 1, timestamp)
 		);
 	}
 
@@ -118,10 +121,10 @@ const AgentUSSD = asyncHandler(async (req, res, next) => {
 
 		// Get the current Menu and show to user
 		menu = AgentMenu[action][nextPage];
-		Logger(`${requestID}|AgentMenu|progress|Session resumed at Page: ${nextPage}|1|${action}|${JSON.stringify(menu)}|'Awaiting input'`);
+		Logger(`${requestID}|${msisdn}|AgentMenu|progress|Resumed|Page:${nextPage}|${action}|${JSON.stringify(menu)}|'Awaiting input'`);
 
 		return res.send(
-			sendXMLResponse(requestID, msisdn, starcode, menu, 1, timestamp)
+			sendXMLResponse(sessionID, msisdn, starcode, menu, 1, timestamp)
 		);
 	}
 
@@ -139,10 +142,10 @@ const AgentUSSD = asyncHandler(async (req, res, next) => {
 		stmt = `INSERT INTO SIMREG_CORE_TBL_AGENT_USSD (MSISDN, SESSION, PAGE, INPUT, ACTION) VALUES('${msisdn}','${requestID}', '${nextPage}', 'awaiting input', '${action}')`;
 		await sql(stmt);
 
-		Logger(`${requestID}|AgentMenu|progress|1|Page: ${nextPage}|${action}|${JSON.stringify(menu)}|'Awaiting input'`);
+		Logger(`${requestID}|${msisdn}|AgentMenu|progress|Open|Page: ${nextPage}|${action}|${JSON.stringify(menu)}|'Awaiting input'`);
 
 		return res.send(
-			sendXMLResponse(requestID, msisdn, starcode, menu, 1, timestamp)
+			sendXMLResponse(sessionID, msisdn, starcode, menu, 1, timestamp)
 		);
 	}
 
@@ -172,14 +175,14 @@ const AgentUSSD = asyncHandler(async (req, res, next) => {
 	// No more menu to show, end session
 	menu = message || AgentMenu.salute;
 
-	Logger(`${requestID}|AgentMenu|ended|2|${action}|${JSON.stringify(menu)}|${JSON.stringify(answers)}`);
-	response = await endSession(requestID, msisdn, starcode, menu, timestamp, answers);
+	response = await endSession(requestID, sessionID, msisdn, starcode, menu, timestamp, answers);
 	res.send(response);
 });
 
 // add new session to database and set flag 1 (open)
 const initSession = async (
 	requestID,
+	sessionID,
 	msisdn,
 	starcode,
 	timestamp
@@ -188,19 +191,21 @@ const initSession = async (
 
 	stmt = `DELETE FROM SIMREG_CORE_TBL_AGENT_USSD WHERE MSISDN='${msisdn}'; INSERT INTO SIMREG_CORE_TBL_AGENT_USSD (MSISDN, SESSION, PAGE, INPUT, ACTION) VALUES('${msisdn}','${requestID}','welcome', 'Awaiting input', null)`;
 	await sql(stmt);
-	Logger(`${requestID}|AgentMenu|progress|1|Page: 1|${JSON.stringify(menu)}|'Awaiting input'`);
 
-	return sendXMLResponse(requestID, msisdn, starcode, menu, 1, timestamp);
+	Logger(`${requestID}|${msisdn}|AgentMenu|progress|Open|Page: Welcome|${JSON.stringify(menu)}|'Awaiting input'`);
+
+	return sendXMLResponse(sessionID, msisdn, starcode, menu, 1, timestamp);
 };
 
 // clear session from database via MSISDN and set flag 2 (close)
-const endSession = async (requestID, msisdn, starcode, menu, timestamp, answers) => {
+const endSession = async (requestID, sessionID, msisdn, starcode, menu, timestamp, answers) => {
 	stmt = `DELETE FROM SIMREG_CORE_TBL_AGENT_USSD WHERE MSISDN='${msisdn}';`;
 	await sql(stmt);
-	Logger(`${requestID}|${msisdn}|AgentMenu|Ended|1|End|2|${JSON.stringify(menu)}|${JSON.stringify(answers)}\n`);
+	Logger(`${requestID}|${msisdn}|AgentMenu|Ended|Closed|Page: Last|${JSON.stringify(menu)}|'Awaiting input'`);
+
 
 	console.log(`${msisdn}: ${JSON.stringify(answers)}`);
-	return sendXMLResponse(requestID, msisdn, starcode, menu, 2, timestamp);
+	return sendXMLResponse(sessionID, msisdn, starcode, menu, 2, timestamp);
 };
 
 module.exports = AgentUSSD;

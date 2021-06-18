@@ -1,13 +1,13 @@
 const axios = require('axios');
 const Logger = require('../../../utils/Logger');
 
-const action = async (msisdn, answers, requestID = null) => {
+const action = async (agentID, answers, requestID = null) => {
   const data = {
     "msisdn": answers[0],
     "iccid": answers[1],
     "nationalID": answers[2].toUpperCase(),
     "suuid": answers[3],
-    "agentID": msisdn,
+    "agentID": agentID,
     "channelID": "ussd",
     "cellID": "",
     "isMFS": 1,
@@ -16,7 +16,7 @@ const action = async (msisdn, answers, requestID = null) => {
 
   };
 
-  Logger(`${requestID}|API|bio-registration|request|${JSON.stringify(data)}`);
+  Logger(`${requestID}|${agentID}|API|bio-registration|request|${JSON.stringify(data)}`);
 
   if (answers[4] !== "1") {
     Logger(`${requestID}|API|bio-registration|response|You have cancelled the request. Kindly retry to proceed`);
@@ -25,7 +25,7 @@ const action = async (msisdn, answers, requestID = null) => {
 
   const URL = process.env.REGISTRATION_URL;
   const response = await axios.post(URL, data);
-  Logger(`${requestID}|API|bio-registration|response|${JSON.stringify(response.data)}`);
+  Logger(`${requestID}|${agentID}|API|bio-registration|response|${JSON.stringify(response.data)}`);
 
   return null;
 }

@@ -1,9 +1,9 @@
 const axios = require('axios');
 const Logger = require('../../../utils/Logger');
 
-const action = async (msisdn, answers, requestID = null) => {
+const action = async (agentID, answers, requestID = null) => {
   const data = {
-    "agentID": msisdn,
+    "agentID": agentID,
     "msisdn": answers[0],
     "iccid": answers[1],
     "niaPIN": answers[2].toUpperCase(),
@@ -14,15 +14,14 @@ const action = async (msisdn, answers, requestID = null) => {
     "isMFS": answers[7] == '1' ? 1 : 0,
     "channelID": "ussd",
     "requestID": requestID,
-
   };
 
-  Logger(`${requestID}|API|remote-registration|request|${JSON.stringify(data)}`);
+  Logger(`${requestID}|${agentID}|API|remote-registration|request|${JSON.stringify(data)}`);
 
   const URL = process.env.REMOTE_REGISTRATION_URL;
   const response = await axios.post(URL, data);
 
-  Logger(`${requestID}|API|remote-registration|response|${JSON.stringify(response.data)}`);
+  Logger(`${requestID}|${agentID}|API|remote-registration|response|${JSON.stringify(response.data)}`);
 
   return null;
 }

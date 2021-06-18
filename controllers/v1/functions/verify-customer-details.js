@@ -4,17 +4,20 @@ const Logger = require('../../../utils/Logger');
 
 
 const action = async (agentID, answers, requestID) => {
-  const customerMSISDN = answers[0];
+  try {
+    const customerMSISDN = answers[0];
+    Logger(`${requestID}|${agentID}|API|verify-customer-details|request|${JSON.stringify(customerMSISDN)}`);
 
-  Logger(`${requestID}|API|verify-customer-details|request|${JSON.stringify(customerMSISDN)}`);
+    const URL = `http://10.81.1.124:89/simreg_agent/index.php?agent_msisdn=${agentID}&msisdn=${customerMSISDN}&ops=simReg`;
+    const response = await axios.get(URL);
 
-  const URL = `http://10.81.1.124:89/simreg_agent/index.php?agent_msisdn=${agentID}&msisdn=${customerMSISDN}&ops=simReg`;
-
-  const response = await axios.get(URL);
-
-  Logger(`${requestID}|API|verify-customer-details|response|${JSON.stringify(response.data)}`);
-
-  return response.data;
+    Logger(`${requestID}|${agentID}|API|verify-customer-details|response|${JSON.stringify(response.data)}`);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    Logger(`${requestID}|${agentID}|API|verify-customer-details|error|${error.message}`);
+    return "An error occured. Please try again later";
+  }
 }
 
 module.exports = action;
