@@ -11,7 +11,7 @@ const SMS = async (MSISDN, TEXT, REQUEST_ID = null) => {
 	if (!MSISDN || !MSISDN.length) {
 		// log to the file
 		Logger(
-			`${REQUEST_ID}|SMS|error|${MSISDN}|${JSON.stringify(
+			`${REQUEST_ID}|${MSISDN}|SMS|error|${JSON.stringify(
 				TEXT
 			)}|Error: Invalid MSISDN`
 		);
@@ -29,15 +29,14 @@ const SMS = async (MSISDN, TEXT, REQUEST_ID = null) => {
 
 		// log to the file
 		Logger(
-			`${REQUEST_ID}|SMS|success|${MSISDN}|${JSON.stringify(TEXT)}|${
-				response.data
+			`${REQUEST_ID}|${MSISDN}|SMS|success|${JSON.stringify(TEXT)}|${response.data
 			}`
 		);
 
 		return response;
 	} catch (error) {
 		Logger(
-			`${REQUEST_ID}|SMS|error|${MSISDN}|${JSON.stringify(
+			`${REQUEST_ID}|${MSISDN}|SMS|error|${JSON.stringify(
 				TEXT
 			)}|${JSON.stringify(error.message)}`
 		);
