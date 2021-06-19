@@ -4,7 +4,7 @@ const moment = require('moment');
 
 const FileLogger = (log) => {
 	// Get current date
-	const filename = moment().format('YYYYMMDD') + '.log';
+	const filename = moment().format('YYYYMMDD') + '.csv';
 
 	// folder directory
 	const dir = path.join('logs');
