@@ -1,7 +1,7 @@
 {
 	"welcome": "Welcome to BIOMETRIC SIM REGISTRATION (TESTING)\n1.New SIM Registration\n2.BIO Re-Registration.\n3.BIO New Registration.\n4.Verify Customer Details\n",
 	"salute": "Thank you for your inputs, you will be notified",
-	"remote_registration": {
+	"non_bio_registration": {
 		"title": "Link your phone number with NIA card details",
 		"1": "Enter the customer's MSISDN",
 		"2": "Enter last Six Digit of ICCID",
