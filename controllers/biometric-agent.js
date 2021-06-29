@@ -152,7 +152,6 @@ const AgentUSSD = asyncHandler(async (req, res, next) => {
 
 	// increment next page
 	nextPage = parseInt(currentPage) + 1;
-	console.log(nextPage);
 
 	// Update previous row with current userdata
 	previousRow = response.recordset[0].ID;
@@ -163,12 +162,19 @@ const AgentUSSD = asyncHandler(async (req, res, next) => {
 
 	// ? Check if there's next page, return next page else end
 	if (AgentMenu[action][nextPage]) {
-		if (parseInt(nextPage) === 5) {
+
+		if (parseInt(nextPage) === 5 && action === 'bio_registration') {
 			stmt = `SELECT INPUT FROM SIMREG_CORE_TBL_AGENT_USSD WHERE MSISDN='${agentID}' AND ACTION='${action}' ORDER BY ID ASC`;
 			response = await pool.request().query(stmt);
-
 			answers = response.recordset.map((index) => index.INPUT);
+
 			menu = `You are registering nationalID: '${answers[2]}' for ${answers[0]} with receipt number: '${answers[3]}'\n1. Confirm\n2.Cancel`;
+		} else if (parseInt(nextPage) === 4 && action === 'bio_re_registration') {
+			stmt = `SELECT INPUT FROM SIMREG_CORE_TBL_AGENT_USSD WHERE MSISDN='${agentID}' AND ACTION='${action}' ORDER BY ID ASC`;
+			response = await pool.request().query(stmt);
+			answers = response.recordset.map((index) => index.INPUT);
+
+			menu = `You are re-registering nationalID: '${answers[1]}' for ${answers[0]} with receipt number: '${answers[2]}'\n1. Confirm\n2.Cancel`;
 		} else {
 			menu = AgentMenu[action][nextPage];
 		}
