@@ -11,6 +11,7 @@
 		"6": "Select customer's gender\n1.Male\n2.Female",
 		"7": "Enter the customer's date of birth (DDMMYYYY)",
 		"8": "Create AirtelTigo Money\n1.Yes\n2.No",
+		"9": "If AirtelTigo Money, enter Next of Kin Full name",
 		"salute": "Thank you for your inputs, you will be notified"
 	},
 	"bio_re_registration": {
@@ -27,7 +28,9 @@
 		"2": "Enter last Six Digit of ICCID",
 		"3": "Enter customer's Ghana card number (GHA-XXXXXXXXX-X)",
 		"4": "Enter verification receipt Number",
-		"5": "You are registering {nationalID} for {msisdn} with receipt number {suuid}\n1. Confirm\n2.Cancel",
+		"5": "You are registering ${nationalID} for ${msisdn} with receipt number ${suuid}\n1. Confirm\n2.Cancel",
+		"6": "Create AirtelTigo Money\n1.Yes\n2.No",
+		"7": "If AirtelTigo Money, enter Next of Kin Full name",
 		"salute": "Thank you for your inputs, you will be notified via SMS"
 	},
 	"verify_customer_details": {

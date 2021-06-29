@@ -1,7 +1,8 @@
 const moment = require('moment');
+const sql = require('mssql');
 
 const asyncHandler = require('./async');
-const sql = require('../database/db');
+const { BSR_CONFIG } = require('../config/database');
 const Logger = require('../utils/Logger');
 
 // grab the allocated time interval in minutes
@@ -17,7 +18,10 @@ const SessionExpiry = asyncHandler(async (req, res, next) => {
   // get previous session via MSISDN
   let stmt = null;
   stmt = `SELECT TOP 1 ID, MSISDN, PAGE, TIMESTAMP FROM [SIMREG_CORE_TBL_AGENT_USSD] WHERE MSISDN='${msisdn}' ORDER BY ID DESC`;
-  let response = await sql(stmt);
+
+  let pool = await sql.connect(BSR_CONFIG);
+  let response = await pool.request().query(stmt);
+  await pool.close();
 
   // No session found, continue
   if (!response.recordset.length) return next();
@@ -31,7 +35,10 @@ const SessionExpiry = asyncHandler(async (req, res, next) => {
     Logger(`${requestID}|${msisdn}|SessionExpiry|Session has expired|${sessionTimestamp}|${currentTimestamp}`);
 
     stmt = `DELETE FROM [SIMREG_CORE_TBL_AGENT_USSD] WHERE MSISDN='${msisdn}'`
-    await sql(stmt);
+
+    pool = await sql.connect(BSR_CONFIG);
+    await pool.request().query(stmt);
+    await pool.close();
   }
 
   next();

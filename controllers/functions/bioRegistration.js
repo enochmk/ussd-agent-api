@@ -9,9 +9,9 @@ const action = async (agentID, answers, requestID = null) => {
 		suuid: answers[3],
 		agentID: agentID,
 		channelID: 'ussd',
-		cellID: '',
-		isMFS: 1,
 		confirmed: answers[4],
+		isMFS: answers[5] == '1' ? 1 : 0,
+		nextOfKin: answers[6].toUpperCase(),
 		requestID: requestID,
 	};
 

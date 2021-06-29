@@ -1,9 +1,8 @@
-const sql = require('mssql');
 const dotenv = require('dotenv');
 
 dotenv.config();
 
-const bsr_config = {
+const BSR_CONFIG = {
 	server: process.env.BSR_DB_HOST,
 	user: process.env.BSR_DB_USER,
 	database: process.env.BSR_DB_DATABASE,
@@ -11,7 +10,7 @@ const bsr_config = {
 	options: {
 		enableArithAbort: true,
 		trustedConnection: true,
-		encrypt: true,
+		encrypt: false,
 		enableArithAbort: true,
 		trustServerCertificate: true,
 	},
@@ -22,16 +21,4 @@ const bsr_config = {
 	},
 };
 
-// run a query against the global connection pool
-function runQuery(query, config = bsr_config) {
-	return sql
-		.connect(config)
-		.then((pool) => {
-			return pool.query(query);
-		})
-		.catch((err) => {
-			throw err;
-		});
-}
-
-module.exports = runQuery;
+module.exports = { BSR_CONFIG };

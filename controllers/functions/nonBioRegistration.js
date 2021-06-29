@@ -7,12 +7,13 @@ const action = async (agentID, answers, requestID = null) => {
 		agentID: agentID,
 		msisdn: answers[0],
 		iccid: answers[1],
-		niaPIN: answers[2].toUpperCase(),
+		nationalID: answers[2].toUpperCase(),
 		forenames: answers[3].toUpperCase(),
 		surname: answers[4].toUpperCase(),
 		gender: answers[5],
 		dateOfBirth: answers[6],
 		isMFS: answers[7] == '1' ? 1 : 0,
+		nextOfKin: answers[8].toUpperCase(),
 		channelID: 'ussd',
 	};
 

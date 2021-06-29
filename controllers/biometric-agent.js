@@ -1,8 +1,10 @@
+const sql = require('mssql');
+
 const asyncHandler = require('../middleware/async');
 const AgentMenu = require('../data/AgentMenu.json');
 const sendXMLResponse = require('../utils/XMLResponse');
 const Logger = require('../utils/Logger');
-const sql = require('../database/db');
+const { BSR_CONFIG } = require('../config/database');
 
 // actions
 const bioRegistration = require('./functions/bioRegistration');
@@ -25,6 +27,7 @@ const AgentUSSD = asyncHandler(async (req, res, next) => {
 	const userdata = body.userdata[0].trim();
 
 	let stmt = null;
+	let pool = null;
 	let action = null;
 	let message = null;
 	let response = null;
@@ -33,16 +36,17 @@ const AgentUSSD = asyncHandler(async (req, res, next) => {
 	let currentPage = null;
 	let answers = null;
 	let previousRow = null;
-
 	req.requestID = requestID;
 
 	Logger(`${requestID}|${agentID}|AgentMenu|request|${JSON.stringify(body)}`);
 
 	// get previous session via MSISDN
 	stmt = `SELECT ID, PAGE, ACTION FROM SIMREG_CORE_TBL_AGENT_USSD WHERE MSISDN='${agentID}' ORDER BY ID DESC`;
-	response = await sql(stmt);
+	pool = await sql.connect(BSR_CONFIG);
+	response = await pool.request().query(stmt);
+	await pool.close();
 
-	// if no session found; initiate new session
+	// ! if no session found; initiate new session
 	if (!response.recordset.length) {
 		response = await initSession(
 			requestID,
@@ -56,7 +60,7 @@ const AgentUSSD = asyncHandler(async (req, res, next) => {
 		return res.send(response);
 	}
 
-	// user wants to cancel the session
+	// ! user wants to cancel the session
 	if (userdata === '#99' || userdata === '#') {
 		response = await endSession(
 			requestID,
@@ -93,6 +97,7 @@ const AgentUSSD = asyncHandler(async (req, res, next) => {
 					starcode,
 					timestamp
 				);
+
 				return res.send(response);
 		}
 	} else {
@@ -112,7 +117,10 @@ const AgentUSSD = asyncHandler(async (req, res, next) => {
 
 		menu = AgentMenu[action][currentPage];
 		stmt = `INSERT INTO SIMREG_CORE_TBL_AGENT_USSD (MSISDN, SESSION, PAGE, INPUT, ACTION) VALUES('${agentID}','${requestID}', '${currentPage}', 'awaiting input', '${action}')`;
-		await sql(stmt);
+
+		pool = await sql.connect(BSR_CONFIG);
+		response = await pool.request().query(stmt);
+		await pool.close();
 
 		Logger(
 			`${requestID}|${agentID}|AgentMenu|progress|1|Page: 1|${action}|${JSON.stringify(
@@ -144,17 +152,30 @@ const AgentUSSD = asyncHandler(async (req, res, next) => {
 
 	// increment next page
 	nextPage = parseInt(currentPage) + 1;
+	console.log(nextPage);
 
 	// Update previous row with current userdata
 	previousRow = response.recordset[0].ID;
-	stmt = `UPDATE SIMREG_CORE_TBL_AGENT_USSD SET INPUT='${userdata}', ACTION='${action}'WHERE ID='${previousRow}'`;
-	await sql(stmt);
 
-	// Check if there's next page, return next page else end
+	pool = await sql.connect(BSR_CONFIG);
+	stmt = `UPDATE SIMREG_CORE_TBL_AGENT_USSD SET INPUT='${userdata}', ACTION='${action}'WHERE ID='${previousRow}'`;
+	response = await pool.request().query(stmt);
+
+	// ? Check if there's next page, return next page else end
 	if (AgentMenu[action][nextPage]) {
-		menu = AgentMenu[action][nextPage];
+		if (parseInt(nextPage) === 5) {
+			stmt = `SELECT INPUT FROM SIMREG_CORE_TBL_AGENT_USSD WHERE MSISDN='${agentID}' AND ACTION='${action}' ORDER BY ID ASC`;
+			response = await pool.request().query(stmt);
+
+			answers = response.recordset.map((index) => index.INPUT);
+			menu = `You are registering nationalID: '${answers[2]}' for ${answers[0]} with receipt number: '${answers[3]}'\n1. Confirm\n2.Cancel`;
+		} else {
+			menu = AgentMenu[action][nextPage];
+		}
+
 		stmt = `INSERT INTO SIMREG_CORE_TBL_AGENT_USSD (MSISDN, SESSION, PAGE, INPUT, ACTION) VALUES('${agentID}','${requestID}', '${nextPage}', 'awaiting input', '${action}')`;
-		await sql(stmt);
+		response = await pool.request().query(stmt);
+		await pool.close();
 
 		Logger(
 			`${requestID}|${agentID}|AgentMenu|progress|Open|Page: ${nextPage}|${action}|${JSON.stringify(
@@ -167,9 +188,11 @@ const AgentUSSD = asyncHandler(async (req, res, next) => {
 		);
 	}
 
-	// Session is over, get all inputs per action
+	// ? Session is over, get all inputs per action
 	stmt = `SELECT INPUT FROM SIMREG_CORE_TBL_AGENT_USSD WHERE MSISDN='${agentID}' AND ACTION='${action}' ORDER BY ID ASC`;
-	response = await sql(stmt);
+	response = await pool.request().query(stmt);
+	await pool.close();
+
 	answers = response.recordset.map((index) => index.INPUT);
 
 	// Send Answers to answer function
@@ -190,7 +213,7 @@ const AgentUSSD = asyncHandler(async (req, res, next) => {
 			break;
 	}
 
-	// No more menu to show, end session
+	// * No more menu to show, end session
 	menu = message || AgentMenu.salute;
 
 	response = await endSession(
@@ -206,7 +229,7 @@ const AgentUSSD = asyncHandler(async (req, res, next) => {
 	res.send(response);
 });
 
-// add new session to database and set flag 1 (open)
+// ? add new session to database and set flag 1 (open)
 const initSession = async (
 	requestID,
 	sessionID,
@@ -216,8 +239,11 @@ const initSession = async (
 ) => {
 	const menu = AgentMenu.welcome;
 
-	stmt = `DELETE FROM SIMREG_CORE_TBL_AGENT_USSD WHERE MSISDN='${msisdn}'; INSERT INTO SIMREG_CORE_TBL_AGENT_USSD (MSISDN, SESSION, PAGE, INPUT, ACTION) VALUES('${msisdn}','${requestID}','welcome', 'Awaiting input', null)`;
-	await sql(stmt);
+	const stmt = `DELETE FROM SIMREG_CORE_TBL_AGENT_USSD WHERE MSISDN='${msisdn}'; INSERT INTO SIMREG_CORE_TBL_AGENT_USSD (MSISDN, SESSION, PAGE, INPUT, ACTION) VALUES('${msisdn}','${requestID}','welcome', 'Awaiting input', null)`;
+
+	const pool = await sql.connect(BSR_CONFIG);
+	await pool.request().query(stmt);
+	await pool.close();
 
 	Logger(
 		`${requestID}|${msisdn}|AgentMenu|progress|Open|Page: Welcome|${JSON.stringify(
@@ -228,7 +254,7 @@ const initSession = async (
 	return sendXMLResponse(sessionID, msisdn, starcode, menu, 1, timestamp);
 };
 
-// clear session from database via MSISDN and set flag 2 (close)
+// ? clear session from database via MSISDN and set flag 2 (close)
 const endSession = async (
 	requestID,
 	sessionID,
@@ -238,8 +264,11 @@ const endSession = async (
 	timestamp,
 	answers
 ) => {
-	stmt = `DELETE FROM SIMREG_CORE_TBL_AGENT_USSD WHERE MSISDN='${msisdn}';`;
-	await sql(stmt);
+	const stmt = `DELETE FROM SIMREG_CORE_TBL_AGENT_USSD WHERE MSISDN='${msisdn}';`;
+	const pool = await sql.connect(BSR_CONFIG);
+	await pool.request().query(stmt);
+	await pool.close();
+
 	Logger(
 		`${requestID}|${msisdn}|AgentMenu|Ended|Closed|Page: Last|${JSON.stringify(
 			menu
