@@ -1,6 +1,6 @@
 {
 	"welcome": "Welcome to BIOMETRIC SIM REGISTRATION (TESTING)\n1.New SIM Registration\n2.BIO Re-Registration.\n3.BIO New Registration.\n4.Verify Customer Details\n",
-	"salute": "Thank you for your inputs, you will be notified",
+	"salute": "Your re-registration request is being processed.",
 	"non_bio_registration": {
 		"title": "Link your phone number with NIA card details",
 		"1": "Enter the customer's MSISDN",
@@ -12,7 +12,7 @@
 		"7": "Enter the customer's date of birth (DDMMYYYY)",
 		"8": "Create AirtelTigo Money\n1.Yes\n2.No",
 		"9": "If AirtelTigo Money, enter Next of Kin Full name",
-		"salute": "Thank you for your inputs, you will be notified"
+		"salute": "Your re-registration request is being processed."
 	},
 	"bio_re_registration": {
 		"title": "Link your phone number with NIA card details",
@@ -20,7 +20,7 @@
 		"2": "Enter customer's Ghana card number (GHA-XXXXXXXXX-X)",
 		"3": "Enter verification receipt Number",
 		"4": "You are re-registering {nationalID} for {msisdn} with receipt number {suuid}\n1. Confirm\n2.Cancel",
-		"salute": "Thank you for your inputs, you will be notified via SMS"
+		"salute": "Your re-registration request is being processed."
 	},
 	"bio_registration": {
 		"title": "Link your phone number with NIA card details",
@@ -31,10 +31,10 @@
 		"5": "You are registering ${nationalID} for ${msisdn} with receipt number ${suuid}\n1. Confirm\n2.Cancel",
 		"6": "Create AirtelTigo Money\n1.Yes\n2.No",
 		"7": "If AirtelTigo Money, enter Next of Kin Full name",
-		"salute": "Thank you for your inputs, you will be notified via SMS"
+		"salute": "Your re-registration request is being processed."
 	},
 	"verify_customer_details": {
 		"1": "Enter customer's MSISDN",
-		"salute": "Thank you for your inputs, you will be notified"
+		"salute": "Your re-registration request is being processed."
 	}
 }
