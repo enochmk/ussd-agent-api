@@ -1,16 +1,20 @@
 const sendXMLResponse = (
-	requestID,
+	sessionID,
 	msisdn,
 	starcode,
 	menu,
 	flag,
 	timestamp
 ) => {
+	if (msisdn.length === 9) {
+		msisdn = `233${msisdn}`;
+	}
+
 	return `
 		<?xml version="1.0" encoding="utf-8"?>
 		<USSDDynMenuResponse>
-				<requestId>${requestID}</requestId>
-				<sessionId>${requestID}</sessionId>
+				<requestId>${sessionID}</requestId>
+				<sessionId>${sessionID}</sessionId>
 				<msisdn>${msisdn}</msisdn>
 				<starCode>${starcode}</starCode>
 				<langId>null</langId>

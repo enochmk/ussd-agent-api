@@ -1,0 +1,20 @@
+{
+  "devMode": {
+    "deniedMessage": "Dear customer, this application is in developer mode. Kindly check again later",
+    "message": "You are in developer mode",
+    "whitelist": [
+      {
+        "name": "Test number",
+        "msisdn": "273111188"
+      },
+      {
+        "name": "Enoch Klufio",
+        "msisdn": "560043149"
+      },
+      {
+        "name": "Michael Affare",
+        "msisdn": "270233334"
+      }
+    ]
+  }
+}

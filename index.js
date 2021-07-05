@@ -7,6 +7,7 @@ const morgan = require('morgan');
 const assignID = require('./middleware/assignID');
 const errorHandler = require('./middleware/error');
 const SessionExpiry = require('./middleware/sessionExpiry');
+const devMode = require('./middleware/devMode');
 
 const app = express();
 
@@ -17,6 +18,8 @@ app.use(xmlparser());
 app.use(
 	'/biometric-agent',
 	assignID,
+	devMode,
+
 	SessionExpiry,
 	require('./routes/biometric-agent')
 );
