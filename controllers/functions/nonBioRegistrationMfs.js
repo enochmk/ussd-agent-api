@@ -21,10 +21,6 @@ const action = async (agentID, answers, requestID = null) => {
 		)}`
 	);
 
-	console.log(data);
-
-	return null;
-
 	const URL = process.env.NON_BIO_REGISTRATION_MFS_URL;
 	const response = await axios.post(URL, data);
 
