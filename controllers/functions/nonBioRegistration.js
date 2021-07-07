@@ -5,15 +5,15 @@ const action = async (agentID, answers, requestID = null) => {
 	const data = {
 		requestID: requestID,
 		agentID: agentID,
-		msisdn: answers[0],
-		iccid: answers[1],
-		nationalID: answers[2].toUpperCase(),
-		forenames: answers[3].toUpperCase(),
-		surname: answers[4].toUpperCase(),
-		gender: answers[5],
-		dateOfBirth: answers[6],
-		isMFS: answers[7] == '1' ? 1 : 0,
-		nextOfKin: answers[8].toUpperCase(),
+		msisdn: answers[1],
+		iccid: answers[2],
+		nationalID: answers[3].toUpperCase(),
+		forenames: answers[4].toUpperCase(),
+		surname: answers[5].toUpperCase(),
+		gender: answers[6] == '1' ? 'MALE' : 'FEMALE',
+		dateOfBirth: answers[7],
+		isMFS: answers[8] == '1' ? 1 : 0,
+		nextOfKin: answers[9].toUpperCase(),
 		channelID: 'ussd',
 	};
 
@@ -22,8 +22,6 @@ const action = async (agentID, answers, requestID = null) => {
 			data
 		)}`
 	);
-
-	return null;
 
 	const URL = process.env.NON_BIO_REGISTRATION_URL;
 	const response = await axios.post(URL, data);

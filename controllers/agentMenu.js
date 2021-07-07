@@ -10,6 +10,7 @@ const { BSR_CONFIG } = require('../config/database');
 const bioRegistration = require('./functions/bioRegistration');
 const bioReRegistration = require('./functions/bioReRegistration');
 const nonBioRegistration = require('./functions/nonBioRegistration');
+const nonBioRegistrationMfs = require('./functions/nonBioRegistrationMfs');
 const verifyCustomerDetails = require('./functions/verifyCustomerDetails');
 
 // the initial code to begin session
@@ -69,9 +70,11 @@ const AgentUSSD = asyncHandler(async (req, res, next) => {
 			agentID,
 			starcode,
 			'Process cancelled',
-			timestamp
+			timestamp,
+			[]
 		);
 
+		console.log(`${agentID}: ${JSON.stringify('Process Cancelled')}`);
 		return res.send(response);
 	}
 
@@ -130,6 +133,7 @@ const AgentUSSD = asyncHandler(async (req, res, next) => {
 			)}|'Awaiting input'`
 		);
 
+		console.log(`${agentID}: RESUME|${JSON.stringify(menu)}`);
 		return res.send(
 			sendXMLResponse(sessionID, agentID, starcode, menu, 1, timestamp)
 		);
@@ -165,6 +169,7 @@ const AgentUSSD = asyncHandler(async (req, res, next) => {
 			)}|'Awaiting input'`
 		);
 
+		console.log(`${agentID}: ${JSON.stringify(menu)}`);
 		return res.send(
 			sendXMLResponse(sessionID, agentID, starcode, menu, 1, timestamp)
 		);
@@ -187,51 +192,35 @@ const AgentUSSD = asyncHandler(async (req, res, next) => {
 		answers = response.recordset.map((index) => index.INPUT);
 
 		if (action === 'verify_customer_details') {
-			menu = `Customer's MSISDN: ${answers[1]}
-			Are you sure you want to proceed? 
-			1.Confirm 
-			2.Cancel`;
+			menu = `MSISDN: ${answers[1]}\n\nAre you sure you want to proceed?\n1.Confirm above the details\n2.Cancel`;
 		} else if (action === 'non_bio_registration') {
-			menu = `
-			Customer's MSISDN: ${answers[1]}
-			Last 6 Digit of ICCID: ${answers[2]}
-			Customer's Ghana Card Number: ${answers[3]}
-			Customer's FirstNames: ${answers[4]}
-			Customer's Surname: ${answers[5]}
-			Customer's Gender: ${answers[6] == 1 ? 'Male' : 'Female'}
-			Customer's DOB: ${answers[7]}
-			Want AirtelTigo Money?: ${answers[8] == 1 ? 'Yes' : 'No'}
-			Next Of Kin: ${answers[9]}
-			1.Confirm
-			2.Cancel`;
+			menu = `MSISDN: ${answers[1]}\nLast 6 Digit of ICCID: ${
+				answers[2]
+			}\nID: ${answers[3]}\nFirstNames: ${answers[4]}\nSurname: ${
+				answers[5]
+			}\nSex: ${answers[6] == 1 ? 'Male' : 'Female'}\nDOB: ${
+				answers[7]
+			}\nWant AirtelTigo Money?: ${
+				answers[8] == 1 ? 'Yes' : 'No'
+			}\nNext Of Kin: ${answers[9]}\n\n1.Confirm above the details\n2.Cancel`;
 		} else if (action === 'non_bio_registration_mfs') {
-			menu = `
-			Customer's MSISDN: ${answers[1]}
-			Customer's Ghana Card Number: ${answers[2]}
-			Customer's FirstNames: ${answers[3]}
-			Customer's Surname: ${answers[4]}
-			Customer's Gender: ${answers[5] == 1 ? 'Male' : 'Female'}
-			Customer's DOB: ${answers[6]}
-			Next Of Kin: ${answers[7]}
-			1.Confirm 
-			2.Cancel`;
+			menu = `MSISDN: ${answers[1]}\nID: ${answers[2]}\nFirstNames: ${
+				answers[3]
+			}\nSurname: ${answers[4]}\nSex: ${
+				answers[5] == 1 ? 'Male' : 'Female'
+			}\nDOB: ${answers[6]}\nNext Of Kin: ${
+				answers[7]
+			}\n\n1.Confirm above the details \n2.Cancel`;
 		} else if (action === 'bio_re_registration') {
-			menu = `
-			Customer's MSISDN: ${answers[1]}\n
-			Customer's Ghana Card Number: ${answers[2]}\n
-			Verification Receipt Number: ${answers[3]}\n
-			1.Confirm \n
-			2.Cancel`;
+			menu = `MSISDN: ${answers[1]}\nID: ${answers[2]}\nVerification Receipt NO: ${answers[3]}\n\n1.Confirm above the details \n2.Cancel`;
 		} else if (action === 'bio_registration') {
-			menu = `
-			Customer's MSISDN: ${answers[1]}\n
-			Last 6 Digit of ICCID: ${answers[2]}\n
-			Customer's Ghana Card Number: ${answers[3]}\n
-			Verification Receipt Number: ${answers[4]}\n
-			Want AirtelTigo Money?: ${answers[5] == 1 ? 'Yes' : 'No'}\n
-			Next Of Kin: ${answers[6]}\n
-			1.Confirm \n
-			2.Cancel`;
+			menu = `MSISDN: ${answers[1]}\nLast 6 Digit of ICCID: ${
+				answers[2]
+			}\nID: ${answers[3]}\nVerification Receipt NO: ${
+				answers[4]
+			}\nWant AirtelTigo Money?: ${
+				answers[5] == 1 ? 'Yes' : 'No'
+			}\nNext Of Kin: ${answers[6]}\n\n1.Confirm above the details \n2.Cancel`;
 		} else {
 			menu = values[nextIndex];
 		}
@@ -244,6 +233,7 @@ const AgentUSSD = asyncHandler(async (req, res, next) => {
 		response = await pool.request().query(stmt);
 		await pool.close();
 
+		console.log(`${agentID}: ${JSON.stringify(menu)}`);
 		return res.send(
 			sendXMLResponse(sessionID, agentID, starcode, menu, 1, timestamp)
 		);
@@ -267,6 +257,7 @@ const AgentUSSD = asyncHandler(async (req, res, next) => {
 			)}|'Awaiting input'`
 		);
 
+		console.log(`${agentID}: ${JSON.stringify(menu)}`);
 		return res.send(
 			sendXMLResponse(sessionID, agentID, starcode, menu, 1, timestamp)
 		);
@@ -302,6 +293,9 @@ const AgentUSSD = asyncHandler(async (req, res, next) => {
 		case 'non_bio_registration':
 			nonBioRegistration(agentID, answers, requestID);
 			break;
+		case 'non_bio_registration_mfs':
+			nonBioRegistrationMfs(agentID, answers, requestID);
+			break;
 		case 'bio_re_registration':
 			message = await bioReRegistration(agentID, answers, requestID);
 			break;
@@ -335,50 +329,50 @@ const AgentUSSD = asyncHandler(async (req, res, next) => {
 const initSession = async (
 	requestID,
 	sessionID,
-	msisdn,
+	agentID,
 	starcode,
 	timestamp
 ) => {
 	const menu = AgentMenu.menu;
 	const stmt = `
-	DELETE FROM SIMREG_CORE_TBL_AGENT_USSD WHERE MSISDN='${msisdn}'; 
-	INSERT INTO SIMREG_CORE_TBL_AGENT_USSD (MSISDN, SESSION, PAGE, INPUT, ACTION) VALUES('${msisdn}','${requestID}','menu', 'Awaiting input', null)`;
+	DELETE FROM SIMREG_CORE_TBL_AGENT_USSD WHERE MSISDN='${agentID}'; 
+	INSERT INTO SIMREG_CORE_TBL_AGENT_USSD (MSISDN, SESSION, PAGE, INPUT, ACTION) VALUES('${agentID}','${requestID}','menu', 'Awaiting input', null)`;
 
 	const pool = await sql.connect(BSR_CONFIG);
 	await pool.request().query(stmt);
 	await pool.close();
 
 	Logger(
-		`${requestID}|${msisdn}|AgentMenu|progress|Page: Menu|${JSON.stringify(
+		`${requestID}|${agentID}|AgentMenu|progress|Page: Menu|${JSON.stringify(
 			menu
 		)}|'Awaiting input'`
 	);
 
-	console.log(`${msisdn}: ${JSON.stringify(menu)}`);
-	return sendXMLResponse(sessionID, msisdn, starcode, menu, 1, timestamp);
+	console.log(`${agentID}: ${JSON.stringify(menu)}`);
+	return sendXMLResponse(sessionID, agentID, starcode, menu, 1, timestamp);
 };
 
 // ? clear session from database via MSISDN and set flag 2 (close)
 const endSession = async (
 	requestID,
 	sessionID,
-	msisdn,
+	agentID,
 	starcode,
 	menu,
 	timestamp,
 	answers
 ) => {
-	const stmt = `DELETE FROM SIMREG_CORE_TBL_AGENT_USSD WHERE MSISDN='${msisdn}';`;
+	const stmt = `DELETE FROM SIMREG_CORE_TBL_AGENT_USSD WHERE MSISDN='${agentID}';`;
 	const pool = await sql.connect(BSR_CONFIG);
 	await pool.request().query(stmt);
 	await pool.close();
 
 	Logger(
-		`${requestID}|${msisdn}|AgentMenu|Ended|Page: Last|${JSON.stringify(menu)}`
+		`${requestID}|${agentID}|AgentMenu|Ended|Page: Last|${JSON.stringify(menu)}`
 	);
 
-	console.log(`${msisdn}: ${JSON.stringify(answers)}`);
-	return sendXMLResponse(sessionID, msisdn, starcode, menu, 2, timestamp);
+	console.log(`${agentID}: ${JSON.stringify(answers)}`);
+	return sendXMLResponse(sessionID, agentID, starcode, menu, 2, timestamp);
 };
 
 module.exports = AgentUSSD;

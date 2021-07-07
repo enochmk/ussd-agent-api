@@ -12,14 +12,13 @@ const devMode = require('./middleware/devMode');
 const app = express();
 
 app.use(cors());
-app.use(morgan('combined'));
+app.use(morgan('tiny'));
 app.use(xmlparser());
 
 app.use(
 	'/biometric-agent',
 	assignID,
 	devMode,
-
 	SessionExpiry,
 	require('./routes/routes')
 );
