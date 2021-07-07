@@ -11,6 +11,8 @@ const action = async (agentID, answers, requestID) => {
 			)}`
 		);
 
+		return 'Verify Customer details data here';
+
 		const URL = `http://10.81.1.124:89/simreg_agent/index.php?agent_msisdn=${agentID}&msisdn=${customerMSISDN}&ops=simReg`;
 		const response = await axios.get(URL);
 
@@ -19,6 +21,7 @@ const action = async (agentID, answers, requestID) => {
 				response.data
 			)}`
 		);
+
 		return response.data;
 	} catch (error) {
 		console.log(error);

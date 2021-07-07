@@ -23,6 +23,8 @@ const action = async (agentID, answers, requestID = null) => {
 		)}`
 	);
 
+	return null;
+
 	const URL = process.env.NON_BIO_REGISTRATION_URL;
 	const response = await axios.post(URL, data);
 
@@ -31,8 +33,6 @@ const action = async (agentID, answers, requestID = null) => {
 			response.data
 		)}`
 	);
-
-	return null;
 };
 
 module.exports = action;

@@ -28,6 +28,8 @@ const action = async (agentID, answers, requestID = null) => {
 		return 'You have cancelled the request. Kindly retry to proceed';
 	}
 
+	return null;
+
 	const URL = process.env.REGISTRATION_URL;
 	const response = await axios.post(URL, data);
 	Logger(
@@ -35,8 +37,6 @@ const action = async (agentID, answers, requestID = null) => {
 			response.data
 		)}`
 	);
-
-	return null;
 };
 
 module.exports = action;

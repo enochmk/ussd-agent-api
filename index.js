@@ -21,7 +21,7 @@ app.use(
 	devMode,
 
 	SessionExpiry,
-	require('./routes/biometric-agent')
+	require('./routes/routes')
 );
 
 app.use(errorHandler);

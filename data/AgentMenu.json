@@ -1,40 +1,45 @@
 {
-	"welcome": "Welcome to BIOMETRIC SIM REGISTRATION (TESTING)\n1.New SIM Registration\n2.BIO Re-Registration.\n3.BIO New Registration.\n4.Verify Customer Details\n",
-	"salute": "Your re-registration request is being processed.",
+	"menu": "Welcome to BIOMETRIC SIM REGISTRATION (TESTING)\n1.New SIM Registration\n2.New AirtelTigo Money registration ONLY\n3.BIO Re-Registration.\n4.BIO New Registration.\n5.Verify Customer Details\n",
+	"salute": "Your re-registration request is being processed.\nAirtelTigo, life is simple",
 	"non_bio_registration": {
-		"title": "Link your phone number with NIA card details",
-		"1": "Enter the customer's MSISDN",
+		"1": "Link your phone number with NIA card details.\nEnter the customer's MSISDN",
 		"2": "Enter last Six Digit of ICCID",
-		"3": "Enter the customer's Ghana card number (GHA-XXXXXXXXX-X)",
+		"3": "Enter the customer's Ghana card number. Eg: (GHA-123456789-9)",
 		"4": "Enter the customer's first names",
 		"5": "Enter the customer's surname",
 		"6": "Select customer's gender\n1.Male\n2.Female",
-		"7": "Enter the customer's date of birth (DDMMYYYY)",
+		"7": "Enter the customer's date of birth (DDMMYYYY). Eg: 08101990",
 		"8": "Create AirtelTigo Money\n1.Yes\n2.No",
 		"9": "If AirtelTigo Money, enter Next of Kin Full name",
-		"salute": "Your re-registration request is being processed."
+		"confirm": "Are you sure?\n1.Confirm.\n2.Cancel"
+	},
+	"non_bio_registration_mfs": {
+		"1": "Link your phone number with NIA card details.\nEnter customer's MSISDN",
+		"2": "Enter customer's Ghana card number.Eg: (GHA-123456789-9)",
+		"3": "Enter the customer's first names",
+		"4": "Enter the customer's surname",
+		"5": "Select customer's gender\n1.Male\n2.Female",
+		"6": "Enter the customer's date of birth (DDMMYYYY). Eg: 08101990",
+		"7": "Enter full name of Next Of Kin",
+		"confirm": "Are you sure?\n1.Confirm.\n2.Cancel"
 	},
 	"bio_re_registration": {
-		"title": "Link your phone number with NIA card details",
-		"1": "Enter customer's MSISDN",
-		"2": "Enter customer's Ghana card number (GHA-XXXXXXXXX-X)",
+		"1": "Link your phone number with NIA card details.\nEnter customer's MSISDN",
+		"2": "Enter customer's Ghana card number. Eg: (GHA-123456789-9)",
 		"3": "Enter verification receipt Number",
-		"4": "You are re-registering {nationalID} for {msisdn} with receipt number {suuid}\n1. Confirm\n2.Cancel",
-		"salute": "Your re-registration request is being processed."
+		"confirm": "Are you sure?\n1.Confirm.\n2.Cancel"
 	},
 	"bio_registration": {
-		"title": "Link your phone number with NIA card details",
-		"1": "Enter customer's MSISDN",
+		"1": "Link your phone number with NIA card details.\nEnter customer's MSISDN",
 		"2": "Enter last Six Digit of ICCID",
-		"3": "Enter customer's Ghana card number (GHA-XXXXXXXXX-X)",
+		"3": "Enter customer's Ghana card number. Eg: (GHA-123456789-9)",
 		"4": "Enter verification receipt Number",
-		"5": "You are registering ${nationalID} for ${msisdn} with receipt number ${suuid}\n1. Confirm\n2.Cancel",
-		"6": "Create AirtelTigo Money\n1.Yes\n2.No",
-		"7": "If AirtelTigo Money, enter Next of Kin Full name",
-		"salute": "Your re-registration request is being processed."
+		"5": "Create AirtelTigo Money\n1.Yes\n2.No",
+		"6": "If AirtelTigo Money, enter Next of Kin Full name",
+		"confirm": "Are you sure?\n1.Confirm.\n2.Cancel"
 	},
 	"verify_customer_details": {
-		"1": "Enter customer's MSISDN",
-		"salute": "Your re-registration request is being processed."
+		"1": "Verify Customer details.\nEnter customer's MSISDN",
+		"confirm": "Are you sure?\n1.Confirm.\n2.Cancel"
 	}
 }
