@@ -1,5 +1,5 @@
 {
-	"menu": "Welcome to Sim Registration(Dev)\n1.New SIM Registration\n2.New AirtelTigo Money ONLY\n3.BIO Re-Registration.\n4.BIO New Registration.\n5.Verify Customer Details\n",
+	"menu": "SIM Registration\n\n1.New SIM Registration\n2.New AirtelTigo Money ONLY\n3.BIO Re-Registration.\n4.BIO New Registration.\n5.Verify Customer Details\n\n",
 	"salute": "Your request is being processed.\nAirtelTigo, life is simple",
 	"non_bio_registration": {
 		"1": "Link your phone number with Ghana Card details.\nEnter the customer's MSISDN",

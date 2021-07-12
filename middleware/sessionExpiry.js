@@ -25,7 +25,9 @@ const SessionExpiry = asyncHandler(async (req, res, next) => {
 	await pool.close();
 
 	// No session found, continue
-	if (!response.recordset.length) return next();
+	if (!response.recordset.length) {
+		return next();
+	}
 
 	// data found.. assess session time is not more than 1min
 	const sessionTimestamp = moment(response.recordset[0].TIMESTAMP).add(
@@ -40,7 +42,7 @@ const SessionExpiry = asyncHandler(async (req, res, next) => {
 			`${requestID}|${msisdn}|SessionExpiry|Session has expired|${sessionTimestamp}|${currentTimestamp}`
 		);
 
-		stmt = `DELETE FROM [SIMREG_CORE_TBL_AGENT_USSD] WHERE MSISDN='${msisdn}'`;
+		stmt = `DELETE FROM [SIMREG_CORE_TBL_AGENT_USSD] WHERE MSISDN LIKE '%${msisdn}%'`;
 
 		pool = await sql.connect(BSR_CONFIG);
 		await pool.request().query(stmt);

@@ -22,7 +22,9 @@ const AgentUSSD = asyncHandler(async (req, res, next) => {
 	// extract requestID, MSISDN, userData
 	const requestID = req.requestID;
 	const sessionID = body.requestid[0];
-	const agentID = body.msisdn[0];
+	let agentID = body.msisdn[0];
+	agentID = agentID.substr(agentID.length - 9);
+
 	const starcode = body.starcode[0];
 	const timestamp = body.timestamp[0];
 	const userdata = body.userdata[0].trim();
@@ -194,15 +196,18 @@ const AgentUSSD = asyncHandler(async (req, res, next) => {
 		if (action === 'verify_customer_details') {
 			menu = `MSISDN: ${answers[1]}\n\nAre you sure you want to proceed?\n1.Confirm above the details\n2.Cancel`;
 		} else if (action === 'non_bio_registration') {
-			menu = `MSISDN: ${answers[1]}\nLast 6 Digit of ICCID: ${
-				answers[2]
-			}\nID: ${answers[3]}\nFirstNames: ${answers[4]}\nSurname: ${
-				answers[5]
-			}\nSex: ${answers[6] == 1 ? 'Male' : 'Female'}\nDOB: ${
-				answers[7]
-			}\nWant AirtelTigo Money?: ${
-				answers[8] == 1 ? 'Yes' : 'No'
-			}\nNext Of Kin: ${answers[9]}\n\n1.Confirm above the details\n2.Cancel`;
+			menu = `
+			MSISDN: ${answers[1]}\n
+			Last 6 Digit of ICCID: ${answers[2]}\n
+			ID: ${answers[3]}\n
+			FirstName(s): ${answers[4]}\n
+			Surname: ${answers[5]}\n
+			Sex: ${answers[6] == 1 ? 'Male' : 'Female'}\n
+			DOB: ${answers[7]}\n
+			Want AirtelTigo Money?: ${answers[8] == 1 ? 'Yes' : 'No'}\n
+			Next Of Kin: ${answers[9]}\n\n
+			1.Confirm above the details\n
+			2.Cancel`.trim();
 		} else if (action === 'non_bio_registration_mfs') {
 			menu = `MSISDN: ${answers[1]}\nID: ${answers[2]}\nFirstNames: ${
 				answers[3]
@@ -362,7 +367,7 @@ const endSession = async (
 	timestamp,
 	answers
 ) => {
-	const stmt = `DELETE FROM SIMREG_CORE_TBL_AGENT_USSD WHERE MSISDN='${agentID}';`;
+	const stmt = `DELETE FROM SIMREG_CORE_TBL_AGENT_USSD WHERE MSISDN LIKE '%${agentID}%';`;
 	const pool = await sql.connect(BSR_CONFIG);
 	await pool.request().query(stmt);
 	await pool.close();
