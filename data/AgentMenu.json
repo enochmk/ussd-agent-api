@@ -1,6 +1,6 @@
 {
-	"menu": "Welcome to Sim Registration(Dev)\n1.New SIM Registration\n2.New AirtelTigo Money ONLY\n3.BIO Re-Registration.\n4.BIO New Registration.\n5.Verify Customer Details\n",
-	"salute": "Your request is being processed.\nAirtelTigo, life is simple",
+	"menu": "Sim Registration\n1.New SIM Registration\n2.New AirtelTigo Money ONLY\n3.Verify Customer Details\n",
+	"salute": "Hello, your request has been received and awaiting validation. Thank you and keep safe.",
 	"non_bio_registration": {
 		"1": "Enter the customer's MSISDN",
 		"2": "Enter last Six Digit of ICCID",

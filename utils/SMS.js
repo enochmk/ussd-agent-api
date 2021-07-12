@@ -29,7 +29,8 @@ const SMS = async (MSISDN, TEXT, REQUEST_ID = null) => {
 
 		// log to the file
 		Logger(
-			`${REQUEST_ID}|${MSISDN}|SMS|success|${JSON.stringify(TEXT)}|${response.data
+			`${REQUEST_ID}|${MSISDN}|SMS|success|${JSON.stringify(TEXT)}|${
+				response.data
 			}`
 		);
 
