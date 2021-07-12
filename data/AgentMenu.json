@@ -1,8 +1,8 @@
 {
 	"menu": "Welcome to Sim Registration(Dev)\n1.New SIM Registration\n2.New AirtelTigo Money ONLY\n3.BIO Re-Registration.\n4.BIO New Registration.\n5.Verify Customer Details\n",
-	"salute": "Your re-registration request is being processed.\nAirtelTigo, life is simple",
+	"salute": "Your request is being processed.\nAirtelTigo, life is simple",
 	"non_bio_registration": {
-		"1": "Link your phone number with NIA card details.\nEnter the customer's MSISDN",
+		"1": "Enter the customer's MSISDN",
 		"2": "Enter last Six Digit of ICCID",
 		"3": "Enter the customer's Ghana card number.\nEg: (GHA-123456789-9)",
 		"4": "Enter the customer's first names",
@@ -14,7 +14,7 @@
 		"confirm": "Are you sure?\n1.Confirm.\n2.Cancel"
 	},
 	"non_bio_registration_mfs": {
-		"1": "Link your phone number with NIA card details.\nEnter customer's MSISDN",
+		"1": "Enter customer's MSISDN",
 		"2": "Enter customer's Ghana card number\nEg: (GHA-123456789-9)",
 		"3": "Enter the customer's first names",
 		"4": "Enter the customer's surname",
@@ -30,7 +30,7 @@
 		"confirm": "Are you sure?\n1.Confirm.\n2.Cancel"
 	},
 	"bio_registration": {
-		"1": "Link your phone number with NIA card details.\nEnter customer's MSISDN",
+		"1": "Enter customer's MSISDN",
 		"2": "Enter last Six Digit of ICCID",
 		"3": "Enter customer's Ghana card number.\nEg: (GHA-123456789-9)",
 		"4": "Enter verification receipt Number",
