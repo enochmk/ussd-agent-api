@@ -17,10 +17,11 @@ const devMode = asyncHandler((req, res, next) => {
 	const starcode = body.starcode[0];
 	const timestamp = body.timestamp[0];
 
-	// ? is userMsisdn supported
-	const developer = supportedMSISDNs.find(
-		(developer) => developer.msisdn === userMsisdn
-	);
+	// ? is userMsisdn whitelist
+	const developer = supportedMSISDNs.find((msisdn) => {
+		msisdn = msisdn.substr(msisdn.length - 9);
+		return msisdn === userMsisdn;
+	});
 
 	const message = !developer
 		? developerOnly.devMode.deniedMessage

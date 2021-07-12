@@ -3,34 +3,24 @@
     "deniedMessage": "Dear customer, this application is in developer mode. Kindly check again later",
     "message": "You are in developer mode",
     "whitelist": [
-      {
-        "name": "Test number",
-        "msisdn": "273111188"
-      },
-      {
-        "name": "Enoch Klufio",
-        "msisdn": "560043149"
-      },
-      {
-        "name": "Michael Affare",
-        "msisdn": "270233334"
-      },
-      {
-        "name": "Madanin",
-        "msisdn": "262592654"
-      },
-      {
-        "name": "Felix",
-        "msisdn": "277530060"
-      },
-      {
-        "name": "Eric Ollenu",
-        "msisdn": "277542847"
-      },
-      {
-        "name": "Aziz Adams",
-        "msisdn": "574341472"
-      }
+      "0560043148",
+      "0560043149",
+      "0270111188",
+      "0270233334",
+      "0277551482",
+      "0277530060",
+      "0570017000",
+      "0266000791",
+      "0279666351",
+      "0262149946",
+      "0577666163",
+      "0279358726",
+      "0277552352",
+      "0266000346",
+      "0266000596",
+      "0274000010",
+      "0267818669",
+      "0277542847"
     ]
   }
 }
