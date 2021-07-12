@@ -1,30 +1,36 @@
 const sql = require('mssql');
+const moment = require('moment');
 
 const asyncHandler = require('../middleware/async');
 const AgentMenu = require('../data/AgentMenu.json');
 const sendXMLResponse = require('../utils/XMLResponse');
 const Logger = require('../utils/Logger');
+const Messages = require('../data/Messages.json');
 const { BSR_CONFIG } = require('../config/database');
+const {
+	confirmMenuBioReg,
+	confirmMenuNonBioReg,
+	confirmMenuNonBioRegMFS,
+} = require('../utils/DisplayMenu');
+const { endSession, initSession } = require('../utils/sessions');
 
 // endpoint actions
-const bioRegistration = require('./functions/bioRegistration');
-const bioReRegistration = require('./functions/bioReRegistration');
+const verifyCustomerDetails = require('./functions/verifyCustomerDetails');
+const formatGhanaCard = require('../utils/formatGhanaCard');
 const nonBioRegistration = require('./functions/nonBioRegistration');
 const nonBioRegistrationMfs = require('./functions/nonBioRegistrationMfs');
-const verifyCustomerDetails = require('./functions/verifyCustomerDetails');
 
 // the initial code to begin session
 const USSD_CODE = ['*460*46#', '*100*5#'];
 
 const AgentUSSD = asyncHandler(async (req, res, next) => {
+	const requestID = req.requestID;
+
 	const body = req.body.ussddynmenurequest;
 
 	// extract requestID, MSISDN, userData
-	const requestID = req.requestID;
+	const agentID = body.msisdn[0].substr(body.msisdn[0].length - 9);
 	const sessionID = body.requestid[0];
-	let agentID = body.msisdn[0];
-	agentID = agentID.substr(agentID.length - 9);
-
 	const starcode = body.starcode[0];
 	const timestamp = body.timestamp[0];
 	const userdata = body.userdata[0].trim();
@@ -40,7 +46,6 @@ const AgentUSSD = asyncHandler(async (req, res, next) => {
 	let currentIndex = null;
 	let answers = null;
 	let previousRow = null;
-	req.requestID = requestID;
 
 	Logger(`${requestID}|${agentID}|AgentMenu|request|${JSON.stringify(body)}`);
 
@@ -89,12 +94,6 @@ const AgentUSSD = asyncHandler(async (req, res, next) => {
 			case '2':
 				action = 'non_bio_registration_mfs';
 				break;
-			// case '3':
-			// 	action = 'bio_re_registration';
-			// 	break;
-			// case '4':
-			// 	action = 'bio_registration';
-			// 	break;
 			case '3':
 				action = 'verify_customer_details';
 				break;
@@ -113,8 +112,8 @@ const AgentUSSD = asyncHandler(async (req, res, next) => {
 		action = response.recordset[0].ACTION;
 	}
 
-	let keys = Object.keys(AgentMenu[action]);
-	let values = Object.values(AgentMenu[action]);
+	const keys = Object.keys(AgentMenu[action]);
+	const values = Object.values(AgentMenu[action]);
 
 	// user has session; get all unique sessions in array []
 	sessions = response.recordset.map((index) => index.PAGE);
@@ -122,9 +121,10 @@ const AgentUSSD = asyncHandler(async (req, res, next) => {
 		(value, index, categoryArray) => categoryArray.indexOf(value) === index
 	);
 
-	currentKey = sessions[0]; // get last index
+	// Current Session Key
+	currentKey = sessions[0];
 
-	// Empty userdata string,  stay on the same page
+	// ? Empty userdata string,  stay on the same page
 	if (!userdata.length || USSD_CODE.includes(userdata)) {
 		currentIndex = keys.indexOf(currentKey);
 		menu = values[currentIndex];
@@ -177,55 +177,79 @@ const AgentUSSD = asyncHandler(async (req, res, next) => {
 		);
 	}
 
+	/***************************
+	 * ? GET THE INPUTS        *
+	 ***************************/
+	stmt = `SELECT INPUT FROM SIMREG_CORE_TBL_AGENT_USSD WHERE MSISDN='${agentID}' AND ACTION='${action}' ORDER BY ID ASC`;
+	pool = await sql.connect(BSR_CONFIG);
+	response = await pool.request().query(stmt);
+	await pool.close();
+
+	// store in array [];
+	answers = response.recordset.map((index) => index.INPUT);
+	console.log(answers);
+
 	// increment to next page
 	currentIndex = keys.indexOf(currentKey);
 	nextIndex = currentIndex + 1;
-	currentKey = keys[nextIndex]; // next currentKey in db
+	currentKey = keys[nextIndex];
 
-	// ? Customer Confirm Message
+	// ! Validate Ghana Card Number
+	if (currentKey === '4' && action === 'non_bio_registration') {
+		// Non Bio registration Check
+		if (!formatGhanaCard(answers[3])) {
+			const message = Messages.invalidInput;
+			console.log(`${agentID}: ${JSON.stringify(message)}`);
+
+			response = await endSession(
+				requestID,
+				sessionID,
+				agentID,
+				starcode,
+				message,
+				timestamp,
+				answers
+			);
+
+			return res.send(response);
+		}
+	}
+
+	// ! validate BirthDate
+	if (currentKey === '7' && action === 'non_bio_registration') {
+		const dob = moment(answers[6], 'DDMMYYYY').format('DD/MM/YYYY');
+		answers[6] = dob;
+	}
+
+	// ! validate if customer wants MFS
+	if (currentKey == '9' && action === 'non_bio_registration') {
+		if (answers[8] === '2') {
+			stmt = `
+			INSERT INTO SIMREG_CORE_TBL_AGENT_USSD (MSISDN, SESSION, PAGE, INPUT, ACTION)
+			VALUES('${agentID}','${requestID}', '${currentKey}', '', '${action}')`;
+
+			pool = await sql.connect(BSR_CONFIG);
+			response = await pool.request().query(stmt);
+			await pool.close();
+
+			// skip next question
+			nextIndex++;
+			currentKey = keys[nextIndex];
+		}
+	}
+
+	// Confirmation
 	if (keys[nextIndex] === 'confirm') {
-		// get the answers to confirm
-		stmt = `SELECT INPUT FROM SIMREG_CORE_TBL_AGENT_USSD WHERE MSISDN='${agentID}' AND ACTION='${action}' ORDER BY ID ASC`;
-		pool = await sql.connect(BSR_CONFIG);
-		response = await pool.request().query(stmt);
-		await pool.close();
-
-		// array of strings [''];
-		answers = response.recordset.map((index) => index.INPUT);
-
+		// ? Customer Confirm Message
 		if (action === 'verify_customer_details') {
-			menu = `MSISDN: ${answers[1]}\n\nAre you sure you want to proceed?\n1.Confirm above the details\n2.Cancel`;
+			menu = `MSISDN: ${answers[1]}\nAre you sure you want to proceed?\n1.Confirm above the details\n2.Cancel`;
 		} else if (action === 'non_bio_registration') {
-			menu = `
-			MSISDN: ${answers[1]}\n
-			Last 6 Digit of ICCID: ${answers[2]}\n
-			ID: ${answers[3]}\n
-			FirstName(s): ${answers[4]}\n
-			Surname: ${answers[5]}\n
-			Sex: ${answers[6] == 1 ? 'Male' : 'Female'}\n
-			DOB: ${answers[7]}\n
-			Want AirtelTigo Money?: ${answers[8] == 1 ? 'Yes' : 'No'}\n
-			Next Of Kin: ${answers[9]}\n\n
-			1.Confirm above the details\n
-			2.Cancel`.trim();
+			menu = confirmMenuNonBioReg(answers);
 		} else if (action === 'non_bio_registration_mfs') {
-			menu = `MSISDN: ${answers[1]}\nID: ${answers[2]}\nFirstNames: ${
-				answers[3]
-			}\nSurname: ${answers[4]}\nSex: ${
-				answers[5] == 1 ? 'Male' : 'Female'
-			}\nDOB: ${answers[6]}\nNext Of Kin: ${
-				answers[7]
-			}\n\n1.Confirm above the details \n2.Cancel`;
+			menu = confirmMenuNonBioRegMFS(answers);
 		} else if (action === 'bio_re_registration') {
-			menu = `MSISDN: ${answers[1]}\nID: ${answers[2]}\nVerification Receipt NO: ${answers[3]}\n\n1.Confirm above the details \n2.Cancel`;
+			menu = confirmMenuBioReg(answers);
 		} else if (action === 'bio_registration') {
-			menu = `MSISDN: ${answers[1]}\nLast 6 Digit of ICCID: ${
-				answers[2]
-			}\nID: ${answers[3]}\nVerification Receipt NO: ${
-				answers[4]
-			}\nWant AirtelTigo Money?: ${
-				answers[5] == 1 ? 'Yes' : 'No'
-			}\nNext Of Kin: ${answers[6]}\n\n1.Confirm above the details \n2.Cancel`;
 		} else {
 			menu = values[nextIndex];
 		}
@@ -268,15 +292,6 @@ const AgentUSSD = asyncHandler(async (req, res, next) => {
 		);
 	}
 
-	// ? Session is over, get all inputs per action
-	stmt = `SELECT INPUT FROM SIMREG_CORE_TBL_AGENT_USSD WHERE MSISDN='${agentID}' AND ACTION='${action}' ORDER BY ID ASC`;
-	pool = await sql.connect(BSR_CONFIG);
-	response = await pool.request().query(stmt);
-	await pool.close();
-
-	// array of strings [''];
-	answers = response.recordset.map((index) => index.INPUT);
-
 	// ! Check if confirmation is cancelled
 	const confirmation = answers[answers.length - 1];
 	if (parseInt(confirmation) === 2) {
@@ -296,17 +311,12 @@ const AgentUSSD = asyncHandler(async (req, res, next) => {
 	// * Request Complete -> Send Answers to respective actions
 	switch (action) {
 		case 'non_bio_registration':
-			nonBioRegistration(agentID, answers, requestID);
+			// nonBioRegistration(agentID, answers, requestID);
 			break;
 		case 'non_bio_registration_mfs':
-			nonBioRegistrationMfs(agentID, answers, requestID);
+			// nonBioRegistrationMfs(agentID, answers, requestID);
+			console.log(answers);
 			break;
-		// case 'bio_re_registration':
-		// 	message = await bioReRegistration(agentID, answers, requestID);
-		// 	break;
-		// case 'bio_registration':
-		// 	message = await bioRegistration(agentID, answers, requestID);
-		// break;
 		case 'verify_customer_details':
 			message = await verifyCustomerDetails(agentID, answers, requestID);
 			break;
@@ -314,9 +324,9 @@ const AgentUSSD = asyncHandler(async (req, res, next) => {
 			break;
 	}
 
-	// * No more menu to show, end session
 	menu = message || AgentMenu.salute;
 
+	// * Send Message and end session
 	response = await endSession(
 		requestID,
 		sessionID,
@@ -327,57 +337,10 @@ const AgentUSSD = asyncHandler(async (req, res, next) => {
 		answers
 	);
 
+	console.log(answers);
+
+	// end
 	res.send(response);
 });
-
-// ? add new session to database and set flag 1 (open)
-const initSession = async (
-	requestID,
-	sessionID,
-	agentID,
-	starcode,
-	timestamp
-) => {
-	const menu = AgentMenu.menu;
-	const stmt = `
-	DELETE FROM SIMREG_CORE_TBL_AGENT_USSD WHERE MSISDN='${agentID}'; 
-	INSERT INTO SIMREG_CORE_TBL_AGENT_USSD (MSISDN, SESSION, PAGE, INPUT, ACTION) VALUES('${agentID}','${requestID}','menu', 'Awaiting input', null)`;
-
-	const pool = await sql.connect(BSR_CONFIG);
-	await pool.request().query(stmt);
-	await pool.close();
-
-	Logger(
-		`${requestID}|${agentID}|AgentMenu|progress|Page: Menu|${JSON.stringify(
-			menu
-		)}|'Awaiting input'`
-	);
-
-	console.log(`${agentID}: ${JSON.stringify(menu)}`);
-	return sendXMLResponse(sessionID, agentID, starcode, menu, 1, timestamp);
-};
-
-// ? clear session from database via MSISDN and set flag 2 (close)
-const endSession = async (
-	requestID,
-	sessionID,
-	agentID,
-	starcode,
-	menu,
-	timestamp,
-	answers
-) => {
-	const stmt = `DELETE FROM SIMREG_CORE_TBL_AGENT_USSD WHERE MSISDN LIKE '%${agentID}%';`;
-	const pool = await sql.connect(BSR_CONFIG);
-	await pool.request().query(stmt);
-	await pool.close();
-
-	Logger(
-		`${requestID}|${agentID}|AgentMenu|Ended|Page: Last|${JSON.stringify(menu)}`
-	);
-
-	console.log(`${agentID}: ${JSON.stringify(answers)}`);
-	return sendXMLResponse(sessionID, agentID, starcode, menu, 2, timestamp);
-};
 
 module.exports = AgentUSSD;
