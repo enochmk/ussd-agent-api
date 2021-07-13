@@ -21,7 +21,7 @@ app.use(
 	assignID,
 	devMode,
 	isAgent,
-	// SessionExpiry,
+	SessionExpiry,
 	require('./routes/routes')
 );
 

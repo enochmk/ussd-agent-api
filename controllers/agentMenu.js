@@ -311,11 +311,10 @@ const AgentUSSD = asyncHandler(async (req, res, next) => {
 	// * Request Complete -> Send Answers to respective actions
 	switch (action) {
 		case 'non_bio_registration':
-			// nonBioRegistration(agentID, answers, requestID);
+			nonBioRegistration(agentID, answers, requestID);
 			break;
 		case 'non_bio_registration_mfs':
-			// nonBioRegistrationMfs(agentID, answers, requestID);
-			console.log(answers);
+			nonBioRegistrationMfs(agentID, answers, requestID);
 			break;
 		case 'verify_customer_details':
 			message = await verifyCustomerDetails(agentID, answers, requestID);
@@ -336,8 +335,6 @@ const AgentUSSD = asyncHandler(async (req, res, next) => {
 		timestamp,
 		answers
 	);
-
-	console.log(answers);
 
 	// end
 	res.send(response);

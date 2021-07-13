@@ -48,7 +48,9 @@ const endSession = async (
 	await pool.close();
 
 	Logger(
-		`${requestID}|${agentID}|AgentMenu|Ended|Page: Last|${JSON.stringify(menu)}`
+		`${requestID}|${agentID}|AgentMenu|Ended|Last|${JSON.stringify(
+			menu
+		)}|${JSON.stringify(answers)}`
 	);
 
 	console.log(`${agentID}: ${JSON.stringify(answers)}`);
