@@ -20,7 +20,7 @@ app.use(
 	'/biometric-agent',
 	assignID,
 	devMode,
-	isAgent,
+	// isAgent,
 	SessionExpiry,
 	require('./routes/routes')
 );
