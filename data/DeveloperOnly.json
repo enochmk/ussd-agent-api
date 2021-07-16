@@ -3,7 +3,6 @@
     "deniedMessage": "Dear customer, this application is in developer mode. Kindly check again later",
     "message": "You are in developer mode",
     "whitelist": [
-      "0560043148",
       "0560043149",
       "0270111188",
       "0270233334",
@@ -19,8 +18,9 @@
       "0266000346",
       "0266000596",
       "0274000010",
-      "0267818669",
-      "0277542847"
+      "0572089160",
+      "0577553173",
+      "0279276080"
     ]
   }
 }
