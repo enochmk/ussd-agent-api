@@ -1,5 +1,6 @@
 const axios = require('axios');
 const Logger = require('../../utils/Logger');
+const formatGhanaCard = require('../../utils/formatGhanaCard');
 
 const action = async (agentID, answers, requestID = null) => {
 	const data = {
@@ -7,7 +8,7 @@ const action = async (agentID, answers, requestID = null) => {
 		agentID: agentID,
 		msisdn: answers[1],
 		iccid: answers[2],
-		nationalID: answers[3].toUpperCase(),
+		nationalID: formatGhanaCard(answers[3].toUpperCase()),
 		forenames: answers[4].toUpperCase(),
 		surname: answers[5].toUpperCase(),
 		gender: answers[6] == '1' ? 'MALE' : 'FEMALE',
