@@ -12,7 +12,7 @@ const action = async (agentID, answers, requestID) => {
 			)}`
 		);
 
-		const URL = `http://10.81.1.124:89/simreg_agent/index.php?agent_msisdn=${agentID}&msisdn=${customerMSISDN}&ops=simReg`;
+		const URL = `${process.env.GET_SUBSCRIBER_KYC}?agentID=${agentID}&msisdn=${customerMSISDN}&channelID=ussd`;
 		const response = await axios.get(URL);
 
 		Logger(
