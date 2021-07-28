@@ -22,6 +22,9 @@ const SMS = async (MSISDN, TEXT, REQUEST_ID = null) => {
 	// take the last 9 characters from the MSISDN
 	MSISDN = MSISDN.substr(MSISDN.length - 9);
 
+	// Replace # with %23
+	TEXT = TEXT.replace('#', '%23');
+
 	const URL = `http://${HOST}/send?username=${USERNAME}&password=${PASSWORD}&to=233${MSISDN}&content=${TEXT}`;
 
 	try {
@@ -29,8 +32,7 @@ const SMS = async (MSISDN, TEXT, REQUEST_ID = null) => {
 
 		// log to the file
 		Logger(
-			`${REQUEST_ID}|${MSISDN}|SMS|success|${JSON.stringify(TEXT)}|${
-				response.data
+			`${REQUEST_ID}|${MSISDN}|SMS|success|${JSON.stringify(TEXT)}|${response.data
 			}`
 		);
 
