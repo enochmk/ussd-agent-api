@@ -9,6 +9,7 @@ const errorHandler = require('./middleware/error');
 const SessionExpiry = require('./middleware/sessionExpiry');
 const devMode = require('./middleware/devMode');
 const isAgent = require('./middleware/isAgent');
+const clearExpiredSessions = require('./utils/clearExpiredSession');
 
 const app = express();
 
@@ -32,3 +33,11 @@ const PORT = process.env.NODE_PORT;
 const MESSAGE = `AGENT-MENU-USSD started in mode: ${process.env.NODE_ENV} on port: ${PORT}`;
 
 app.listen(PORT, () => console.log(MESSAGE));
+
+// set timer to periodically clear old sessions
+const timer = parseInt(process.env.CLEAR_EXPIRY_INTERVAL) * 1000;
+
+setInterval(() => {
+	clearExpiredSessions();
+}, timer);
+
