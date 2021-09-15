@@ -13,8 +13,8 @@ const action = async (agentID, answers, requestID = null) => {
 		surname: answers[5].toUpperCase(),
 		gender: answers[6] == '1' ? 'MALE' : 'FEMALE',
 		dateOfBirth: answers[7],
-		isMFS: answers[8] == '1' ? 1 : 0,
-		nextOfKin: answers[9].toUpperCase(),
+		isMFS: answers[8] == '1' ? true : false,
+		nextOfKin: answers[9].toUpperCase() || '',
 		channelID: 'ussd',
 	};
 
