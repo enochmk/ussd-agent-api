@@ -53,7 +53,7 @@ const AgentUSSD = asyncHandler(async (req, res, next) => {
 	stmt = `SELECT ID, PAGE, ACTION FROM SIMREG_CORE_TBL_AGENT_USSD WHERE MSISDN='${agentID}' ORDER BY ID DESC`;
 	pool = await sql.connect(BSR_CONFIG);
 	response = await pool.request().query(stmt);
-	await pool.close();
+	// await pool.close();
 
 	// ! initiate new session
 	if (!response.recordset.length) {
@@ -146,7 +146,7 @@ const AgentUSSD = asyncHandler(async (req, res, next) => {
 	stmt = `UPDATE SIMREG_CORE_TBL_AGENT_USSD SET INPUT='${userdata}', ACTION='${action}'WHERE ID='${previousRow}'`;
 	pool = await sql.connect(BSR_CONFIG);
 	response = await pool.request().query(stmt);
-	await pool.close();
+	// await pool.close();
 
 	// Check if there an action has not been selected, re-initiate session
 	if (currentKey === 'menu') {
@@ -163,7 +163,7 @@ const AgentUSSD = asyncHandler(async (req, res, next) => {
 
 		pool = await sql.connect(BSR_CONFIG);
 		response = await pool.request().query(stmt);
-		await pool.close();
+		// await pool.close();
 
 		Logger(
 			`${requestID}|${agentID}|AgentMenu|progress|Page: ${currentKey}|${action}|${JSON.stringify(
@@ -183,7 +183,7 @@ const AgentUSSD = asyncHandler(async (req, res, next) => {
 	stmt = `SELECT INPUT FROM SIMREG_CORE_TBL_AGENT_USSD WHERE MSISDN='${agentID}' AND ACTION='${action}' ORDER BY ID ASC`;
 	pool = await sql.connect(BSR_CONFIG);
 	response = await pool.request().query(stmt);
-	await pool.close();
+	// await pool.close();
 
 	// store in array [];
 	answers = response.recordset.map((index) => index.INPUT);
@@ -230,7 +230,7 @@ const AgentUSSD = asyncHandler(async (req, res, next) => {
 
 			pool = await sql.connect(BSR_CONFIG);
 			response = await pool.request().query(stmt);
-			await pool.close();
+			// await pool.close();
 
 			// skip next question
 			nextIndex++;
@@ -260,7 +260,7 @@ const AgentUSSD = asyncHandler(async (req, res, next) => {
 
 		pool = await sql.connect(BSR_CONFIG);
 		response = await pool.request().query(stmt);
-		await pool.close();
+		// await pool.close();
 
 		console.log(`${agentID}: ${JSON.stringify(menu)}`);
 		return res.send(
@@ -278,7 +278,7 @@ const AgentUSSD = asyncHandler(async (req, res, next) => {
 
 		pool = await sql.connect(BSR_CONFIG);
 		response = await pool.request().query(stmt);
-		await pool.close();
+		// await pool.close();
 
 		Logger(
 			`${requestID}|${agentID}|AgentMenu|progress|Page: ${nextIndex}|${action}|${JSON.stringify(

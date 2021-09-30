@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const xmlparser = require('express-xml-bodyparser');
-const dotenv = require('dotenv').config();
+const dotenv = require('dotenv');
 const morgan = require('morgan');
 
 const assignID = require('./middleware/assignID');
@@ -13,6 +13,8 @@ const clearExpiredSessions = require('./utils/clearExpiredSession');
 
 const app = express();
 
+dotenv.config();
+
 app.use(cors());
 app.use(morgan('tiny'));
 app.use(xmlparser());
@@ -21,11 +23,10 @@ app.use(
 	'/biometric-agent',
 	assignID,
 	devMode,
-	// isAgent,
+	isAgent,
 	SessionExpiry,
 	require('./routes/routes')
 );
-
 app.use(errorHandler);
 
 // Set server port to listen
@@ -40,4 +41,3 @@ const timer = parseInt(process.env.CLEAR_EXPIRY_INTERVAL) * 1000;
 setInterval(() => {
 	clearExpiredSessions();
 }, timer);
-
