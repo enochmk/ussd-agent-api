@@ -11,6 +11,9 @@ const Logger = require('../utils/Logger');
  * @param req.query.msisdn
  */
 const devMode = asyncHandler(async (req, res, next) => {
+	// perform DEV_MODE if enable
+	if (process.env.DEV_MODE === 'false') return next();
+
 	// get the body request
 	const body = req.body.ussddynmenurequest;
 
@@ -29,7 +32,7 @@ const devMode = asyncHandler(async (req, res, next) => {
 
 	const pool = await sql.connect(BSR_CONFIG);
 	const response = await pool.request().query(stmt);
-	await pool.close();
+	// await pool.close();
 
 	// ! MSISDN not in table
 	if (parseInt(response.recordset[0].COUNT) == 0) {
