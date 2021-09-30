@@ -89,14 +89,14 @@ const AgentUSSD = asyncHandler(async (req, res, next) => {
 	if (!response.recordset[0].ACTION) {
 		switch (userdata) {
 			case '1':
-				action = 'non_bio_registration';
-				break;
-			case '2':
 				action = 'non_bio_registration_mfs';
 				break;
-			case '3':
-				action = 'verify_customer_details';
-				break;
+			// case '2':
+			// 	action = 'non_bio_registration';
+			// 	break;
+			// case '3':
+			// 	action = 'verify_customer_details';
+			// 	break;
 			default:
 				response = await initSession(
 					requestID,
@@ -187,7 +187,7 @@ const AgentUSSD = asyncHandler(async (req, res, next) => {
 
 	// store in array [];
 	answers = response.recordset.map((index) => index.INPUT);
-	console.log(answers);
+	// console.log(answers);
 
 	// increment to next page
 	currentIndex = keys.indexOf(currentKey);
