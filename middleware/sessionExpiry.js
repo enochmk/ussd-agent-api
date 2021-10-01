@@ -22,7 +22,7 @@ const SessionExpiry = asyncHandler(async (req, res, next) => {
 
 	let pool = await sql.connect(BSR_CONFIG);
 	let response = await pool.request().query(stmt);
-	await pool.close();
+	// await pool.close();
 
 	// No session found, continue
 	if (!response.recordset.length) {
