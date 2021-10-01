@@ -89,14 +89,14 @@ const AgentUSSD = asyncHandler(async (req, res, next) => {
 	if (!response.recordset[0].ACTION) {
 		switch (userdata) {
 			case '1':
+				action = 'non_bio_registration';
+				break;
+			case '2':
 				action = 'non_bio_registration_mfs';
 				break;
-			// case '2':
-			// 	action = 'non_bio_registration';
-			// 	break;
-			// case '3':
-			// 	action = 'verify_customer_details';
-			// 	break;
+			case '3':
+				action = 'verify_customer_details';
+				break;
 			default:
 				response = await initSession(
 					requestID,
@@ -222,7 +222,7 @@ const AgentUSSD = asyncHandler(async (req, res, next) => {
 	}
 
 	// ! validate if customer wants MFS
-	if (currentKey == '9' && action === 'non_bio_registration') {
+	if (currentKey === '9' && action === 'non_bio_registration') {
 		if (answers[8] === '2') {
 			stmt = `
 			INSERT INTO SIMREG_CORE_TBL_AGENT_USSD (MSISDN, SESSION, PAGE, INPUT, ACTION)
