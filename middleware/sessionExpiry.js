@@ -46,7 +46,7 @@ const SessionExpiry = asyncHandler(async (req, res, next) => {
 
 		pool = await sql.connect(BSR_CONFIG);
 		await pool.request().query(stmt);
-		await pool.close();
+		// await pool.close();
 	}
 
 	next();

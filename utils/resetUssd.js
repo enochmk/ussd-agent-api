@@ -5,7 +5,7 @@ const resetUssd = async (tableName) => {
 	const stmt = `DELETE FROM ${tableName}`;
 	const pool = await sql.connect(BSR_CONFIG);
 	await pool.request().query(stmt);
-	await pool.close();
+	// await pool.close();
 };
 
 module.exports = resetUssd;

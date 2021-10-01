@@ -20,7 +20,7 @@ const initSession = async (
 
 	const pool = await sql.connect(BSR_CONFIG);
 	await pool.request().query(stmt);
-	await pool.close();
+	// await pool.close();
 
 	Logger(
 		`${requestID}|${agentID}|AgentMenu|progress|Page: Menu|${JSON.stringify(
@@ -45,7 +45,7 @@ const endSession = async (
 	const stmt = `DELETE FROM SIMREG_CORE_TBL_AGENT_USSD WHERE MSISDN LIKE '%${agentID}%';`;
 	const pool = await sql.connect(BSR_CONFIG);
 	await pool.request().query(stmt);
-	await pool.close();
+	// await pool.close();
 
 	Logger(
 		`${requestID}|${agentID}|AgentMenu|Ended|Last|${JSON.stringify(
