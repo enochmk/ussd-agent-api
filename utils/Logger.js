@@ -3,17 +3,24 @@ const path = require('path');
 const moment = require('moment');
 
 const FileLogger = (log) => {
-	// Get current date
-	const filename = moment().format('YYYYMMDD') + '.csv';
+	let location = 'logs';
+
+	if (os.platform() === 'win32') {
+		location = process.env.LOG_PATH_WINDOWS;
+	} else if (os.platform() === 'linux') {
+		location = process.env.LOG_PATH_LINUX;
+	}
 
 	// folder directory
-	const dir = path.join('logs');
+	const dir = path.join(location);
 
 	// Check if folder with current's date exists, else create folder
 	if (!fs.existsSync(dir)) {
-		fs.mkdirSync(dir);
+		fs.mkdirSync(dir, { recursive: true });
 	}
 
+	// Get current date
+	const filename = moment().format('YYYYMMDD') + '.log';
 	// write to the file path;
 	const filePath = path.join(dir, filename);
 

@@ -28,22 +28,22 @@ const devMode = asyncHandler(async (req, res, next) => {
 	req.channelID = req.body.channelID || req.query.channelID;
 
 	// ? Query if the MSISDN is in table
-	const stmt = `SELECT count(1) AS COUNT FROM [BIOSIMREG].[dbo].[SIMREG_CORE_DEVMODE_MSISDN] where MSISDN LIKE '%${msisdn}%'`;
+	// const stmt = `SELECT count(1) AS COUNT FROM [BIOSIMREG].[dbo].[SIMREG_CORE_DEVMODE_MSISDN] where MSISDN LIKE '%${msisdn}%'`;
 
-	const pool = await sql.connect(BSR_CONFIG);
-	const response = await pool.request().query(stmt);
-	// await pool.close();
+	// const pool = await sql.connect(BSR_CONFIG);
+	// const response = await pool.request().query(stmt);
+	// // await pool.close();
 
 	// ! MSISDN not in table
-	if (parseInt(response.recordset[0].COUNT) == 0) {
-		const menu = `Dear customer, this application is in developer mode. Kindly check again later`;
-		Logger(`${requestID}|${msisdn}|devMode|error|${JSON.stringify(menu)}`);
+	// if (parseInt(response.recordset[0].COUNT) == 0) {
+	// 	const menu = `Dear customer, this application is in developer mode. Kindly check again later`;
+	// 	Logger(`${requestID}|${msisdn}|devMode|error|${JSON.stringify(menu)}`);
 
-		console.log(`${msisdn}: devMode|${JSON.stringify(menu)}`);
-		return res.send(
-			sendXMLResponse(sessionID, msisdn, starcode, menu, 2, timestamp)
-		);
-	}
+	// 	console.log(`${msisdn}: devMode|${JSON.stringify(menu)}`);
+	// 	return res.send(
+	// 		sendXMLResponse(sessionID, msisdn, starcode, menu, 2, timestamp)
+	// 	);
+	// }
 
 	next();
 });

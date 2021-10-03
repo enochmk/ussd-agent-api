@@ -12,11 +12,13 @@
 	"license": "ISC",
 	"dependencies": {
 		"axios": "^0.21.1",
+		"chalk": "^4.1.2",
 		"cors": "^2.8.5",
 		"dotenv": "^10.0.0",
 		"express": "^4.17.1",
 		"express-xml-bodyparser": "^0.3.0",
 		"moment": "^2.29.1",
+		"mongoose": "^6.0.8",
 		"morgan": "^1.10.0",
 		"mssql": "^7.1.0",
 		"uuid": "^8.3.2"

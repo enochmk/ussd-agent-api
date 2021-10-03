@@ -28,26 +28,26 @@ const isAgent = asyncHandler(async (req, res, next) => {
 	if (process.env.PERFORM_IS_AGENT === 'false') return next();
 
 	// ? Check if MSISDN already registered
-	const stmt = `SELECT ACTIVATORID, ACTIVATORMSISDN FROM [dms2].[dbo].[DMS_JOB_SIMREG_TBL_ENGRAFI_AUTHENTICATION] WHERE ACTIVATORID = '${msisdn}' OR ACTIVATORMSISDN = '${msisdn}'`;
-	const pool = await sql.connect(DMS_CONFIG);
-	let response = await pool.request().query(stmt);
-	// await pool.close();
+	// const stmt = `SELECT ACTIVATORID, ACTIVATORMSISDN FROM [dms2].[dbo].[DMS_JOB_SIMREG_TBL_ENGRAFI_AUTHENTICATION] WHERE ACTIVATORID = '${msisdn}' OR ACTIVATORMSISDN = '${msisdn}'`;
+	// const pool = await sql.connect(DMS_CONFIG);
+	// let response = await pool.request().query(stmt);
+	// // await pool.close();
 
 	// ! MSISDN already registered
-	if (!response.recordset.length) {
-		const message = Messages.notAgent;
+	// if (!response.recordset.length) {
+	// 	const message = Messages.notAgent;
 
-		response = sendXMLResponse(
-			sessionID,
-			msisdn,
-			starcode,
-			message,
-			2,
-			timestamp
-		);
+	// 	response = sendXMLResponse(
+	// 		sessionID,
+	// 		msisdn,
+	// 		starcode,
+	// 		message,
+	// 		2,
+	// 		timestamp
+	// 	);
 
-		return res.send(response);
-	}
+	// 	return res.send(response);
+	// }
 
 	next();
 });
