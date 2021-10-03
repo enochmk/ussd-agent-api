@@ -1,6 +1,6 @@
 const uuid = require('uuid').v4;
 
-const assignID = (req, res, next) => {
+const assignID = (req, _, next) => {
 	req.requestID = req.body.requestID || uuid();
 	next();
 };
