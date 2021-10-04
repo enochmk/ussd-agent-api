@@ -3,7 +3,7 @@ const axios = require('axios');
 const Logger = require('../utils/Logger');
 const SMS = require('../utils/SMS');
 
-// call the re-registration API
+// * call the basic re-registration API
 const ReRegistrationBasic = async (data, requestID) => {
 	Logger(`${requestID}|${data.msisdn}|BasicAPI|request|${data}`);
 

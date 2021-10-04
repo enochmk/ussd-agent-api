@@ -1,6 +1,6 @@
 const axios = require('axios');
 
-const Logger = require('../../utils/Logger');
+const Logger = require('../utils/Logger');
 
 const action = async (agentID, answers, requestID) => {
 	try {

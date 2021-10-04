@@ -1,6 +1,6 @@
 const express = require('express');
 
-const menu = require('../controllers/agentMenu');
+const menu = require('../controllers/USSD');
 
 const router = express.Router();
 

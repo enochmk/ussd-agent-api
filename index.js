@@ -16,7 +16,7 @@ app.use(cors());
 app.use(morgan('tiny'));
 app.use(xmlparser());
 
-// app.use('/biometric-agent', assignID, require('./routes/routes'));
+app.use('/biometric-agent', assignID, require('./routes/routes'));
 app.use(errorHandler);
 
 // Set server port to listen
