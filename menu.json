@@ -1,47 +1,30 @@
 {
 	"start": "Welcome to AirtelTigo Agent Menu\n\n1. New Registration\n2. New AirtelTigo Money ONLY\n3. Verify Customer Details\n",
 	"finish": "Hello, your request has been received and awaiting validation. Thank you and keep safe.",
-	"options": {
-		"non_bio_registration": {
-			"1": "Enter the customer's MSISDN",
-			"2": "Enter last Six Digit of ICCID",
-			"3": "Enter the customer's Ghana card number.\nEg: (GHA-123456789-9)",
-			"4": "Enter the customer's first names",
-			"5": "Enter the customer's surname",
-			"6": "Select customer's gender\n1.Male\n2.Female",
-			"7": "Enter the customer's date of birth (DDMMYYYY).\nEg: 08101990",
-			"8": "Create AirtelTigo Money\n1.Yes\n2.No",
-			"9": "If AirtelTigo Money, enter Next of Kin Full name",
-			"confirm": "Are you sure?\n1.Confirm.\n2.Cancel"
-		},
-		"non_bio_registration_mfs": {
-			"1": "Enter customer's MSISDN",
-			"2": "Enter customer's Ghana card number\nEg: (GHA-123456789-9)",
-			"3": "Enter the customer's first names",
-			"4": "Enter the customer's surname",
-			"5": "Select customer's gender\n1.Male\n2.Female",
-			"6": "Enter the customer's date of birth (DDMMYYYY).\nEg: 08101990",
-			"7": "Enter full name of Next Of Kin",
-			"confirm": "Are you sure?\n1.Confirm.\n2.Cancel"
-		},
-		"bio_re_registration": {
-			"1": "Link your phone number with NIA card details.\nEnter customer's MSISDN",
-			"2": "Enter customer's Ghana card number.\nEg: (GHA-123456789-9)",
-			"3": "Enter verification receipt Number",
-			"confirm": "Are you sure?\n1.Confirm.\n2.Cancel"
-		},
-		"bio_registration": {
-			"1": "Enter customer's MSISDN",
-			"2": "Enter last Six Digit of ICCID",
-			"3": "Enter customer's Ghana card number.\nEg: (GHA-123456789-9)",
-			"4": "Enter verification receipt Number",
-			"5": "Create AirtelTigo Money\n1.Yes\n2.No",
-			"6": "If AirtelTigo Money, enter Next of Kin Full name",
-			"confirm": "Are you sure?\n1.Confirm.\n2.Cancel"
-		},
-		"verify_customer_details": {
-			"1": "Verify Customer details.\nEnter customer's MSISDN",
-			"confirm": "Are you sure?\n1.Confirm.\n2.Cancel"
-		}
+	"non_bio_registration": {
+		"1": "Enter the customer's MSISDN",
+		"2": "Enter last Six Digit of ICCID",
+		"3": "Enter the customer's Ghana card number.\nEg: (GHA-123456789-9)",
+		"4": "Enter the customer's first names",
+		"5": "Enter the customer's surname",
+		"6": "Select customer's gender\n1.Male\n2.Female",
+		"7": "Enter the customer's date of birth (DDMMYYYY).\nEg: 08101990",
+		"8": "Create AirtelTigo Money\n1.Yes\n2.No",
+		"9": "If AirtelTigo Money, enter Next of Kin Full name",
+		"confirm": "Are you sure?\n1.Confirm.\n2.Cancel"
+	},
+	"non_bio_registration_mfs": {
+		"1": "Enter customer's MSISDN",
+		"2": "Enter customer's Ghana card number\nEg: (GHA-123456789-9)",
+		"3": "Enter the customer's first names",
+		"4": "Enter the customer's surname",
+		"5": "Select customer's gender\n1.Male\n2.Female",
+		"6": "Enter the customer's date of birth (DDMMYYYY).\nEg: 08101990",
+		"7": "Enter full name of Next Of Kin",
+		"confirm": "Are you sure?\n1.Confirm.\n2.Cancel"
+	},
+	"verify_customer_details": {
+		"1": "Verify Customer details.\nEnter customer's MSISDN",
+		"confirm": "Are you sure?\n1.Confirm.\n2.Cancel"
 	}
 }

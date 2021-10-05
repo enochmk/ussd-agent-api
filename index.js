@@ -24,7 +24,7 @@ const PORT = process.env.NODE_PORT || 5000;
 const MESSAGE = `AGENT-MENU-USSD started in mode: ${process.env.NODE_ENV} on port: ${PORT}`;
 
 // connect to database
-mongoose.connect('mongodb://localhost:27017', () => {
+mongoose.connect('mongodb://localhost:27017/ussd-agent', () => {
 	console.log(chalk.black.bgGreen.bold('Connected to Mongodb'));
 	app.listen(PORT, () => console.log(chalk.white.bgYellow.bold(MESSAGE)));
 });

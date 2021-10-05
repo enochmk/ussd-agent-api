@@ -2,6 +2,7 @@ const moment = require('moment');
 
 const asyncHandler = require('../middleware/async');
 const Menu = require('../menu.json');
+const Session = require('../models/Session');
 const sendXMLResponse = require('../utils/XMLResponse');
 const Logger = require('../utils/Logger');
 const Messages = require('../utils/Messages.json');
@@ -21,24 +22,131 @@ const USSD = asyncHandler(async (req, res, _) => {
 	const userdata = body.userdata[0].trim();
 
 	// check if subscriber have sessionID
+	const sessions = await Session.find({ msisdn: agentID }).sort({
+		$natural: -1,
+	});
 
 	// if no; start a new session and save to database
+	if (!sessions.length) {
+		let key = 'start';
+		await Session.create({
+			sessionID: sessionID,
+			msisdn: agentID,
+			option: null,
+			page: null,
+			question: JSON.stringify(Menu[key]),
+			answer: null,
+		});
 
-	// userdata empty: yes, return same question
+		return res.send(
+			sendXMLResponse(sessionID, agentID, starcode, Menu[key], 1, timestamp)
+		);
+	}
 
-	// userdata empty: no, save input on the previous question
+	// if userdata is empty
+	if (!userdata || userdata.length === 0) {
+	}
 
-	let message = Menu.start;
-	let response = sendXMLResponse(
-		sessionID,
-		agentID,
-		starcode,
-		message,
-		2,
-		timestamp
+	//? Get the last session
+	const lastSession = sessions[0];
+	let action = lastSession.option;
+	let page = lastSession.page;
+
+	// no action selected
+	if (action === null) {
+		page = null;
+		switch (userdata) {
+			case '1':
+				action = 'non_bio_registration';
+				break;
+			case '2':
+				action = 'non_bio_registration_mfs';
+				break;
+			case '3':
+				action = 'verify_customer_details';
+				break;
+			default:
+				// invalid input
+				return res.send(
+					sendXMLResponse(
+						sessionID,
+						agentID,
+						starcode,
+						Messages.invalidInput,
+						page === 'confirm' ? 2 : 1,
+						timestamp
+					)
+				);
+		}
+	}
+
+	//* *************************Previous Session*****************************************//
+	// ? update the input of the last session
+	lastSession.answer = userdata;
+	await Session.updateOne({ _id: lastSession._id }, lastSession);
+	//* **********************************************************************************//
+
+	//* *************************Next Section Handler*************************************//
+	let questions = Menu[action]; // questions for this action
+	let nextQuestion = null;
+	let endSession = false;
+
+	// increment to the next key
+	if (page !== null) {
+		// convert to array of question numbers;
+		const keys = Object.keys(questions);
+		const currentIndex = keys.indexOf(page);
+		const nextIndex = currentIndex + 1;
+
+		// convert to array of questions
+		questions = Object.values(questions);
+
+		// Get the next question if available
+		if (questions[nextIndex]) {
+			nextQuestion = questions[nextIndex];
+			page = keys[nextIndex];
+		} else {
+			endSession = true;
+		}
+	} else {
+		page = '1';
+		nextQuestion = questions[page];
+	}
+
+	// ? create new session if end session is false
+	if (!endSession) {
+		// create new session record
+		let newSession = {
+			msisdn: agentID,
+			sessionID: sessionID,
+			option: action,
+			page: page,
+			answer: null,
+			question: nextQuestion,
+		};
+
+		await Session.create(newSession);
+	}
+	//* **********************************************************************************//
+
+	// get the answers and clear the sesion;
+	if (endSession) {
+		let answers = await Session.find({ msisdn: agentID });
+		answers = answers.map((record) => record.answer);
+		console.log(answers);
+		// await Session.deleteMany({ msisdn: agentID });
+	}
+
+	return res.send(
+		sendXMLResponse(
+			sessionID,
+			agentID,
+			starcode,
+			endSession ? Messages.onSubmit : nextQuestion,
+			endSession ? 2 : 1,
+			timestamp
+		)
 	);
-
-	return res.send(response);
 });
 
 module.exports = USSD;
