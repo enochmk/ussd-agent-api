@@ -13,6 +13,7 @@ const Messages = require('../utils/Messages.json');
 const USSD = asyncHandler(async (req, res, _) => {
 	const requestID = req.requestID;
 	const USSD_CODE = ['*460*46#', '*100*5#'];
+	const END_CODE = ['#', '99'];
 
 	const body = req.body.ussddynmenurequest;
 	const agentID = body.msisdn[0].substr(body.msisdn[0].length - 9);
@@ -43,14 +44,40 @@ const USSD = asyncHandler(async (req, res, _) => {
 		);
 	}
 
-	// if userdata is empty
-	if (!userdata || userdata.length === 0) {
-	}
-
 	//? Get the last session
 	const lastSession = sessions[0];
 	let action = lastSession.option;
 	let page = lastSession.page;
+
+	// if userdata is empty, return the same question
+	if (!userdata || userdata.length === 0) {
+		return res.send(
+			sendXMLResponse(
+				sessionID,
+				agentID,
+				starcode,
+				lastSession.question.toString(),
+				1,
+				timestamp
+			)
+		);
+	}
+
+	// end session if userdata is in END_CODE
+	if (END_CODE.includes(userdata)) {
+		await Session.deleteMany({ msisdn: agentID });
+
+		return res.send(
+			sendXMLResponse(
+				sessionID,
+				agentID,
+				starcode,
+				Messages.onCancel,
+				2,
+				timestamp
+			)
+		);
+	}
 
 	// no action selected
 	if (action === null) {
@@ -133,8 +160,9 @@ const USSD = asyncHandler(async (req, res, _) => {
 	if (endSession) {
 		let answers = await Session.find({ msisdn: agentID });
 		answers = answers.map((record) => record.answer);
-		console.log(answers);
-		// await Session.deleteMany({ msisdn: agentID });
+
+		// console.log(answers);
+		await Session.deleteMany({ msisdn: agentID });
 	}
 
 	return res.send(
