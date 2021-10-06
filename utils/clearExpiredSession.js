@@ -14,6 +14,7 @@ const clearExpiredSession = async () => {
 	const timestamp = moment()
 		.subtract(CLEAR_EXPIRY_VALUE, CLEAR_EXPIRY_UNIT)
 		.format();
+
 	const stmt = `DELETE FROM [dbo].[${TABLE_NAME}] WHERE TIMESTAMP <= '${timestamp}'`;
 
 	const pool = await sql.connect(BSR_CONFIG);

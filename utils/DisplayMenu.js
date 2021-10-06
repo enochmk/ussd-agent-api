@@ -1,6 +1,6 @@
 const formatGhanaCard = require('./formatGhanaCard');
 
-const confirmMenuNonBioReg = (answers) => {
+const confirmMenuNBReg = (answers) => {
 	let menu = `MSISDN: ${answers[1]}\nLast 6 Digit of ICCID: ${
 		answers[2]
 	}\nID: ${formatGhanaCard(
@@ -16,7 +16,7 @@ const confirmMenuNonBioReg = (answers) => {
 	return menu;
 };
 
-const confirmMenuNonBioRegMFS = (answers) => {
+const confirmMenuNBRegMFS = (answers) => {
 	menu = `MSISDN: ${answers[1]}\nID: ${answers[2]}\nFirstNames: ${
 		answers[3]
 	}\nSurname: ${answers[4]}\nSex: ${
@@ -28,25 +28,7 @@ const confirmMenuNonBioRegMFS = (answers) => {
 	return menu;
 };
 
-const confirmMenuBioReReg = (answers) => {
-	menu = `MSISDN: ${answers[1]}\nID: ${answers[2]}\nVerification Receipt NO: ${answers[3]}\n\n1.Confirm above the details \n2.Cancel`;
-
-	return menu;
-};
-
-const confirmMenuBioReg = (answers) => {
-	menu = `MSISDN: ${answers[1]}\nLast 6 Digit of ICCID: ${answers[2]}\nID: ${
-		answers[3]
-	}\nVerification Receipt NO: ${answers[4]}\nWant AirtelTigo Money?: ${
-		answers[5] == 1 ? 'Yes' : 'No'
-	}\nNext Of Kin: ${answers[6]}\n\n1.Confirm above the details \n2.Cancel`;
-
-	return menu;
-};
-
 module.exports = {
-	confirmMenuBioReReg,
-	confirmMenuBioReg,
-	confirmMenuNonBioRegMFS,
-	confirmMenuNonBioReg,
+	confirmMenuNBReg,
+	confirmMenuNBRegMFS,
 };

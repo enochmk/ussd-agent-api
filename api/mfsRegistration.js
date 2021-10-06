@@ -2,7 +2,7 @@ const axios = require('axios');
 const Logger = require('../../utils/Logger');
 const formatGhanaCard = require('../../utils/formatGhanaCard');
 
-const action = async (agentID, answers, requestID = null) => {
+const action = async (requestID, agentID, answers) => {
 	const data = {
 		requestID: requestID,
 		agentID: agentID,
