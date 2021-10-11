@@ -33,7 +33,7 @@ const SessionExpiry = asyncHandler(async (req, res, next) => {
 
 	// if allocatedTimestamp is greater, session has expired, clear from db
 	if (moment(allocatedTimestamp) < moment(currentTimestamp)) {
-		return res.send('Session expired');
+		await Session.deleteMany({ msisdn: msisdn });
 	}
 
 	next();
