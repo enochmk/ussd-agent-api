@@ -2,10 +2,11 @@ const axios = require('axios');
 const Logger = require('../../utils/Logger');
 const formatGhanaCard = require('../../utils/formatGhanaCard');
 
-const action = async (requestID, agentID, answers) => {
+const action = async (requestID, agentID, answers, cellID) => {
 	const data = {
 		requestID: requestID,
 		agentID: agentID,
+		cellID: cellID,
 		msisdn: answers[1],
 		nationalID: formatGhanaCard(answers[2].toUpperCase()),
 		forenames: answers[3].toUpperCase(),
@@ -22,12 +23,17 @@ const action = async (requestID, agentID, answers) => {
 		)}`
 	);
 
-	const URL = process.env.NON_BIO_REGISTRATION_MFS_URL;
-	const response = await axios.post(URL, data);
+	const response = await axios.post(
+		process.env.NON_BIO_REGISTRATION_MFS_URL,
+		data
+	);
 
 	Logger(
 		`${requestID}|${agentID}|API|nonBioRegistrationMfsAPI|response|${JSON.stringify(
-			response.data
+			{
+				cellID: cellID,
+				response: response.data,
+			}
 		)}`
 	);
 };

@@ -2,9 +2,10 @@ const axios = require('axios');
 const Logger = require('../../utils/Logger');
 const formatGhanaCard = require('../../utils/formatGhanaCard');
 
-const action = async (requestID, agentID, answers) => {
+const action = async (requestID, agentID, answers, cellID) => {
 	const data = {
 		requestID: requestID,
+		cellID: cellID,
 		agentID: agentID,
 		msisdn: answers[1],
 		iccid: answers[2],
@@ -24,12 +25,11 @@ const action = async (requestID, agentID, answers) => {
 		)}`
 	);
 
-	const URL = process.env.NON_BIO_REGISTRATION_URL;
-	const response = await axios.post(URL, data);
+	const response = await axios.post(process.env.NON_BIO_REGISTRATION_URL, data);
 
 	Logger(
 		`${requestID}|${agentID}|API|nonBioRegistrationAPI|response|${JSON.stringify(
-			response.data
+			{ cellID: cellID, response: response.data }
 		)}`
 	);
 };

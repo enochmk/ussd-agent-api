@@ -4,6 +4,7 @@ const asyncHandler = require('../middleware/async');
 const Menu = require('../menu.json');
 const Session = require('../models/Session');
 const sendXMLResponse = require('../utils/XMLResponse');
+const formatGhanaCard = require('../utils/formatGhanaCard');
 const Logger = require('../utils/Logger');
 const Messages = require('../utils/Messages.json');
 
@@ -12,7 +13,7 @@ const Messages = require('../utils/Messages.json');
  */
 const USSD = asyncHandler(async (req, res, _) => {
 	const requestID = req.requestID;
-	const USSD_CODE = ['*460*46#', '*100*5#'];
+	const USSD_CODE = ['*460*55#', '*474#'];
 	const END_CODE = ['#', '99'];
 
 	const body = req.body.ussddynmenurequest;
@@ -28,8 +29,9 @@ const USSD = asyncHandler(async (req, res, _) => {
 	});
 
 	// if no; start a new session and save to database
-	if (!sessions.length) {
+	if (!sessions.length || USSD_CODE.includes(userdata)) {
 		let key = 'start';
+
 		await Session.create({
 			sessionID: sessionID,
 			msisdn: agentID,
@@ -117,6 +119,7 @@ const USSD = asyncHandler(async (req, res, _) => {
 	let questions = Menu[action]; // questions for this action
 	let nextQuestion = null;
 	let endSession = false;
+	let answers = await Session.find({ msisdn: agentID });
 
 	// increment to the next key
 	if (page !== null) {
@@ -125,10 +128,56 @@ const USSD = asyncHandler(async (req, res, _) => {
 		const currentIndex = keys.indexOf(page);
 		const nextIndex = currentIndex + 1;
 
+		// validation
+		answers = answers.map((record) => record.answer);
+		answers = answers.shift(); // remove first item (menu selection)
+
+		// ? Validate Ghana Card is in correct format
+		if (action === 'non_bio_registration' && page === '2') {
+			if (!formatGhanaCard(lastSession.answer)) {
+				return res.send(
+					sendXMLResponse(
+						sessionID,
+						agentID,
+						starcode,
+						Messages.invalidGhanaCard,
+						2,
+						timestamp
+					)
+				);
+			}
+		}
+
+		// // ? validate BirthDate
+		if (action === 'non_bio_registration' && page === '6') {
+			const dob = moment(answers[6], 'DDMMYYYY').format('DD/MM/YYYY');
+			answers[6] = dob;
+		}
+
+		// // ? validate if customer wants MFS, if no skip this question
+		if (action === 'non_bio_registration' && page === '7') {
+			if (answers[7] === '2') {
+				// skip next question
+				nextIndex++;
+
+				// create new session record
+				let newSession = {
+					msisdn: agentID,
+					sessionID: sessionID,
+					option: action,
+					page: page,
+					answer: 2,
+					question: 'Create AirtelTigo Money\n1.Yes\n2.No',
+				};
+
+				await Session.create(newSession);
+			}
+		}
+
 		// convert to array of questions
 		questions = Object.values(questions);
 
-		// Get the next question if available
+		// Get the next question if available or else end the session
 		if (questions[nextIndex]) {
 			nextQuestion = questions[nextIndex];
 			page = keys[nextIndex];
@@ -140,7 +189,7 @@ const USSD = asyncHandler(async (req, res, _) => {
 		nextQuestion = questions[page];
 	}
 
-	// ? create new session if end session is false
+	// ? continue to new session if end session is false
 	if (!endSession) {
 		// create new session record
 		let newSession = {
@@ -161,7 +210,7 @@ const USSD = asyncHandler(async (req, res, _) => {
 		let answers = await Session.find({ msisdn: agentID });
 		answers = answers.map((record) => record.answer);
 
-		// console.log(answers);
+		console.log(answers);
 		await Session.deleteMany({ msisdn: agentID });
 	}
 
