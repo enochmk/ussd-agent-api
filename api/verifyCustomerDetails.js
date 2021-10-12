@@ -1,23 +1,35 @@
 const axios = require('axios');
+const util = require('util');
 
 const Logger = require('../utils/Logger');
 
-const action = async (requestID, agentID, answers, cellID) => {
-	const customerMSISDN = answers[1];
+const action = async (requestID, agentID, msisdn, cellID = null) => {
+	const URL = `${process.env.GET_SUBSCRIBER_KYC}?agentID=${agentID}&msisdn=${msisdn}&channelID=ussd&cellID=${cellID}`;
 
-	const URL = `${process.env.GET_SUBSCRIBER_KYC}?agentID=${agentID}&msisdn=${customerMSISDN}&channelID=ussd`;
-	const response = await axios.get(URL);
+	try {
+		const response = await axios.get(URL);
 
-	Logger(
-		`${requestID}|${agentID}|API|verifyCustomerDetails|response|${JSON.stringify(
-			{
-				cellID: cellID,
-				response: response.data,
-			}
-		)}`
-	);
+		Logger(
+			`${requestID}|${agentID}|API|verifyCustomerDetails|response|${JSON.stringify(
+				{
+					cellID: cellID,
+					response: response.data,
+				}
+			)}`
+		);
 
-	return response.data;
+		return response.data;
+	} catch (error) {
+		Logger(
+			`${requestID}|${agentID}|API|verifyCustomerDetails|error|${JSON.stringify(
+				{
+					stack: error.stack,
+					response: util.inspect(error.response),
+					message: error.message,
+				}
+			)}`
+		);
+	}
 };
 
 module.exports = action;

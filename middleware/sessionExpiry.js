@@ -10,7 +10,9 @@ const ALLOCATED_INTERVAL = process.env.ALLOCATED_INTERVAL;
  * @description Check if a session for this MSISDN has expired
  * @param req.body.msisdn
  */
-const SessionExpiry = asyncHandler(async (req, res, next) => {
+const SessionExpiry = asyncHandler(async (req, _, next) => {
+	if (process.env.PERFORM_SESSION_EXPIRY === 'false') return next();
+
 	const body = req.body.ussddynmenurequest;
 
 	// extract requestID, MSISDN, userData

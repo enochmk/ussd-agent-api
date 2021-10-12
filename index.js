@@ -50,11 +50,11 @@ db.once('open', () => {
 	console.log(chalk.black.bgGreen.bold('Connected to Mongodb'));
 });
 
-createConnection()
-	.then((connection) => {
-		console.log(chalk.black.bgGreen.bold('Connected to SQL database'));
-	})
-	.catch((error) => {
-		console.log('SQL Error: ', error);
-		server.close(1);
-	});
+// createConnection()
+// 	.then((connection) => {
+// 		console.log(chalk.black.bgGreen.bold('Connected to SQL database'));
+// 	})
+// 	.catch((error) => {
+// 		console.log('SQL Error: ', error);
+// 		server.close(1);
+// 	});
