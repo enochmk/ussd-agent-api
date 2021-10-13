@@ -3,6 +3,8 @@ const Messages = require('../utils/Messages.json');
 const Session = require('../models/Session');
 const sendXMLResponse = require('../utils/XMLResponse');
 const asyncHandler = require('../middleware/async');
+const registrationHandler = require('../functions/option1');
+const registrationMFSHandler = require('../functions/option2');
 const verifyCustomerHandler = require('../functions/option3');
 
 /**
@@ -19,7 +21,7 @@ const USSD = asyncHandler(async (req, res, _) => {
 	const sessionID = body.requestid[0];
 	const starcode = body.starcode[0];
 	const timestamp = body.timestamp[0];
-	const userdata = body.userdata[0].trim();
+	let userdata = body.userdata[0].trim();
 
 	// get latest sessions
 	let sessions = await Session.find({ msisdn: msisdn }).sort({ _id: 'desc' });
@@ -45,9 +47,13 @@ const USSD = asyncHandler(async (req, res, _) => {
 	// Go Back
 	if (BACK_CODE.includes(userdata)) {
 		const ID = sessions[0]._id;
+
 		if (sessions.length > 1) {
 			await Session.deleteOne({ _id: ID });
 			sessions.shift();
+
+			// unset userdata
+			userdata = null;
 		}
 	}
 
@@ -138,12 +144,24 @@ const USSD = asyncHandler(async (req, res, _) => {
 
 	let optionHandler = null;
 	switch (option) {
-		// case 'non_bio_registration':
-		// 	optionHandler = await registrationHandler();
-		// 	break;
-		// case 'non_bio_registration_mfs':
-		// 	optionHandler = await registrationHandler();
-		// 	break;
+		case 'non_bio_registration':
+			optionHandler = await registrationHandler(
+				option,
+				sessionID,
+				msisdn,
+				starcode,
+				timestamp
+			);
+			break;
+		case 'non_bio_registration_mfs':
+			optionHandler = await registrationMFSHandler(
+				option,
+				sessionID,
+				msisdn,
+				starcode,
+				timestamp
+			);
+			break;
 		case 'verify_customer_details':
 			optionHandler = await verifyCustomerHandler(
 				option,
