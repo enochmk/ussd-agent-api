@@ -15,13 +15,13 @@
 	},
 	"non_bio_registration_mfs": {
 		"1": "Enter customer's MSISDN",
-		"2": "Enter customer's Ghana card number\nEg: (GHA-123456789-9)",
+		"2": "Enter customer's Ghana card number\nEg: (GHA-712456789-9)",
 		"3": "Enter the customer's first names",
 		"4": "Enter the customer's surname",
 		"5": "Select customer's gender\n1.Male\n2.Female",
 		"6": "Enter the customer's date of birth (DDMMYYYY).\nEg: 08101990",
 		"7": "Enter full name of Next Of Kin",
-		"confirm": "MSISDN: (MSISDN)\nID: (ID)\nFirstNames: (FORNAMES)\nSurname: (SURNAME)\nSex: (SEX)\nDOB: (DOB)\nNext Of Kin: (NOK)\n\n1.Confirm above the details \n2.Cancel"
+		"confirm": "MSISDN: (MSISDN)\nID: (ID)\nFirstNames: (FORENAMES)\nSurname: (SURNAME)\nSex: (SEX)\nDOB: (DOB)\nNext Of Kin: (NOK)\n\n1.Confirm above the details \n2.Cancel"
 	},
 	"verify_customer_details": {
 		"1": "Enter customer's MSISDN\n\n",
