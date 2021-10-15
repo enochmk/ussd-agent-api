@@ -1,37 +1,45 @@
 const axios = require('axios');
-const Logger = require('../../utils/Logger');
-const formatGhanaCard = require('../../utils/formatGhanaCard');
+const util = require('util');
 
-const action = async (requestID, agentID, answers, cellID) => {
+const Logger = require('../utils/Logger');
+
+const action = async (requestID, agentID, answers, cellID = null) => {
 	const data = {
 		requestID: requestID,
 		cellID: cellID,
 		agentID: agentID,
-		msisdn: answers[1],
-		iccid: answers[2],
-		nationalID: formatGhanaCard(answers[3].toUpperCase()),
-		forenames: answers[4].toUpperCase(),
-		surname: answers[5].toUpperCase(),
-		gender: answers[6] == '1' ? 'MALE' : 'FEMALE',
-		dateOfBirth: answers[7],
-		isMFS: answers[8] == '1' ? true : false,
-		nextOfKin: answers[9].toUpperCase() || '',
+		msisdn: answers.MSISDN,
+		iccid: answers.ICCID,
+		nationalID: answers.ID,
+		forenames: answers.FORENAMES,
+		surname: answers.SURNAME,
+		gender: answers.SEX,
+		dateOfBirth: answers.DOB,
+		isMFS: answers.ATM.toLowerCase() === 'yes' ? true : false,
+		nextOfKin: answers.ATM.toLowerCase() === 'yes' ? answers.NOK : '',
 		channelID: 'ussd',
 	};
 
-	Logger(
-		`${requestID}|${agentID}|API|nonBioRegistrationAPI|request|${JSON.stringify(
-			data
-		)}`
-	);
+	try {
+		const response = await axios.post(process.env.RE_REGISTRATION_URL, data);
 
-	const response = await axios.post(process.env.NON_BIO_REGISTRATION_URL, data);
-
-	Logger(
-		`${requestID}|${agentID}|API|nonBioRegistrationAPI|response|${JSON.stringify(
-			{ cellID: cellID, response: response.data }
-		)}`
-	);
+		Logger(
+			`${requestID}|${agentID}|API|nonBioRegistrationAPI|response|${JSON.stringify(
+				{ request: data, response: response.data }
+			)}`
+		);
+	} catch (error) {
+		Logger(
+			`${requestID}|${agentID}|API|nonBioRegistrationAPI|response|${JSON.stringify(
+				{
+					request: data,
+					error: error.response ? error.response.data : error.message,
+					message: error.message,
+					stack: util.inspect(error.stack),
+				}
+			)}`
+		);
+	}
 };
 
 module.exports = action;
