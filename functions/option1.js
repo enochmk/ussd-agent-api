@@ -134,7 +134,6 @@ module.exports = async (option, sessionID, msisdn, starcode, timestamp) => {
 
 			registrationAPI(sessionID, msisdn, data, null);
 		}
-		// await Session.deleteMany({ msisdn: msisdn });
 	}
 
 	return sendXMLResponse(
