@@ -31,7 +31,7 @@ const action = async (requestID, agentID, answers, cellID = null) => {
 		);
 	} catch (error) {
 		Logger(
-			`${requestID}|${agentID}|API|nonBioRegistrationMFSAPI|response|${JSON.stringify(
+			`${requestID}|${agentID}|API|nonBioRegistrationMFSAPI|error|${JSON.stringify(
 				{
 					request: data,
 					error: error.response ? error.response.data : error.message,

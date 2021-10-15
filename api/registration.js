@@ -30,7 +30,7 @@ const action = async (requestID, agentID, answers, cellID = null) => {
 		);
 	} catch (error) {
 		Logger(
-			`${requestID}|${agentID}|API|nonBioRegistrationAPI|response|${JSON.stringify(
+			`${requestID}|${agentID}|API|nonBioRegistrationAPI|error|${JSON.stringify(
 				{
 					request: data,
 					error: error.response ? error.response.data : error.message,
