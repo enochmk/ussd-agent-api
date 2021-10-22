@@ -8,9 +8,7 @@ const mongoose = require('mongoose');
 const chalk = require('chalk');
 
 const assignID = require('./middleware/assignID');
-const devMode = require('./middleware/devMode');
-const isAgent = require('./middleware/isAgent');
-const sessionExpiry = require('./middleware/sessionExpiry');
+
 const errorHandler = require('./middleware/error');
 
 const app = express();
@@ -20,14 +18,7 @@ app.use(cors());
 app.use(morgan('tiny'));
 app.use(xmlparser());
 
-app.use(
-	'/biometric-agent',
-	assignID,
-	devMode,
-	isAgent,
-	sessionExpiry,
-	require('./routes/routes')
-);
+app.use('/biometric-agent', assignID, require('./routes/routes'));
 app.use(errorHandler);
 
 const PORT = process.env.NODE_PORT || 5000;
@@ -37,8 +28,15 @@ const server = app.listen(PORT, () =>
 );
 
 // Set server port to listen
-const mongoURI = 'mongodb://localhost:27017/ussd-agent';
-mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true });
+const mongoURI = `mongodb://${process.env.MONGO_HOST || 'localhost'}`;
+mongoose.connect(mongoURI, {
+	dbName: process.env.MONGO_DB,
+	user: process.env.MONGO_USERNAME,
+	pass: process.env.MONGO_PASSWORD,
+	useNewUrlParser: true,
+	useUnifiedTopology: true,
+});
+
 const db = mongoose.connection;
 
 db.on('error', (error) => {
@@ -50,11 +48,11 @@ db.once('open', () => {
 	console.log(chalk.black.bgGreen.bold('Connected to Mongodb'));
 });
 
-// createConnection()
-// 	.then((connection) => {
-// 		console.log(chalk.black.bgGreen.bold('Connected to SQL database'));
-// 	})
-// 	.catch((error) => {
-// 		console.log('SQL Error: ', error);
-// 		server.close(1);
-// 	});
+createConnection()
+	.then((connection) => {
+		console.log(chalk.black.bgGreen.bold('Connected to SQL database'));
+	})
+	.catch((error) => {
+		console.log('SQL Error: ', error);
+		server.close(1);
+	});
