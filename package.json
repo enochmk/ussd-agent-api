@@ -1,0 +1,41 @@
+{
+  "name": "ussd-agent-ts-api",
+  "version": "1.0.0",
+  "main": "app.js",
+  "license": "MIT",
+  "scripts": {
+    "dev": "ts-node-dev --respawn --transpile-only src/app.ts",
+    "start": "node build/app.js"
+  },
+  "dependencies": {
+    "axios": "^0.24.0",
+    "chalk": "^4.1.2",
+    "config": "^3.3.6",
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "express-xml-bodyparser": "^0.3.0",
+    "moment": "^2.29.1",
+    "morgan": "^1.10.0",
+    "mssql": "^7.2.1",
+    "redis": "^3.1.2",
+    "typeorm": "^0.2.38",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "@types/config": "^0.0.40",
+    "@types/cors": "^2.8.12",
+    "@types/express": "^4.17.13",
+    "@types/express-xml-bodyparser": "^0.3.2",
+    "@types/morgan": "^1.9.3",
+    "@types/node": "^16.11.6",
+    "@types/redis": "^2.8.32",
+    "@types/uuid": "^8.3.1",
+    "@typescript-eslint/eslint-plugin": "^5.3.0",
+    "@typescript-eslint/parser": "^5.3.0",
+    "eslint": "^8.1.0",
+    "reflect-metadata": "^0.1.13",
+    "ts-node-dev": "^1.1.8",
+    "typescript": "^4.4.4"
+  }
+}

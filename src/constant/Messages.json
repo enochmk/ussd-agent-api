@@ -1,0 +1,9 @@
+{
+  "notAgent": "Hello, you are not permitted to use this channel. Thank you and keep safe.",
+  "invalidInput": "Hello, you've entered an invalid input. Dial *474# and try again. Thank you and keep safe.",
+  "invalidGhanaCard": "Hello, you've entered an invalid Ghana Card. Dial *474# and try again. Thank you and keep safe.",
+  "onSubmit": "Hello, your information has been successfully received and awaiting validation. Thank you and keep safe.",
+  "onCancel": "You've ended this session. Thank you and keep safe",
+  "invalidSession": "Sorry, cannot process this session at this time. Thank you and keep safe",
+  "devOnly": "Dear customer, this application is in developer mode. Kindly check again later."
+}
