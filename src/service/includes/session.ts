@@ -5,6 +5,7 @@ export const createSession = (
 	sessionID: string,
 	msisdn: number,
 	question: any,
+	option: any = null,
 	page: any = null,
 	userdata: any = null
 ) => {
@@ -14,6 +15,7 @@ export const createSession = (
 		sessionID,
 		msisdn,
 		question,
+		option,
 		page,
 		userdata,
 	};

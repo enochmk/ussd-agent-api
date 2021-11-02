@@ -1,6 +1,6 @@
 {
   "0": "Welcome to AirtelTigo Agent Menu\n\n1. New Registration\n2. New AirtelTigo Money ONLY\n3. Verify Customer Details\n",
-  "non_bio_registration": {
+  "1": {
     "1": "Enter the customer's MSISDN",
     "2": "Enter last Six Digit of ICCID",
     "3": "Enter the customer's Ghana card number.\nEg: (GHA-123456789-9)",
@@ -12,7 +12,7 @@
     "9": "If AirtelTigo Money, enter Next of Kin Full name",
     "confirm": "MSISDN: (MSISDN)\nLast 6 Digit of ICCID: (ICCID)\nID: (ID)\nFirstName(s): (FORENAMES)\nSurname: (SURNAME)\nSex: (SEX)\nDOB: (DOB)\nWant AirtelTigo Money?: (ATM)\nNext Of Kin: (NOK)\n\n1.Confirm above the details\n2.Cancel"
   },
-  "non_bio_registration_mfs": {
+  "2": {
     "1": "Enter customer's MSISDN",
     "2": "Enter customer's Ghana card number\nEg: (GHA-712456789-9)",
     "3": "Enter the customer's first names",
@@ -22,7 +22,7 @@
     "7": "Enter full name of Next Of Kin",
     "confirm": "MSISDN: (MSISDN)\nID: (ID)\nFirstNames: (FORENAMES)\nSurname: (SURNAME)\nSex: (SEX)\nDOB: (DOB)\nNext Of Kin: (NOK)\n\n1.Confirm above the details \n2.Cancel"
   },
-  "verify_customer_details": {
+  "3": {
     "1": "Enter customer's MSISDN\n\n",
     "confirm": "Customer: (MSISDN)\nAre you sure?\n1. Confirm.\n2. Cancel\n#. Back"
   }

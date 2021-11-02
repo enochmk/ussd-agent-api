@@ -1,4 +1,8 @@
-interface MenuRequest {
+interface IObjectKeys {
+	[key: string]: string | number;
+}
+
+interface MenuRequest extends IObjectKeys {
 	msisdn: number;
 	sessionID: string;
 	starcode: string;

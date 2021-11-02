@@ -2,7 +2,7 @@ interface MenuResponse {
 	msisdn: number;
 	sessionID: string;
 	starcode: string;
-	flag: number;
+	flag: 1 | 2;
 	menu: string;
 	timestamp: string;
 }

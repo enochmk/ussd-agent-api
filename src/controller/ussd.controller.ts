@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import SessionManager from '../service/SessionManager';
 import MenuRequest from '../interface/MenuRequest';
 
-const ussd = (req: Request, res: Response, next: NextFunction) => {
+const ussd = async (req: Request, res: Response, next: NextFunction) => {
 	const body = req.body.ussddynmenurequest;
 	const msisdn = body.msisdn[0];
 	const sessionID = body.requestid[0];
@@ -19,7 +19,8 @@ const ussd = (req: Request, res: Response, next: NextFunction) => {
 		userdata,
 	};
 
-	res.send(SessionManager(data));
+	const response = await SessionManager(data);
+	res.send(response);
 };
 
 export default ussd;
