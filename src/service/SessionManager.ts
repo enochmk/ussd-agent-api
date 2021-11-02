@@ -2,26 +2,24 @@ import redis, { RedisClient } from 'redis';
 import config from 'config';
 import util from 'util';
 
-import MenuJSON from '../constant/Menu.json';
+import Messages from '../constant/Messages.json';
+import MenuJson from '../constant/Menu.json';
+import MenuInterface from '../interface/Menu';
 import MenuRequest from '../interface/MenuRequest';
 import sendResponse from '../helper/SendResponse';
-import Messages from '../constant/Messages.json';
 import { createSession } from './includes/session';
 import optionHandler from './includes/optionHandler';
 
-// button listeners
+const REDIS_EXPIRY = <number>config.get('redisExpiry');
+const REDIS_PORT = <number>config.get('redisPort');
 const MAIN_BUTTON = ['00'];
 const BACK_BUTTON = ['#'];
-type menuOptions = {
-	[key: string]: any;
-};
 
 const sessionManager = async (menuRequest: MenuRequest) => {
-	const Menu: menuOptions = MenuJSON;
+	const Menu: MenuInterface = MenuJson;
 
-	// connect to redis Once!
-	const client: RedisClient = redis.createClient(config.get('redisPort'));
-	const REDIS_EXPIRY = <number>config.get('redisExpiry');
+	// ?connect to redis only Once!
+	const client: RedisClient = redis.createClient(REDIS_PORT);
 	client.get = <any>util.promisify(client.get);
 	client.del = <any>util.promisify(client.del);
 
@@ -29,11 +27,8 @@ const sessionManager = async (menuRequest: MenuRequest) => {
 	const starcode = menuRequest.starcode;
 	const userdata = menuRequest.userdata;
 	const timestamp = menuRequest.timestamp;
-	const msisdn = Number(
-		menuRequest.msisdn
-			.toString()
-			.substr(menuRequest.msisdn.toString().length - 9)
-	);
+	let msisdn = menuRequest.msisdn.toString();
+	msisdn = msisdn.substr(msisdn.length - 9);
 
 	let sessions = [];
 	let page = '0';

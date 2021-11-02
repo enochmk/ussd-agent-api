@@ -3,7 +3,7 @@ import { v4 as uuid } from 'uuid';
 
 export const createSession = (
 	sessionID: string,
-	msisdn: number,
+	msisdn: string,
 	question: any,
 	option: any = null,
 	page: any = null,

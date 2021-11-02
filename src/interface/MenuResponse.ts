@@ -1,5 +1,5 @@
 interface MenuResponse {
-	msisdn: number;
+	msisdn: string;
 	sessionID: string;
 	starcode: string;
 	flag: 1 | 2;

@@ -1,8 +1,8 @@
 import MenuResponse from '../interface/MenuResponse';
 
 const sendResponse = (data: MenuResponse): string => {
-	if (data.msisdn.toString().length === 9) {
-		data.msisdn = Number(`233${data.msisdn}`);
+	if (data.msisdn.length === 9) {
+		data.msisdn = `233${data.msisdn}`;
 	}
 
 	return `
