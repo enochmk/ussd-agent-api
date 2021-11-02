@@ -136,6 +136,9 @@ const sessionManager = async (menuRequest: MenuRequest) => {
 			msisdn,
 			client
 		);
+
+		flag = response.flag;
+		message = response.message;
 	}
 
 	// ! clear cache when flag is 2;
