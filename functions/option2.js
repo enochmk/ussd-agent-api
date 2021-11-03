@@ -7,7 +7,14 @@ const formatGhanaCard = require('../utils/formatGhanaCard');
 const sendXMLResponse = require('../utils/XMLResponse');
 const registrationMFSAPI = require('../api/mfsRegistration');
 
-module.exports = async (option, sessionID, msisdn, starcode, timestamp) => {
+module.exports = async (
+	option,
+	sessionID,
+	msisdn,
+	starcode,
+	timestamp,
+	cellID
+) => {
 	const questions = Menu[option];
 	const keys = Object.keys(questions);
 	let currentIndex = 0;
@@ -111,7 +118,7 @@ module.exports = async (option, sessionID, msisdn, starcode, timestamp) => {
 			data.DOB = answers[5];
 			data.NOK = answers[6].toUpperCase();
 
-			registrationMFSAPI(sessionID, msisdn, data, null);
+			registrationMFSAPI(sessionID, msisdn, data, cellID);
 		}
 
 		await Session.deleteMany({ msisdn: msisdn });

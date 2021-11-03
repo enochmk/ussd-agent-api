@@ -4,7 +4,14 @@ const Session = require('../models/Session');
 const sendXMLResponse = require('../utils/XMLResponse');
 const verifyCustomerAPI = require('../api/verifyCustomerDetails');
 
-module.exports = async (option, sessionID, msisdn, starcode, timestamp) => {
+module.exports = async (
+	option,
+	sessionID,
+	msisdn,
+	starcode,
+	timestamp,
+	cellID
+) => {
 	const questions = Menu[option];
 	const keys = Object.keys(questions);
 	let currentIndex = 0;
@@ -84,7 +91,7 @@ module.exports = async (option, sessionID, msisdn, starcode, timestamp) => {
 		if (lastSession.answer === '1') {
 			answers.reverse();
 			data.MSISDN = answers[0];
-			verifyCustomerAPI(sessionID, msisdn, data.MSISDN, null);
+			verifyCustomerAPI(sessionID, msisdn, data.MSISDN, cellID);
 		}
 	}
 

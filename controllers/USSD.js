@@ -21,6 +21,7 @@ const USSD = asyncHandler(async (req, res, _) => {
 	const sessionID = body.requestid[0];
 	const starcode = body.starcode[0];
 	const timestamp = body.timestamp[0];
+	const CELLID = body.dataset[0]['param'][1]['value'][0];
 	let userdata = body.userdata[0].trim();
 
 	// get latest sessions
@@ -150,7 +151,8 @@ const USSD = asyncHandler(async (req, res, _) => {
 				sessionID,
 				msisdn,
 				starcode,
-				timestamp
+				timestamp,
+				CELLID
 			);
 			break;
 		case 'non_bio_registration_mfs':
@@ -159,7 +161,8 @@ const USSD = asyncHandler(async (req, res, _) => {
 				sessionID,
 				msisdn,
 				starcode,
-				timestamp
+				timestamp,
+				CELLID
 			);
 			break;
 		case 'verify_customer_details':
@@ -168,7 +171,8 @@ const USSD = asyncHandler(async (req, res, _) => {
 				sessionID,
 				msisdn,
 				starcode,
-				timestamp
+				timestamp,
+				CELLID
 			);
 			break;
 		default:

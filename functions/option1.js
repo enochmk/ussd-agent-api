@@ -7,7 +7,14 @@ const formatGhanaCard = require('../utils/formatGhanaCard');
 const sendXMLResponse = require('../utils/XMLResponse');
 const registrationAPI = require('../api/registration');
 
-module.exports = async (option, sessionID, msisdn, starcode, timestamp) => {
+module.exports = async (
+	option,
+	sessionID,
+	msisdn,
+	starcode,
+	timestamp,
+	cellID
+) => {
 	const questions = Menu[option];
 	const keys = Object.keys(questions);
 	let currentIndex = 0;
@@ -132,7 +139,7 @@ module.exports = async (option, sessionID, msisdn, starcode, timestamp) => {
 			data.ATM = answers[7] === '1' ? 'YES' : 'NO';
 			data.NOK = answers[7] === '2' ? 'N/A' : answers[8].toUpperCase();
 
-			registrationAPI(sessionID, msisdn, data, null);
+			registrationAPI(sessionID, msisdn, data, cellID);
 		}
 	}
 
