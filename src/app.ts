@@ -24,12 +24,12 @@ app.listen(port, () => {
 });
 
 // Connect to the Database and start the application
-createConnection()
-	.then((_connection) => {
-		const DB_message = `Connection to database: ${process.env.DB_HOST} has been established`;
-		console.log(chalk.cyan(DB_message));
-	})
-	.catch((err) => {
-		console.log(chalk.red.italic.underline('DB Error: ' + err.message));
-		process.exit(1);
-	});
+// createConnection()
+// 	.then((_connection) => {
+// 		const DB_message = `Connection to database: ${process.env.DB_HOST} has been established`;
+// 		console.log(chalk.cyan(DB_message));
+// 	})
+// 	.catch((err) => {
+// 		console.log(chalk.red.italic.underline('DB Error: ' + err.message));
+// 		process.exit(1);
+// 	});
