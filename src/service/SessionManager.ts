@@ -4,6 +4,7 @@ import util from 'util';
 
 import Messages from '../constant/Messages.json';
 import MenuJson from '../constant/Menu.json';
+import SessionInterface from '../interface/Session';
 import MenuInterface from '../interface/Menu';
 import MenuRequest from '../interface/MenuRequest';
 import sendResponse from '../helper/SendResponse';
@@ -15,14 +16,20 @@ const REDIS_PORT = <number>config.get('redisPort');
 const MAIN_BUTTON = ['00'];
 const BACK_BUTTON = ['#'];
 
-const sessionManager = async (menuRequest: MenuRequest) => {
+// connect to redis only Once!
+const client: RedisClient = redis.createClient(REDIS_PORT);
+client.get = <any>util.promisify(client.get);
+client.del = <any>util.promisify(client.del);
+
+/**
+ * @description: Handle the session for a given sessionID
+ * @param menuRequest: MenuRequest
+ * @return:Promise<string>
+ */
+const sessionManager = async (menuRequest: MenuRequest): Promise<string> => {
 	const Menu: MenuInterface = MenuJson;
 
-	// ?connect to redis only Once!
-	const client: RedisClient = redis.createClient(REDIS_PORT);
-	client.get = <any>util.promisify(client.get);
-	client.del = <any>util.promisify(client.del);
-
+	// params
 	const sessionID = menuRequest.sessionID;
 	const starcode = menuRequest.starcode;
 	const userdata = menuRequest.userdata;
@@ -39,20 +46,24 @@ const sessionManager = async (menuRequest: MenuRequest) => {
 	// get session from cache
 	const data = <any>await client.get(sessionID);
 
-	// Does session exist or go to MAIN
-	if (!data || MAIN_BUTTON.includes(userdata)) {
-		// if MAIN button is parsed and
-		if (MAIN_BUTTON.includes(userdata)) {
-			await client.del(sessionID);
-		}
+	// ? Handle main button
+	if (MAIN_BUTTON.includes(userdata)) {
+		data && client.del(sessionID);
+	}
 
-		let question = Menu[page];
-		let session = createSession(sessionID, msisdn, question, null, null, null);
-
-		// push session to cache
+	// ? No session, create session.
+	if (!data) {
+		const question = Menu[page];
+		const session: SessionInterface = createSession(
+			sessionID,
+			msisdn,
+			question,
+			null,
+			null,
+			null
+		);
 		sessions.push(session);
 		client.setex(sessionID, REDIS_EXPIRY, JSON.stringify(sessions));
-
 		return sendResponse({
 			sessionID,
 			msisdn,
@@ -65,8 +76,6 @@ const sessionManager = async (menuRequest: MenuRequest) => {
 
 	// convert from string to JSON array of data
 	sessions = JSON.parse(data);
-
-	// get the last session in the array
 	let lastSession = <any>sessions[sessions.length - 1];
 
 	// ? Handle empty userdata
@@ -82,35 +91,31 @@ const sessionManager = async (menuRequest: MenuRequest) => {
 	}
 
 	// ? Handle back button
-	if (BACK_BUTTON.includes(userdata) && sessions.length > 1) {
-		// remove last item in array;
-		sessions.pop();
-		client.setex(sessionID, REDIS_EXPIRY, JSON.stringify(sessions));
+	if (BACK_BUTTON.includes(userdata)) {
+		if (sessions.length > 1) {
+			sessions.pop();
+			const lastSession = sessions[sessions.length - 1];
 
-		// get new latest item
-		const lastSession = sessions[sessions.length - 1];
-
-		// If lastSession is menu page, remove the page value
-		if (sessions.length === 1) {
-			lastSession.page = null;
-			lastSession.option = null;
-			lastSession.userdata = null;
-			sessions[0] = lastSession;
+			if (sessions.length === 1) {
+				lastSession.page = null;
+				lastSession.option = null;
+				lastSession.userdata = null;
+				sessions[0] = lastSession;
+			}
 
 			client.setex(sessionID, REDIS_EXPIRY, JSON.stringify(sessions));
+			return sendResponse({
+				sessionID,
+				msisdn,
+				starcode,
+				menu: lastSession.question,
+				flag: 1,
+				timestamp,
+			});
 		}
-
-		return sendResponse({
-			sessionID,
-			msisdn,
-			starcode,
-			menu: lastSession.question,
-			flag: 1,
-			timestamp,
-		});
 	}
 
-	// Update previous data && define the option
+	// ? userdata is defined: Update previous data && define the option
 	lastSession.userdata = userdata;
 	if (!lastSession.option) {
 		lastSession.option = userdata;
@@ -141,6 +146,7 @@ const sessionManager = async (menuRequest: MenuRequest) => {
 		client.del(sessionID);
 	}
 
+	// return XML response back to controller
 	return sendResponse({
 		sessionID,
 		msisdn,

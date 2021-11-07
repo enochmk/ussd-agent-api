@@ -3,7 +3,7 @@ import { v4 as uuid } from 'uuid';
 
 import Session from '../../interface/Session';
 
-const createSession = (
+export const createSession = (
 	sessionID: string,
 	msisdn: string,
 	question: string | null,
@@ -22,5 +22,3 @@ const createSession = (
 		userdata,
 	};
 };
-
-export default createSession;

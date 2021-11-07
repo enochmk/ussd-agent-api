@@ -23,7 +23,7 @@
     "confirm": "MSISDN: (MSISDN)\nID: (ID)\nFirstNames: (FORENAMES)\nSurname: (SURNAME)\nSex: (SEX)\nDOB: (DOB)\nNext Of Kin: (NOK)\n\n1.Confirm above the details \n2.Cancel"
   },
   "3": {
-    "1": "Enter customer's MSISDN\n\n",
-    "confirm": "Customer: (MSISDN)\nAre you sure?\n1. Confirm.\n2. Cancel\n#. Back"
+    "1": "Enter customer's MSISDN (eg: 05XXXXXXX): \n\n",
+    "confirm": "Customer: {MSISDN}\n\nAre you sure?\n1. Confirm.\n2. Cancel\n#. Back"
   }
 }
