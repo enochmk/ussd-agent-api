@@ -24,6 +24,6 @@
   },
   "3": {
     "1": "Enter customer's MSISDN (eg: 05XXXXXXX): \n\n",
-    "confirm": "Customer: (MSISDN)\n\nAre you sure?\n1. Confirm.\n2. Cancel\n00. Main\n#. Back"
+    "confirm": "Subscriber's MSISDN: (MSISDN)\n\nAre you sure?\n1. Confirm.\n2. Cancel\n00. Main\n#. Back"
   }
 }

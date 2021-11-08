@@ -6,7 +6,8 @@ import MainMenuJson from '../../constant/Menu.json';
 import Messages from '../../constant/Messages.json';
 import MenuInterface from '../../interface/Menu';
 import { createSession } from '../includes/session';
-import Validation from '../../validation/ValidateOption3';
+import SessionValidation from '../../validation/validateOption3';
+import getSubscriberStatus from '../../api/getSubscriberStatus.api';
 
 const optionNumber = '3';
 const Menu: MenuInterface = MainMenuJson[optionNumber];
@@ -14,9 +15,9 @@ const REDIS_EXPIRY: number = config.get('redisExpiry');
 const KEYS = Object.keys(Menu);
 
 /**
- * @description: Check for the registration status of MSISDN
+ * @description: Check for the registration status of a subscriber
  * @param: MSISDN
- * @param: AgentID
+ * @param: redis Client
  */
 const option3 = async (
 	sessionID: string,
@@ -24,38 +25,41 @@ const option3 = async (
 	client: RedisClient
 ): Promise<OptionResponse> => {
 	let sessions: any = null;
-	let question = '';
+	let message = '';
 	let page = '1';
 	let flag = 1;
 
 	sessions = await client.get(sessionID);
 	sessions = JSON.parse(sessions);
 
-	const isError = Validation(sessions);
+	// ! Validate the session inputs */
+	const isError = SessionValidation(sessions);
 	if (!isError.success) {
+		flag = 2;
+
 		return {
 			message: isError.message,
 			flag,
 		};
 	}
 
-	// ? Iterate menu item */
+	/* Iterate menu item */
 	const lastSession = sessions[sessions.length - 1];
 	const currentIndex = KEYS.indexOf(lastSession.page);
 	if (KEYS[currentIndex + 1]) {
 		const nextIndex = currentIndex + 1;
 		page = KEYS[nextIndex];
-		question = Menu[page];
+		message = Menu[page];
 
 		if (page === 'confirm') {
-			question = question.replace('{MSISDN}', lastSession.userdata);
+			message = message.replace('(MSISDN)', lastSession.userdata);
 		}
 
 		// create the session for this question
 		const session = createSession(
 			sessionID,
 			msisdn,
-			question,
+			message,
 			optionNumber,
 			page,
 			null
@@ -66,28 +70,43 @@ const option3 = async (
 		client.setex(sessionID, REDIS_EXPIRY, JSON.stringify(sessions));
 	}
 
-	// ? confirmation
+	// ? confirmation:
 	if (lastSession.page === 'confirm') {
 		if (!['1', '2'].includes(lastSession.userdata)) {
-			question = Messages.invalidInput;
+			message = Messages.invalidInput;
 			flag = 2;
 		}
 
-		// user has confirmed
+		// * User has confirmed
 		if (lastSession.userdata === '1') {
-			question = Messages.onSubmit;
+			message = Messages.onSubmit;
 			flag = 2;
+
+			// get the subscriber's MSISDN from the session
+			const subscriberMSISDN = sessions[sessions.length - 2].userdata;
+			await getSubscriberStatus(
+				sessionID,
+				msisdn,
+				subscriberMSISDN,
+				lastSession.cellID
+			)
+				.then((data) => {
+					message = data;
+				})
+				.catch((_) => {
+					message = Messages.unknownError;
+				});
 		}
 
 		// user has cancelled
 		if (lastSession.userdata === '2') {
-			question = Messages.onCancel;
+			message = Messages.onCancel;
 			flag = 2;
 		}
 	}
 
 	return {
-		message: question,
+		message: message,
 		flag,
 	};
 };

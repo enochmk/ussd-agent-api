@@ -5,11 +5,10 @@ export default (sessions: Array<object>) => {
 	let success = true;
 	let message = 'No error';
 
-	/* Enter Subscriber's MSISDN */
 	if (lastSession.page === '1') {
-		if (lastSession.userdata.length !== 10) {
+		if (lastSession.userdata.length !== '10') {
 			success = false;
-			message = Messages.invalidMSISDNLength;
+			message = Messages.invalidMSISDN;
 		}
 	}
 

@@ -1,7 +1,4 @@
 const axios = require('axios');
-const util = require('util');
-
-const Logger = require('../utils/Logger');
 
 const action = async (requestID, agentID, answers, cellID = null) => {
 	const data = {
@@ -22,24 +19,7 @@ const action = async (requestID, agentID, answers, cellID = null) => {
 
 	try {
 		const response = await axios.post(process.env.RE_REGISTRATION_URL, data);
-
-		Logger(
-			`${requestID}|${agentID}|API|nonBioRegistrationAPI|response|${JSON.stringify(
-				{ request: data, response: response.data }
-			)}`
-		);
-	} catch (error) {
-		Logger(
-			`${requestID}|${agentID}|API|nonBioRegistrationAPI|error|${JSON.stringify(
-				{
-					request: data,
-					error: error.response ? error.response.data : error.message,
-					message: error.message,
-					stack: util.inspect(error.stack),
-				}
-			)}`
-		);
-	}
+	} catch (error) {}
 };
 
 module.exports = action;

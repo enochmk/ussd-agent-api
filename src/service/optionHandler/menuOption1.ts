@@ -6,7 +6,7 @@ import MainMenuJson from '../../constant/Menu.json';
 import Messages from '../../constant/Messages.json';
 import MenuInterface from '../../interface/Menu';
 import { createSession } from '../includes/session';
-import Validation from '../../validation/ValidateOption3';
+import Validation from '../../validation/validateOption3';
 
 const optionNumber = '1';
 const Menu: MenuInterface = MainMenuJson[optionNumber];

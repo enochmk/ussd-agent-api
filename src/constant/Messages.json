@@ -6,5 +6,7 @@
   "onCancel": "You've ended this session. Thank you and keep safe",
   "invalidOption": "Sorry, you've entered an invalid option. Kindly check and try again. Thank you and keep safe",
   "devOnly": "Dear customer, this application is in developer mode. Kindly check again later.",
-  "invalidMSISDN": "Invalid MSISDN. Please check and try again"
+  "invalidMSISDN": "Invalid MSISDN. Please check and try again",
+  "invalidMSISDNLength": "Invalid MSISDN format. MSISDN must be on 10 digits. Please check and try again.",
+  "unknownError": "Sorry, something went wrong when processing your request."
 }
