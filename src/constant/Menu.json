@@ -1,29 +1,29 @@
 {
   "0": "Welcome to AirtelTigo Agent Menu\n\n1. New Registration\n2. New AirtelTigo Money ONLY\n3. Verify Customer Details\n",
   "1": {
-    "1": "Enter the customer's MSISDN",
-    "2": "Enter last Six Digit of ICCID",
-    "3": "Enter the customer's Ghana card number.\nEg: (GHA-123456789-9)",
-    "4": "Enter the customer's first names",
-    "5": "Enter the customer's surname",
-    "6": "Select customer's gender\n1.Male\n2.Female",
-    "7": "Enter the customer's date of birth (DDMMYYYY).\nEg: 08101990",
-    "8": "Create AirtelTigo Money\n1.Yes\n2.No",
-    "9": "If AirtelTigo Money, enter Next of Kin Full name",
-    "confirm": "MSISDN: (MSISDN)\nLast 6 Digit of ICCID: (ICCID)\nID: (ID)\nFirstName(s): (FORENAMES)\nSurname: (SURNAME)\nSex: (SEX)\nDOB: (DOB)\nWant AirtelTigo Money?: (ATM)\nNext Of Kin: (NOK)\n\n1.Confirm above the details\n2.Cancel"
+    "1": "Enter the customer's MSISDN\n\n",
+    "2": "Enter last Six Digit of ICCID\n\n",
+    "3": "Enter the customer's Ghana card number.\nEg: (GHA-123456789-9)\n\n",
+    "4": "Enter the customer's first names\n\n",
+    "5": "Enter the customer's surname\n\n",
+    "6": "Select customer's gender\n1. Male\n2. Female\n00. Main\n#. Back",
+    "7": "Enter the customer's date of birth (DDMMYYYY).\nEg: 08101990\n\n",
+    "8": "Create AirtelTigo Money\n1. Yes\n2. No\n\n",
+    "9": "If AirtelTigo Money, enter Next of Kin Full name\n\n",
+    "confirm": "MSISDN: (MSISDN)\nLast 6 Digit of ICCID: (ICCID)\nID: (ID)\nFirstName(s): (FORENAMES)\nSurname: (SURNAME)\nSex: (SEX)\nDOB: (DOB)\nWant AirtelTigo Money?: (ATM)\nNext Of Kin: (NOK)\n\n1. Confirm details\n2. Cancel"
   },
   "2": {
-    "1": "Enter customer's MSISDN",
-    "2": "Enter customer's Ghana card number\nEg: (GHA-712456789-9)",
-    "3": "Enter the customer's first names",
-    "4": "Enter the customer's surname",
-    "5": "Select customer's gender\n1.Male\n2.Female",
-    "6": "Enter the customer's date of birth (DDMMYYYY).\nEg: 08101990",
-    "7": "Enter full name of Next Of Kin",
-    "confirm": "MSISDN: (MSISDN)\nID: (ID)\nFirstNames: (FORENAMES)\nSurname: (SURNAME)\nSex: (SEX)\nDOB: (DOB)\nNext Of Kin: (NOK)\n\n1.Confirm above the details \n2.Cancel"
+    "1": "Enter customer's MSISDN\n\n",
+    "2": "Enter customer's Ghana card number(Eg: GHA-712456789-9)\n\n",
+    "3": "Enter the customer's first names\n\n",
+    "4": "Enter the customer's surname\n\n",
+    "5": "Select customer's gender\n1. Male\n2. Female\n\n",
+    "6": "Enter the customer's date of birth (DDMMYYYY).\n\n",
+    "7": "Enter full name of Next Of Kin\n\n",
+    "confirm": "MSISDN: (MSISDN)\nID: (ID)\nFirstNames: (FORENAMES)\nSurname: (SURNAME)\nSex: (SEX)\nDOB: (DOB)\nNext Of Kin: (NOK)\n\n1. Confirm details\n2. Cancel\n"
   },
   "3": {
     "1": "Enter customer's MSISDN (eg: 05XXXXXXX): \n\n",
-    "confirm": "Customer: {MSISDN}\n\nAre you sure?\n1. Confirm.\n2. Cancel\n#. Back"
+    "confirm": "Customer: (MSISDN)\n\nAre you sure?\n1. Confirm.\n2. Cancel\n00. Main\n#. Back"
   }
 }

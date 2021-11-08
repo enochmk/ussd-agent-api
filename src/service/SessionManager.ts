@@ -54,6 +54,7 @@ const sessionManager = async (menuRequest: MenuRequest): Promise<string> => {
 	// ? No session, create session.
 	if (!data) {
 		const question = Menu[page];
+
 		const session: SessionInterface = createSession(
 			sessionID,
 			msisdn,
@@ -62,6 +63,7 @@ const sessionManager = async (menuRequest: MenuRequest): Promise<string> => {
 			null,
 			null
 		);
+
 		sessions.push(session);
 		client.setex(sessionID, REDIS_EXPIRY, JSON.stringify(sessions));
 		return sendResponse({
