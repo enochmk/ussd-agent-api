@@ -8,5 +8,8 @@
   "devOnly": "Dear customer, this application is in developer mode. Kindly check again later.",
   "invalidMSISDN": "Invalid MSISDN. Please check and try again",
   "invalidMSISDNLength": "Invalid MSISDN format. MSISDN must be on 10 digits. Please check and try again.",
+  "invalidDOBLength": "Invalid date of birth format. Please provide a birthdate in this format (DDMMYYYY). Thank you",
+  "invalidDOB": "Invalid date of birth. Please check and try again. Thank you",
+  "invalidICCIDLength": "Invalid ICCID length. Please check and try again. Thank you",
   "unknownError": "Sorry, something went wrong when processing your request."
 }

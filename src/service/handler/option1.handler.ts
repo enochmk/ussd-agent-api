@@ -1,12 +1,14 @@
 import { RedisClient } from 'redis';
 import config from 'config';
+import moment from 'moment';
 
 import OptionResponse from '../../interface/OptionResponse';
 import MainMenuJson from '../../constant/Menu.json';
 import Messages from '../../constant/Messages.json';
 import MenuInterface from '../../interface/Menu';
 import { createSession } from '../includes/session';
-import Validation from '../../validation/validateOption3';
+import SessionValidation from '../../validation/option1.validation';
+import formatPhoneNumber from '../../helper/formatPhoneNumber';
 
 const optionNumber = '1';
 const Menu: MenuInterface = MainMenuJson[optionNumber];
@@ -31,15 +33,18 @@ const option1 = async (
 	sessions = await client.get(sessionID);
 	sessions = JSON.parse(sessions);
 
-	// const isError = Validation(sessions);
-	// if (!isError.success) {
-	// 	return {
-	// 		message: isError.message,
-	// 		flag,
-	// 	};
-	// }
+	// ! Validate the session inputs */
+	const isError = SessionValidation(sessions);
+	if (!isError.success) {
+		flag = 2;
 
-	// ? Iterate menu item */
+		return {
+			message: isError.message,
+			flag,
+		};
+	}
+
+	/* ? Iterate menu item */
 	const lastSession = sessions[sessions.length - 1];
 	const currentIndex = KEYS.indexOf(lastSession.page);
 	if (KEYS[currentIndex + 1]) {
@@ -50,17 +55,17 @@ const option1 = async (
 		// * Final Question
 		if (page === 'confirm') {
 			let NOK = sessions[sessions.length - 1].userdata.toUpperCase();
-			let ATM = sessions[sessions.length - 2].userdata.toUpperCase();
-			let DOB = sessions[sessions.length - 3].userdata.toUpperCase();
-			let SEX = sessions[sessions.length - 4].userdata.toUpperCase();
-			let SURNAME = sessions[sessions.length - 5].userdata.toUpperCase();
-			let FORENAMES = sessions[sessions.length - 6].userdata.toUpperCase();
-			let PIN_NUMBER = sessions[sessions.length - 7].userdata.toUpperCase();
-			let ICCID = sessions[sessions.length - 8].userdata.toUpperCase();
-			let MSISDN = sessions[sessions.length - 9].userdata.toUpperCase();
+			let DOB = sessions[sessions.length - 2].userdata.toUpperCase();
+			let SEX = sessions[sessions.length - 3].userdata.toUpperCase();
+			let SURNAME = sessions[sessions.length - 4].userdata.toUpperCase();
+			let FORENAMES = sessions[sessions.length - 5].userdata.toUpperCase();
+			let PIN_NUMBER = sessions[sessions.length - 6].userdata.toUpperCase();
+			let ICCID = sessions[sessions.length - 7].userdata.toUpperCase();
+			let MSISDN = sessions[sessions.length - 8].userdata.toUpperCase();
 
 			SEX = SEX === '1' ? 'Male' : 'Female';
-			ATM = ATM === '1' ? 'Yes' : 'No';
+			DOB = moment(DOB, 'DDMMYYYY').format('DD-MM-YYYY');
+			MSISDN = formatPhoneNumber(MSISDN);
 
 			/* Modify the confirmation question */
 			question = question.replace('(MSISDN)', MSISDN);
@@ -69,7 +74,6 @@ const option1 = async (
 			question = question.replace('(SURNAME)', SURNAME);
 			question = question.replace('(SEX)', SEX);
 			question = question.replace('(DOB)', DOB);
-			question = question.replace('(ATM)', ATM);
 			question = question.replace('(NOK)', NOK);
 			question = question.replace('(ICCID)', ICCID);
 		}

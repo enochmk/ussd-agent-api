@@ -2,9 +2,9 @@ import { RedisClient } from 'redis';
 
 import Messages from '../../constant/Messages.json';
 import OptionResponse from '../../interface/OptionResponse';
-import menuOption1 from '../optionHandler/menuOption1';
-import menuOption2 from '../optionHandler/menuOption2';
-import menuOption3 from '../optionHandler/menuOption3';
+import option1Handler from '../handler/option1.handler';
+import option2Handler from '../handler/option2.handler';
+import option3Handler from '../handler/option3.handler';
 
 /**
  * @description A function to redirect selected option to their handler
@@ -19,13 +19,13 @@ const optionHandler = async (
 	// option handler
 	switch (option) {
 		case '1':
-			response = await menuOption1(sessionID, msisdn, client);
+			response = await option1Handler(sessionID, msisdn, client);
 			break;
 		case '2':
-			response = await menuOption2(sessionID, msisdn, client);
+			response = await option2Handler(sessionID, msisdn, client);
 			break;
 		case '3':
-			response = await menuOption3(sessionID, msisdn, client);
+			response = await option3Handler(sessionID, msisdn, client);
 			break;
 		default:
 			response = {

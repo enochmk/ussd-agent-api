@@ -6,8 +6,9 @@ import MainMenuJson from '../../constant/Menu.json';
 import Messages from '../../constant/Messages.json';
 import MenuInterface from '../../interface/Menu';
 import { createSession } from '../includes/session';
-import SessionValidation from '../../validation/validateOption3';
+import SessionValidation from '../../validation/option3.validation';
 import getSubscriberStatus from '../../api/getSubscriberStatus.api';
+import formatPhoneNumber from '../../helper/formatPhoneNumber';
 
 const optionNumber = '3';
 const Menu: MenuInterface = MainMenuJson[optionNumber];
@@ -51,8 +52,10 @@ const option3 = async (
 		page = KEYS[nextIndex];
 		message = Menu[page];
 
+		const MSISDN = formatPhoneNumber(lastSession.userdata);
+
 		if (page === 'confirm') {
-			message = message.replace('(MSISDN)', lastSession.userdata);
+			message = message.replace('(MSISDN)', MSISDN);
 		}
 
 		// create the session for this question

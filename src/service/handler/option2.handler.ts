@@ -1,11 +1,14 @@
 import { RedisClient } from 'redis';
 import config from 'config';
+import moment from 'moment';
 
 import OptionResponse from '../../interface/OptionResponse';
 import MainMenuJson from '../../constant/Menu.json';
 import Messages from '../../constant/Messages.json';
 import MenuInterface from '../../interface/Menu';
 import { createSession } from '../includes/session';
+import SessionValidation from '../../validation/option2.validation';
+import formatPhoneNumber from '../../helper/formatPhoneNumber';
 
 const optionNumber = '2';
 const Menu: MenuInterface = MainMenuJson[optionNumber];
@@ -30,9 +33,18 @@ const option2 = async (
 	sessions = await client.get(sessionID);
 	sessions = JSON.parse(sessions);
 
-	// TODO: Validation
+	// ! Validate the session inputs */
+	const isError = SessionValidation(sessions);
+	if (!isError.success) {
+		flag = 1;
 
-	// ? Iterate menu item */
+		return {
+			message: isError.message,
+			flag,
+		};
+	}
+
+	/* Iterate menu item */
 	const lastSession = sessions[sessions.length - 1];
 	const currentIndex = KEYS.indexOf(lastSession.page);
 	if (KEYS[currentIndex + 1]) {
@@ -50,6 +62,8 @@ const option2 = async (
 			let MSISDN = sessions[sessions.length - 7].userdata.toUpperCase();
 
 			SEX = SEX === '1' ? 'Male' : 'Female';
+			DOB = moment(DOB, 'DDMMYYYY').format('DD-MM-YYYY');
+			MSISDN = formatPhoneNumber(MSISDN);
 
 			/* Modify the confirmation question */
 			question = question.replace('(MSISDN)', MSISDN);
