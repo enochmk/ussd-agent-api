@@ -6,7 +6,7 @@ export default {
 	port: process.env.PORT ?? 5006,
 	environment: process.env.NODE_ENV ?? 'development',
 	redisPort: process.env.REDIS_PORT ?? 6379,
-	redisExpiry: 60,
+	redisExpiry: 60000000,
 	api: {
 		subscriberStatus: '/v1/subscriber/check-kyc-status',
 		registration: '/v1/nonbiometric/registration',

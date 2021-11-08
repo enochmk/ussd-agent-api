@@ -1,25 +1,23 @@
-const axios = require('axios');
+import axios from 'axios';
+import config from 'config';
 
-const action = async (requestID, agentID, answers, cellID = null) => {
-	const data = {
-		requestID: requestID,
-		cellID: cellID,
-		agentID: agentID,
-		msisdn: answers.MSISDN,
-		iccid: answers.ICCID,
-		nationalID: answers.ID,
-		forenames: answers.FORENAMES,
-		surname: answers.SURNAME,
-		gender: answers.SEX,
-		dateOfBirth: answers.DOB,
-		isMFS: answers.ATM.toLowerCase() === 'yes' ? true : false,
-		nextOfKin: answers.ATM.toLowerCase() === 'yes' ? answers.NOK : '',
-		channelID: 'ussd',
-	};
+import RegistrationInterface from '../interface/Registration';
 
-	try {
-		const response = await axios.post(process.env.RE_REGISTRATION_URL, data);
-	} catch (error) {}
+const PATH = config.get('api.registrationMFS');
+const SERVER = config.get('server');
+const URL = `${SERVER}${PATH}`;
+
+export default (
+	requestID: string,
+	agentID: string,
+	data: RegistrationInterface
+): Promise<string> => {
+	return new Promise(async (resolve, reject) => {
+		try {
+			const response = await axios.post(URL, data);
+			resolve(response.data);
+		} catch (error: any) {
+			reject(error.message);
+		}
+	});
 };
-
-module.exports = action;

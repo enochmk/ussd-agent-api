@@ -9,6 +9,9 @@ import MenuInterface from '../../interface/Menu';
 import { createSession } from '../includes/session';
 import SessionValidation from '../../validation/option1.validation';
 import formatPhoneNumber from '../../helper/formatPhoneNumber';
+import RegistrationAPI from '../../api/registration.api';
+import RegistrationInterface from '../../interface/Registration';
+import SessionInterface from '../../interface/Session';
 
 const optionNumber = '1';
 const Menu: MenuInterface = MainMenuJson[optionNumber];
@@ -100,13 +103,34 @@ const option1 = async (
 			flag = 2;
 		}
 
-		// user has confirmed
+		// user has CONFIRMED *
 		if (lastSession.userdata === '1') {
 			question = Messages.onSubmit;
-			flag = 2;
+			flag = 1;
+			const answers = sessions.map(
+				(session: SessionInterface) => session.userdata
+			);
+
+			let data: RegistrationInterface = {
+				requestID: sessionID,
+				agentID: msisdn,
+				cellID: lastSession.cellID || null,
+				channelID: 'ussd',
+				isMFS: true,
+				msisdn: answers[1],
+				iccid: answers[2],
+				nationalID: answers[3],
+				forenames: answers[4],
+				surname: answers[5],
+				gender: answers[6] === '1' ? 'Male' : 'Female',
+				dateOfBirth: answers[7],
+			};
+
+			// Call external API and handle error exception
+			RegistrationAPI(sessionID, msisdn, data).catch((error: any) => {});
 		}
 
-		// user has cancelled
+		// user has CANCELLED *
 		if (lastSession.userdata === '2') {
 			question = Messages.onCancel;
 			flag = 2;

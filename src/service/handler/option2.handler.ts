@@ -9,6 +9,9 @@ import MenuInterface from '../../interface/Menu';
 import { createSession } from '../includes/session';
 import SessionValidation from '../../validation/option2.validation';
 import formatPhoneNumber from '../../helper/formatPhoneNumber';
+import MFSRegistrationInterface from '../../interface/MFSRegistration';
+import SessionInterface from '../../interface/Session';
+import MFSRegistrationAPI from '../../api/mfsRegistration.api';
 
 const optionNumber = '2';
 const Menu: MenuInterface = MainMenuJson[optionNumber];
@@ -97,10 +100,32 @@ const option2 = async (
 			flag = 2;
 		}
 
-		// user has confirmed
+		// user has CONFIRMED *
 		if (lastSession.userdata === '1') {
 			question = Messages.onSubmit;
-			flag = 2;
+			flag = 1;
+
+			const answers = sessions.map(
+				(session: SessionInterface) => session.userdata
+			);
+
+			let data: MFSRegistrationInterface = {
+				requestID: sessionID,
+				agentID: msisdn,
+				cellID: lastSession.cellID || null,
+				channelID: 'ussd',
+				isMFS: true,
+				msisdn: answers[1],
+				nationalID: answers[2],
+				forenames: answers[3],
+				surname: answers[4],
+				gender: answers[5] === '1' ? 'Male' : 'Female',
+				dateOfBirth: answers[6],
+				nextOfKin: answers[7],
+			};
+
+			// Call external API and handle error exception
+			MFSRegistrationAPI(sessionID, msisdn, data).catch((error: any) => {});
 		}
 
 		// user has cancelled
