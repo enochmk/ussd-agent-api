@@ -4,7 +4,7 @@ import logger from '../utils/logger';
 
 import RegistrationInterface from '../interface/Registration';
 
-const PATH = config.get('api.registrationMFS');
+const PATH = config.get('api.registration');
 const SERVER = config.get('server');
 const URL = `${SERVER}${PATH}`;
 
@@ -35,6 +35,7 @@ export default (
 				stack: error.stack,
 				data,
 			});
+
 			reject(error.message);
 		}
 	});

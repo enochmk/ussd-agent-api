@@ -29,7 +29,7 @@ const option2 = async (
 	client: RedisClient
 ): Promise<OptionResponse> => {
 	let sessions: any = null;
-	let question = '';
+	let message = '';
 	let page = '1';
 	let flag = 1;
 
@@ -53,7 +53,7 @@ const option2 = async (
 	if (KEYS[currentIndex + 1]) {
 		const nextIndex = currentIndex + 1;
 		page = KEYS[nextIndex];
-		question = Menu[page];
+		message = Menu[page];
 
 		if (page === 'confirm') {
 			let NOK = sessions[sessions.length - 1].userdata.toUpperCase();
@@ -69,20 +69,20 @@ const option2 = async (
 			MSISDN = formatPhoneNumber(MSISDN);
 
 			/* Modify the confirmation question */
-			question = question.replace('(MSISDN)', MSISDN);
-			question = question.replace('(ID)', PIN_NUMBER);
-			question = question.replace('(FORENAMES)', FORENAMES);
-			question = question.replace('(SURNAME)', SURNAME);
-			question = question.replace('(SEX)', SEX);
-			question = question.replace('(DOB)', DOB);
-			question = question.replace('(NOK)', NOK);
+			message = message.replace('(MSISDN)', MSISDN);
+			message = message.replace('(ID)', PIN_NUMBER);
+			message = message.replace('(FORENAMES)', FORENAMES);
+			message = message.replace('(SURNAME)', SURNAME);
+			message = message.replace('(SEX)', SEX);
+			message = message.replace('(DOB)', DOB);
+			message = message.replace('(NOK)', NOK);
 		}
 
 		// create the session for this question
 		const session = createSession(
 			sessionID,
 			msisdn,
-			question,
+			message,
 			optionNumber,
 			page,
 			null
@@ -96,13 +96,13 @@ const option2 = async (
 	// ? confirmation
 	if (lastSession.page === 'confirm') {
 		if (!['1', '2'].includes(lastSession.userdata)) {
-			question = Messages.invalidInput;
+			message = Messages.invalidInput;
 			flag = 2;
 		}
 
 		// user has CONFIRMED *
 		if (lastSession.userdata === '1') {
-			question = Messages.onSubmit;
+			message = Messages.onSubmit;
 			flag = 1;
 
 			const answers = sessions.map(
@@ -114,7 +114,6 @@ const option2 = async (
 				agentID: msisdn,
 				cellID: lastSession.cellID || null,
 				channelID: 'ussd',
-				isMFS: true,
 				msisdn: answers[1],
 				nationalID: answers[2],
 				forenames: answers[3],
@@ -125,18 +124,20 @@ const option2 = async (
 			};
 
 			// Call external API and handle error exception
-			MFSRegistrationAPI(sessionID, msisdn, data).catch((error: any) => {});
+			await MFSRegistrationAPI(sessionID, msisdn, data)
+				.then((data) => (message = data))
+				.catch((error: string) => (message = Messages.unknownError));
 		}
 
 		// user has cancelled
 		if (lastSession.userdata === '2') {
-			question = Messages.onCancel;
+			message = Messages.onCancel;
 			flag = 2;
 		}
 	}
 
 	return {
-		message: question,
+		message: message,
 		flag,
 	};
 };

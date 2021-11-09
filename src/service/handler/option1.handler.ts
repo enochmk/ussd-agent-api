@@ -29,7 +29,7 @@ const option1 = async (
 	client: RedisClient
 ): Promise<OptionResponse> => {
 	let sessions: any = null;
-	let question = '';
+	let message = '';
 	let page = '1';
 	let flag = 1;
 
@@ -53,7 +53,7 @@ const option1 = async (
 	if (KEYS[currentIndex + 1]) {
 		const nextIndex = currentIndex + 1;
 		page = KEYS[nextIndex];
-		question = Menu[page];
+		message = Menu[page];
 
 		// * Final Question
 		if (page === 'confirm') {
@@ -71,21 +71,21 @@ const option1 = async (
 			MSISDN = formatPhoneNumber(MSISDN);
 
 			/* Modify the confirmation question */
-			question = question.replace('(MSISDN)', MSISDN);
-			question = question.replace('(ID)', PIN_NUMBER);
-			question = question.replace('(FORENAMES)', FORENAMES);
-			question = question.replace('(SURNAME)', SURNAME);
-			question = question.replace('(SEX)', SEX);
-			question = question.replace('(DOB)', DOB);
-			question = question.replace('(NOK)', NOK);
-			question = question.replace('(ICCID)', ICCID);
+			message = message.replace('(MSISDN)', MSISDN);
+			message = message.replace('(ID)', PIN_NUMBER);
+			message = message.replace('(FORENAMES)', FORENAMES);
+			message = message.replace('(SURNAME)', SURNAME);
+			message = message.replace('(SEX)', SEX);
+			message = message.replace('(DOB)', DOB);
+			message = message.replace('(NOK)', NOK);
+			message = message.replace('(ICCID)', ICCID);
 		}
 
 		// create the session for this question
 		const session = createSession(
 			sessionID,
 			msisdn,
-			question,
+			message,
 			optionNumber,
 			page,
 			null
@@ -99,14 +99,15 @@ const option1 = async (
 	// ? confirmation
 	if (lastSession.page === 'confirm') {
 		if (!['1', '2'].includes(lastSession.userdata)) {
-			question = Messages.invalidInput;
+			message = Messages.invalidInput;
 			flag = 2;
 		}
 
 		// user has CONFIRMED *
 		if (lastSession.userdata === '1') {
-			question = Messages.onSubmit;
-			flag = 1;
+			message = Messages.onSubmit;
+			flag = 2;
+
 			const answers = sessions.map(
 				(session: SessionInterface) => session.userdata
 			);
@@ -127,18 +128,20 @@ const option1 = async (
 			};
 
 			// Call external API and handle error exception
-			RegistrationAPI(sessionID, msisdn, data).catch((error: any) => {});
+			await RegistrationAPI(sessionID, msisdn, data)
+				.then((data) => (message = data))
+				.catch((error: string) => (message = Messages.unknownError));
 		}
 
 		// user has CANCELLED *
 		if (lastSession.userdata === '2') {
-			question = Messages.onCancel;
+			message = Messages.onCancel;
 			flag = 2;
 		}
 	}
 
 	return {
-		message: question,
+		message: message,
 		flag,
 	};
 };

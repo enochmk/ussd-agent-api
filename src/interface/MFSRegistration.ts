@@ -10,7 +10,6 @@ interface MFSRegistration {
 	nextOfKin: string;
 	channelID: string;
 	dateOfBirth: string;
-	isMFS: boolean;
 }
 
 export default MFSRegistration;

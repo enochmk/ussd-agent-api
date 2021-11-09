@@ -4,7 +4,6 @@ import path from 'path';
 import config from 'config';
 import moment from 'moment';
 import winston, { format } from 'winston';
-import { Any } from 'typeorm';
 
 const { timestamp, printf } = format;
 const NODE_ENV = config.get('NODE_ENV');
@@ -63,10 +62,10 @@ const customLogFormat = {
 const options = {
 	console: {
 		level: NODE_ENV === 'development' ? 'verbose' : 'info',
-		colorize: NODE_ENV === 'development' ? true : false,
+		colorize: NODE_ENV === 'development' ? false : false,
 		format: format.combine(
 			customLogFormat.simple,
-			format.colorize({ all: true })
+			format.colorize({ all: false })
 		),
 	},
 	error: {
