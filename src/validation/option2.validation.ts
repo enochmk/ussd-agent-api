@@ -9,7 +9,10 @@ export default (sessions: Array<object>) => {
 
 	/*1. Enter customer's MSISDN */
 	if (lastSession.page === '1') {
-		if (lastSession.userdata.length !== 10) {
+		if (
+			lastSession.userdata.length !== 10 &&
+			lastSession.userdata.length !== 9
+		) {
 			success = false;
 			message = Messages.invalidMSISDNLength;
 		}

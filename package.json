@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "main": "app.js",
   "license": "MIT",
+  "type": "commonjs",
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only src/app.ts",
     "start": "node build/app.js"
@@ -20,7 +21,8 @@
     "mssql": "^7.2.1",
     "redis": "^3.1.2",
     "typeorm": "^0.2.38",
-    "uuid": "^8.3.2"
+    "uuid": "^8.3.2",
+    "winston": "^3.3.3"
   },
   "devDependencies": {
     "@types/config": "^0.0.40",
