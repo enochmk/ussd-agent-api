@@ -1,6 +1,7 @@
 import redis, { RedisClient } from 'redis';
 import config from 'config';
 import util from 'util';
+import logger from '../utils/logger';
 
 import Messages from '../constant/Messages.json';
 import MenuJson from '../constant/Menu.json';
@@ -37,7 +38,7 @@ const sessionManager = async (menuRequest: MenuRequest): Promise<string> => {
 	let msisdn = menuRequest.msisdn.toString();
 	msisdn = msisdn.substr(msisdn.length - 9);
 
-	let sessions = [];
+	let sessions: any = [];
 	let page = '0';
 	let flag = 1;
 	let message = Messages.invalidInput;
@@ -48,6 +49,14 @@ const sessionManager = async (menuRequest: MenuRequest): Promise<string> => {
 
 	// ? Handle main button
 	if (MAIN_BUTTON.includes(userdata)) {
+		logger.info({
+			message: 'Main',
+			label: `Session Manager`,
+			requestID: sessionID,
+			agentID: msisdn,
+			sessions,
+		});
+
 		data && client.del(sessionID);
 	}
 
@@ -66,6 +75,13 @@ const sessionManager = async (menuRequest: MenuRequest): Promise<string> => {
 
 		sessions.push(session);
 		client.setex(sessionID, REDIS_EXPIRY, JSON.stringify(sessions));
+		logger.info({
+			message: 'New Session',
+			label: `Session Manager`,
+			requestID: sessionID,
+			agentID: msisdn,
+		});
+
 		return sendResponse({
 			sessionID,
 			msisdn,
@@ -82,6 +98,13 @@ const sessionManager = async (menuRequest: MenuRequest): Promise<string> => {
 
 	// ? Handle empty userdata
 	if (!userdata) {
+		logger.info({
+			message: 'Empty Userdata',
+			label: `Session Manager`,
+			requestID: sessionID,
+			agentID: msisdn,
+			sessions,
+		});
 		return sendResponse({
 			sessionID,
 			msisdn,
@@ -106,6 +129,13 @@ const sessionManager = async (menuRequest: MenuRequest): Promise<string> => {
 			}
 
 			client.setex(sessionID, REDIS_EXPIRY, JSON.stringify(sessions));
+			logger.info({
+				message: 'Back',
+				label: `Session Manager`,
+				requestID: sessionID,
+				agentID: msisdn,
+				sessions,
+			});
 			return sendResponse({
 				sessionID,
 				msisdn,
@@ -141,6 +171,14 @@ const sessionManager = async (menuRequest: MenuRequest): Promise<string> => {
 
 		flag = response.flag;
 		message = response.message;
+
+		logger.info({
+			message: message,
+			label: `Option ${lastSession.option}`,
+			requestID: sessionID,
+			agentID: msisdn,
+			flag,
+		});
 	}
 
 	// ! clear cache when flag is 2;

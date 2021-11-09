@@ -1,5 +1,6 @@
 import axios from 'axios';
 import config from 'config';
+import logger from '../utils/logger';
 
 import MFSRegistrationInterface from '../interface/MFSRegistration';
 
@@ -15,8 +16,25 @@ export default (
 	return new Promise(async (resolve, reject) => {
 		try {
 			const response = await axios.post(URL, data);
+			logger.http({
+				message: response.data,
+				label: 'MFS_REGISTRATION',
+				url: URL,
+				requestID,
+				data,
+			});
+
 			resolve(response.data);
 		} catch (error: any) {
+			logger.error({
+				message: error.message,
+				stack: error.stack,
+				label: 'MFS_REGISTRATION',
+				url: URL,
+				requestID,
+				data,
+			});
+
 			reject(error.message);
 		}
 	});
