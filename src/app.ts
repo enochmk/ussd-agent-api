@@ -4,7 +4,8 @@ import config from 'config';
 import cors from 'cors';
 import morgan from 'morgan';
 import xmlBodyParser from 'express-xml-bodyparser';
-import { createConnection } from 'typeorm';
+import sequelize from './database/connection';
+
 import logger from './utils/logger';
 import ussd from './routes/ussd.routes';
 import errorHandler from './middleware/errorHandler';
@@ -19,18 +20,26 @@ app.use(xmlBodyParser());
 app.use('/', ussd);
 app.use(errorHandler);
 
+// start Express Server
 app.listen(port, () => {
 	const message = `App is running in mode: ${mode} at http://localhost:${port}`;
 	logger.info(chalk.bgGreen.bold.black.underline(message));
 });
 
-// Connect to the Database and start the application
-// createConnection()
-// 	.then((_connection) => {
-// 		const DB_message = `Connection to database: ${process.env.DB_HOST} has been established`;
-// 		logger.info(chalk.cyan(DB_message));
+// connect to database
+sequelize
+	.authenticate()
+	.then(() => {
+		logger.info('Database connection established successfully.');
+	})
+	.catch((error) => {
+		console.error('Database error', error);
+		process.exit(1);
+	});
+
+// sequelize
+// 	.sync({ force: true })
+// 	.then((data) => {
+// 		console.log('Synced');
 // 	})
-// 	.catch((err) => {
-// 		logger.error(chalk.red.italic.underline('DB Error: ' + err.message), err);
-// 		process.exit(1);
-// 	});
+// 	.catch((error) => console.log(error));

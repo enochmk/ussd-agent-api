@@ -1,7 +1,7 @@
 import moment from 'moment';
 import { v4 as uuid } from 'uuid';
 
-import Session from '../../interface/Session';
+import Session from '../interface/Session';
 
 export const createSession = (
 	sessionID: string,

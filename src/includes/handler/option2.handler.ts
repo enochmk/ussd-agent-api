@@ -6,7 +6,7 @@ import OptionResponse from '../../interface/OptionResponse';
 import MainMenuJson from '../../constant/Menu.json';
 import Messages from '../../constant/Messages.json';
 import MenuInterface from '../../interface/Menu';
-import { createSession } from '../includes/session';
+import { createSession } from '../session';
 import SessionValidation from '../../validation/option2.validation';
 import formatPhoneNumber from '../../helper/formatPhoneNumber';
 import MFSRegistrationInterface from '../../interface/MFSRegistration';

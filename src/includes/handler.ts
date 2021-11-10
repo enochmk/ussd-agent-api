@@ -1,10 +1,10 @@
 import { RedisClient } from 'redis';
 
-import Messages from '../../constant/Messages.json';
-import OptionResponse from '../../interface/OptionResponse';
-import option1Handler from '../handler/option1.handler';
-import option2Handler from '../handler/option2.handler';
-import option3Handler from '../handler/option3.handler';
+import Messages from '../constant/Messages.json';
+import OptionResponse from '../interface/OptionResponse';
+import option1Handler from './handler/option1.handler';
+import option2Handler from './handler/option2.handler';
+import option3Handler from './handler/option3.handler';
 
 /**
  * @description A function to redirect selected option to their handler

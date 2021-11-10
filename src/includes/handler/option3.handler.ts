@@ -5,10 +5,11 @@ import OptionResponse from '../../interface/OptionResponse';
 import MainMenuJson from '../../constant/Menu.json';
 import Messages from '../../constant/Messages.json';
 import MenuInterface from '../../interface/Menu';
-import { createSession } from '../includes/session';
+import { createSession } from '../session';
 import SessionValidation from '../../validation/option3.validation';
 import getSubscriberStatus from '../../api/getSubscriberStatus.api';
 import formatPhoneNumber from '../../helper/formatPhoneNumber';
+import Ussd from '../../model/Ussd';
 
 const optionNumber = '3';
 const Menu: MenuInterface = MainMenuJson[optionNumber];
@@ -87,6 +88,15 @@ const option3 = async (
 
 			// get the subscriber's MSISDN from the session
 			const subscriberMSISDN = sessions[sessions.length - 2].userdata;
+
+			await Ussd.create({
+				SESSION_ID: sessionID,
+				AGENT_ID: msisdn,
+				MSISDN: subscriberMSISDN,
+				OPTION: 'CHECK_SUBSCRIBER_STATUS',
+				CELL_ID: lastSession.cellID,
+			});
+
 			await getSubscriberStatus(
 				sessionID,
 				msisdn,
