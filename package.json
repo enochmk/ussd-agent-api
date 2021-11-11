@@ -5,8 +5,10 @@
   "license": "MIT",
   "type": "commonjs",
   "scripts": {
+    "cleanup": "rimraf build",
+    "build": "npm run cleanup && tsc --pretty",
     "dev": "ts-node-dev --respawn --transpile-only src/app.ts",
-    "start": "node build/app.js"
+    "start": "npm run build && node build/src/app.js"
   },
   "dependencies": {
     "axios": "^0.24.0",
