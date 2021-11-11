@@ -9,7 +9,7 @@ import { createSession } from '../../helper/session';
 import SessionValidation from '../../validation/option3.validation';
 import getSubscriberStatus from '../../api/getSubscriberStatus.api';
 import formatPhoneNumber from '../../helper/formatPhoneNumber';
-import { USSD } from '../../enttiy/Ussd';
+import { USSD } from '../../entity/Ussd';
 
 const OPTION_NUMBER = '3';
 const Menu: MenuInterface = MainMenuJson[OPTION_NUMBER];

@@ -5,10 +5,12 @@
   "license": "MIT",
   "type": "commonjs",
   "scripts": {
-    "cleanup": "rimraf build",
+    "cleanup": "rimraf build && rimraf logs",
     "build": "npm run cleanup && tsc --pretty",
     "dev": "npm run cleanup && ts-node-dev --respawn --transpile-only src/app.ts",
-    "start": "npm run build && node build/src/app.js"
+    "start": "npm run build && node build/src/app.js",
+    "pm2": "pm2 flush DEV-AGENT-MENU && pm2 restart DEV-AGENT-MENU && pm2 logs DEV-AGENT-MENU",
+    "buildAndPm2": "npm run build && npm run pm2"
   },
   "dependencies": {
     "axios": "^0.24.0",

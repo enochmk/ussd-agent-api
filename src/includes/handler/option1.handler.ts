@@ -13,7 +13,7 @@ import formatPinNumber from '../../helper/formatPinNumber';
 import RegistrationAPI from '../../api/registration.api';
 import RegistrationInterface from '../../interface/Registration';
 import SessionInterface from '../../interface/Session';
-import { USSD } from '../../enttiy/Ussd';
+import { USSD } from '../../entity/Ussd';
 
 const OPTION_NUMBER = '1';
 const Menu: MenuInterface = MainMenuJson[OPTION_NUMBER];

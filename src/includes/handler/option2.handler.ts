@@ -13,7 +13,7 @@ import formatPinNumber from '../../helper/formatPinNumber';
 import MFSRegistrationInterface from '../../interface/MFSRegistration';
 import SessionInterface from '../../interface/Session';
 import MFSRegistrationAPI from '../../api/mfsRegistration.api';
-import { USSD } from '../../enttiy/Ussd';
+import { USSD } from '../../entity/Ussd';
 
 const OPTION_NUMBER = '2';
 const Menu: MenuInterface = MainMenuJson[OPTION_NUMBER];
