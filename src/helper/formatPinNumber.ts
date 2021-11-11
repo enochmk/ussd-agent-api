@@ -1,8 +1,8 @@
 import isAlphabetString from './isAlphabetString';
 
-const formatPinNumber = (pinNumber: string): string | null => {
+const formatPinNumber = (pinNumber: string): string => {
 	if (pinNumber.length < 13) {
-		return null;
+		return pinNumber;
 	}
 
 	// if the length is equal to 13: GHA1234567890
@@ -15,11 +15,11 @@ const formatPinNumber = (pinNumber: string): string | null => {
 	}
 
 	if (pinNumber.length !== 15) {
-		return null;
+		return pinNumber;
 	}
 
 	if (!isAlphabetString(pinNumber.slice(0, 3))) {
-		return null;
+		return pinNumber;
 	}
 
 	return pinNumber;

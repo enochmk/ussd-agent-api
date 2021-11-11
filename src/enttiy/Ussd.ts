@@ -58,6 +58,11 @@ export class USSD extends BaseEntity {
 	})
 	CELLID!: string;
 
+	@Column({
+		nullable: true,
+	})
+	RESPONSE!: string;
+
 	@CreateDateColumn()
 	TIMESTAMP!: Date;
 }

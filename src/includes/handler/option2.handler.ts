@@ -9,14 +9,17 @@ import MenuInterface from '../../interface/Menu';
 import { createSession } from '../session';
 import SessionValidation from '../../validation/option2.validation';
 import formatPhoneNumber from '../../helper/formatPhoneNumber';
+import formatPinNumber from '../../helper/formatPinNumber';
 import MFSRegistrationInterface from '../../interface/MFSRegistration';
 import SessionInterface from '../../interface/Session';
 import MFSRegistrationAPI from '../../api/mfsRegistration.api';
+import { USSD } from '../../enttiy/Ussd';
 
-const optionNumber = '2';
-const Menu: MenuInterface = MainMenuJson[optionNumber];
+const OPTION_NUMBER = '2';
+const Menu: MenuInterface = MainMenuJson[OPTION_NUMBER];
 const REDIS_EXPIRY: number = config.get('redisExpiry');
 const KEYS = Object.keys(Menu);
+const NAMESPACE = 'MFS_REGISTRATION';
 
 /**
  * @description: Check for the registration status of MSISDN
@@ -67,6 +70,7 @@ const option2 = async (
 			SEX = SEX === '1' ? 'Male' : 'Female';
 			DOB = moment(DOB, 'DDMMYYYY').format('DD-MM-YYYY');
 			MSISDN = formatPhoneNumber(MSISDN);
+			PIN_NUMBER = formatPinNumber(PIN_NUMBER);
 
 			/* Modify the confirmation question */
 			message = message.replace('(MSISDN)', MSISDN);
@@ -83,7 +87,7 @@ const option2 = async (
 			sessionID,
 			msisdn,
 			message,
-			optionNumber,
+			OPTION_NUMBER,
 			page,
 			null
 		);
@@ -103,7 +107,7 @@ const option2 = async (
 		// user has CONFIRMED *
 		if (lastSession.userdata === '1') {
 			message = Messages.onSubmit;
-			flag = 1;
+			flag = 2;
 
 			const answers = sessions.map(
 				(session: SessionInterface) => session.userdata
@@ -115,18 +119,40 @@ const option2 = async (
 				cellID: lastSession.cellID || null,
 				channelID: 'ussd',
 				msisdn: answers[1],
-				nationalID: answers[2],
-				forenames: answers[3],
-				surname: answers[4],
-				gender: answers[5] === '1' ? 'Male' : 'Female',
-				dateOfBirth: answers[6],
-				nextOfKin: answers[7],
+				nationalID: formatPinNumber(answers[2].toUpperCase()),
+				forenames: answers[3].toUpperCase(),
+				surname: answers[4].toUpperCase(),
+				gender:
+					answers[5] === '1' ? 'Male'.toUpperCase() : 'Female'.toUpperCase(),
+				dateOfBirth: answers[6].toUpperCase(),
+				nextOfKin: answers[7].toUpperCase(),
 			};
 
+			// Save to database
+			const ussd = new USSD();
+			ussd.OPTION = NAMESPACE;
+			ussd.SESSION_ID = data.requestID;
+			ussd.AGENT_ID = data.agentID;
+			ussd.MSISDN = data.msisdn;
+			ussd.DOB = data.dateOfBirth;
+			ussd.FORENAMES = data.forenames;
+			ussd.SURNAME = data.surname;
+			ussd.CELLID = data.cellID;
+			ussd.NEXTOFKIN = data.nextOfKin;
+			ussd.PIN_NUMBER = data.nationalID;
+			ussd.GENDER = data.gender;
+
+			const record = await ussd.save();
+
 			// Call external API and handle error exception
-			await MFSRegistrationAPI(sessionID, msisdn, data)
-				.then((data) => (message = data))
-				.catch((error: string) => (message = Messages.unknownError));
+			try {
+				const text = await MFSRegistrationAPI(sessionID, msisdn, data);
+				message = text;
+				await USSD.update(record.ID, { RESPONSE: text });
+			} catch (error: any) {
+				message = Messages.unknownError;
+				await USSD.update(record.ID, { RESPONSE: error.message });
+			}
 		}
 
 		// user has cancelled
