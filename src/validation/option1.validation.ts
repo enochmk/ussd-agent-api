@@ -33,7 +33,7 @@ export default (sessions: Array<object>) => {
 	if (lastSession.page === '3') {
 		if (!formatPinNumber(lastSession.userdata)) {
 			success = false;
-			message = Messages.invalidMSISDNLength;
+			message = Messages.invalidGhanaCard;
 		}
 	}
 

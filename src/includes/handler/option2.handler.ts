@@ -39,6 +39,7 @@ const option2 = async (
 
 	sessions = await client.get(sessionID);
 	sessions = JSON.parse(sessions);
+	const lastSession = sessions[sessions.length - 1];
 
 	// ! Validate the session inputs */
 	const isError = SessionValidation(sessions);
@@ -46,13 +47,12 @@ const option2 = async (
 		flag = 1;
 
 		return {
-			message: isError.message,
+			message: `${isError.message}\n${lastSession.question}`,
 			flag,
 		};
 	}
 
 	/* Iterate menu item */
-	const lastSession = sessions[sessions.length - 1];
 	const currentIndex = KEYS.indexOf(lastSession.page);
 	if (KEYS[currentIndex + 1]) {
 		const nextIndex = currentIndex + 1;
@@ -120,7 +120,7 @@ const option2 = async (
 				cellID: cellID || null,
 				channelID: 'ussd',
 				msisdn: answers[1],
-				nationalID: formatPinNumber(answers[2].toUpperCase()),
+				nationalID: formatPinNumber(answers[2].toUpperCase()) || '',
 				forenames: answers[3].toUpperCase(),
 				surname: answers[4].toUpperCase(),
 				gender:
@@ -134,7 +134,7 @@ const option2 = async (
 			ussd.OPTION = NAMESPACE;
 			ussd.SESSION_ID = data.requestID;
 			ussd.AGENT_ID = data.agentID;
-			ussd.MSISDN = data.msisdn;
+			ussd.MSISDN = data.msisdn.substr(data.msisdn.length - 9);
 			ussd.DOB = data.dateOfBirth;
 			ussd.FORENAMES = data.forenames;
 			ussd.SURNAME = data.surname;

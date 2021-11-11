@@ -11,6 +11,7 @@ interface Registration {
 	dateOfBirth: string;
 	cellID: string | null;
 	isMFS: boolean;
+	nextOfKin: string;
 }
 
 export default Registration;

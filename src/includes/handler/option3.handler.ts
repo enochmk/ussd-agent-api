@@ -89,13 +89,13 @@ const option3 = async (
 			flag = 2;
 
 			// get the subscriber's MSISDN from the session
-			const subscriberMSISDN = sessions[sessions.length - 2].userdata;
+			const subscriberMSISDN: string = sessions[sessions.length - 2].userdata;
 
 			// Save to database
 			const ussd = new USSD();
 			ussd.SESSION_ID = sessionID;
 			ussd.AGENT_ID = msisdn;
-			ussd.MSISDN = subscriberMSISDN;
+			ussd.MSISDN = subscriberMSISDN.substr(subscriberMSISDN.length - 9);
 			ussd.OPTION = NAMESPACE;
 			ussd.CELLID = cellID;
 			const record = await ussd.save();

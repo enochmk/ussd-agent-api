@@ -39,20 +39,20 @@ const option1 = async (
 
 	sessions = await client.get(sessionID);
 	sessions = JSON.parse(sessions);
+	const lastSession = sessions[sessions.length - 1];
 
 	// ! Validate the session inputs */
 	const isError = SessionValidation(sessions);
 	if (!isError.success) {
-		flag = 2;
+		flag = 1;
 
 		return {
-			message: isError.message,
+			message: `${isError.message}\n${lastSession.question}`,
 			flag,
 		};
 	}
 
 	/* ? Iterate menu item */
-	const lastSession = sessions[sessions.length - 1];
 	const currentIndex = KEYS.indexOf(lastSession.page);
 	if (KEYS[currentIndex + 1]) {
 		const nextIndex = currentIndex + 1;
@@ -111,7 +111,7 @@ const option1 = async (
 		// user has CONFIRMED *
 		if (lastSession.userdata === '1') {
 			message = Messages.onSubmit;
-			flag = 1;
+			flag = 2;
 
 			const answers = sessions.map(
 				(session: SessionInterface) => session.userdata
@@ -131,6 +131,7 @@ const option1 = async (
 				gender:
 					answers[6] === '1' ? 'Male'.toUpperCase() : 'Female'.toUpperCase(),
 				dateOfBirth: answers[7],
+				nextOfKin: answers[8].toUpperCase(),
 			};
 
 			// Save to database
@@ -138,12 +139,12 @@ const option1 = async (
 			ussd.OPTION = NAMESPACE;
 			ussd.SESSION_ID = data.requestID;
 			ussd.AGENT_ID = data.agentID;
-			ussd.MSISDN = data.msisdn;
+			ussd.MSISDN = data.msisdn.substr(data.msisdn.length - 9);
 			ussd.DOB = data.dateOfBirth;
 			ussd.FORENAMES = data.forenames;
 			ussd.SURNAME = data.surname;
 			ussd.CELLID = data.cellID || ' ';
-			// ussd.NEXTOFKIN = data.nextOfKin;
+			ussd.NEXTOFKIN = data.nextOfKin;
 			ussd.PIN_NUMBER = data.nationalID;
 			ussd.GENDER = data.gender;
 
