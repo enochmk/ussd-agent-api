@@ -7,7 +7,7 @@
   "scripts": {
     "cleanup": "rimraf build",
     "build": "npm run cleanup && tsc --pretty",
-    "dev": "ts-node-dev --respawn --transpile-only src/app.ts",
+    "dev": "npm run cleanup && ts-node-dev --respawn --transpile-only src/app.ts",
     "start": "npm run build && node build/src/app.js"
   },
   "dependencies": {
