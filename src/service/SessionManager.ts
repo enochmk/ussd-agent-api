@@ -40,7 +40,7 @@ const sessionManager = async (menuRequest: MenuRequest): Promise<string> => {
 
 	let sessions: any = [];
 	let page = '0';
-	let flag = 1;
+	let flag: any = 1;
 	let message = Messages.invalidInput;
 	let response = null;
 
@@ -192,7 +192,7 @@ const sessionManager = async (menuRequest: MenuRequest): Promise<string> => {
 		msisdn,
 		starcode,
 		menu: message,
-		flag: 2,
+		flag,
 		timestamp,
 	});
 };
