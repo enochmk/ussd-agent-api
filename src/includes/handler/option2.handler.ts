@@ -29,6 +29,7 @@ const NAMESPACE = 'MFS_REGISTRATION';
 const option2 = async (
 	sessionID: string,
 	msisdn: string,
+	cellID: string,
 	client: RedisClient
 ): Promise<OptionResponse> => {
 	let sessions: any = null;
@@ -116,7 +117,7 @@ const option2 = async (
 			let data: MFSRegistrationInterface = {
 				requestID: sessionID,
 				agentID: msisdn,
-				cellID: lastSession.cellID || null,
+				cellID: cellID || null,
 				channelID: 'ussd',
 				msisdn: answers[1],
 				nationalID: formatPinNumber(answers[2].toUpperCase()),

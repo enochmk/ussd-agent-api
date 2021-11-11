@@ -35,6 +35,8 @@ const sessionManager = async (menuRequest: MenuRequest): Promise<string> => {
 	const starcode = menuRequest.starcode;
 	const userdata = menuRequest.userdata;
 	const timestamp = menuRequest.timestamp;
+	const cellID = menuRequest.cellID;
+
 	let msisdn = menuRequest.msisdn.toString();
 	msisdn = msisdn.substr(msisdn.length - 9);
 
@@ -166,6 +168,7 @@ const sessionManager = async (menuRequest: MenuRequest): Promise<string> => {
 			lastSession.option,
 			sessionID,
 			msisdn,
+			cellID,
 			client
 		);
 

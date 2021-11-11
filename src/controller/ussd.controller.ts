@@ -10,6 +10,7 @@ const ussd = asyncHandler(
 		const sessionID = body.requestid[0];
 		const starcode = body.starcode[0];
 		const timestamp = body.timestamp[0];
+		const cellID = body.dataset[0]['param'][1]['value'][0];
 		let userdata = body.userdata[0].trim();
 
 		// forward request to session Manager
@@ -19,6 +20,7 @@ const ussd = asyncHandler(
 			starcode,
 			timestamp,
 			userdata,
+			cellID,
 		};
 
 		const response = await SessionManager(data);

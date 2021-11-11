@@ -29,6 +29,7 @@ const NAMESPACE = 'REGISTRATION';
 const option1 = async (
 	sessionID: string,
 	msisdn: string,
+	cellID: string,
 	client: RedisClient
 ): Promise<OptionResponse> => {
 	let sessions: any = null;
@@ -119,7 +120,7 @@ const option1 = async (
 			let data: RegistrationInterface = {
 				requestID: sessionID,
 				agentID: msisdn,
-				cellID: lastSession.cellID,
+				cellID: cellID,
 				channelID: 'ussd',
 				isMFS: true,
 				msisdn: answers[1],

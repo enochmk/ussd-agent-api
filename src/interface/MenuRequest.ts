@@ -8,6 +8,7 @@ interface MenuRequest extends IObjectKeys {
 	starcode: string;
 	userdata: string;
 	timestamp: string;
+	cellID?: any;
 }
 
 export default MenuRequest;

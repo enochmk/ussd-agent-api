@@ -13,19 +13,20 @@ const optionHandler = async (
 	option: string,
 	sessionID: string,
 	msisdn: string,
+	cellID: string,
 	client: RedisClient
 ): Promise<OptionResponse> => {
 	let response: OptionResponse;
 	// option handler
 	switch (option) {
 		case '1':
-			response = await option1Handler(sessionID, msisdn, client);
+			response = await option1Handler(sessionID, msisdn, cellID, client);
 			break;
 		case '2':
-			response = await option2Handler(sessionID, msisdn, client);
+			response = await option2Handler(sessionID, msisdn, cellID, client);
 			break;
 		case '3':
-			response = await option3Handler(sessionID, msisdn, client);
+			response = await option3Handler(sessionID, msisdn, cellID, client);
 			break;
 		default:
 			response = {

@@ -25,6 +25,7 @@ const NAMESPACE = 'CHECK_SUBSCRIBER_STATUS';
 const option3 = async (
 	sessionID: string,
 	msisdn: string,
+	cellID: string,
 	client: RedisClient
 ): Promise<OptionResponse> => {
 	let sessions: any = null;
@@ -96,21 +97,23 @@ const option3 = async (
 			ussd.AGENT_ID = msisdn;
 			ussd.MSISDN = subscriberMSISDN;
 			ussd.OPTION = NAMESPACE;
-			ussd.CELLID = lastSession.cellID;
-			await ussd.save();
+			ussd.CELLID = cellID;
+			const record = await ussd.save();
 
-			await getSubscriberStatus(
-				sessionID,
-				msisdn,
-				subscriberMSISDN,
-				lastSession.cellID
-			)
-				.then((data) => {
-					message = data;
-				})
-				.catch((_) => {
-					message = Messages.unknownError;
-				});
+			try {
+				const text = await getSubscriberStatus(
+					sessionID,
+					msisdn,
+					subscriberMSISDN,
+					cellID
+				);
+
+				message = text;
+				await USSD.update(record.ID, { RESPONSE: text });
+			} catch (error: any) {
+				message = Messages.unknownError;
+				await USSD.update(record.ID, { RESPONSE: error.message });
+			}
 		}
 
 		// user has cancelled
