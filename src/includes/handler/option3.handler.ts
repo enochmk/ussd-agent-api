@@ -9,12 +9,13 @@ import { createSession } from '../session';
 import SessionValidation from '../../validation/option3.validation';
 import getSubscriberStatus from '../../api/getSubscriberStatus.api';
 import formatPhoneNumber from '../../helper/formatPhoneNumber';
-import Ussd from '../../model/Ussd';
+import { USSD } from '../../enttiy/Ussd';
 
-const optionNumber = '3';
-const Menu: MenuInterface = MainMenuJson[optionNumber];
+const OPTION_NUMBER = '3';
+const Menu: MenuInterface = MainMenuJson[OPTION_NUMBER];
 const REDIS_EXPIRY: number = config.get('redisExpiry');
 const KEYS = Object.keys(Menu);
+const NAMESPACE = 'CHECK_SUBSCRIBER_STATUS';
 
 /**
  * @description: Check for the registration status of a subscriber
@@ -64,7 +65,7 @@ const option3 = async (
 			sessionID,
 			msisdn,
 			message,
-			optionNumber,
+			OPTION_NUMBER,
 			page,
 			null
 		);
@@ -89,13 +90,14 @@ const option3 = async (
 			// get the subscriber's MSISDN from the session
 			const subscriberMSISDN = sessions[sessions.length - 2].userdata;
 
-			await Ussd.create({
-				SESSION_ID: sessionID,
-				AGENT_ID: msisdn,
-				MSISDN: subscriberMSISDN,
-				OPTION: 'CHECK_SUBSCRIBER_STATUS',
-				CELL_ID: lastSession.cellID,
-			});
+			// Save to database
+			const ussd = new USSD();
+			ussd.SESSION_ID = sessionID;
+			ussd.AGENT_ID = msisdn;
+			ussd.MSISDN = subscriberMSISDN;
+			ussd.OPTION = NAMESPACE;
+			ussd.CELLID = lastSession.cellID;
+			await ussd.save();
 
 			await getSubscriberStatus(
 				sessionID,

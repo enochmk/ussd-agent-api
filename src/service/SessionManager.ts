@@ -1,8 +1,8 @@
 import redis, { RedisClient } from 'redis';
 import config from 'config';
 import util from 'util';
-import logger from '../utils/logger';
 
+import logger from '../utils/logger';
 import Messages from '../constant/Messages.json';
 import MenuJson from '../constant/Menu.json';
 import SessionInterface from '../interface/Session';

@@ -3,8 +3,7 @@ import path from 'path';
 
 dotenv.config();
 
-const folderName: string =
-	path.dirname(__dirname).split('/').pop() || 'ussd-agent-api';
+const folderName: any = path.dirname(__dirname).split(path.sep).pop();
 
 export default {
 	appName: 'AGENT-USSD-MENU',
@@ -27,7 +26,7 @@ export default {
 		host: process.env.DB_HOST,
 		username: process.env.DB_USERNAME,
 		password: process.env.DB_PASSWORD,
-		name: process.env.DB_NAME,
+		name: process.env.DB_DATABASE,
 		dialect: process.env.DB_CONNECTION,
 	},
 };
