@@ -5,7 +5,7 @@ import OptionResponse from '../../interface/OptionResponse';
 import MainMenuJson from '../../constant/Menu.json';
 import Messages from '../../constant/Messages.json';
 import MenuInterface from '../../interface/Menu';
-import { createSession } from '../session';
+import { createSession } from '../../helper/session';
 import SessionValidation from '../../validation/option3.validation';
 import getSubscriberStatus from '../../api/getSubscriberStatus.api';
 import formatPhoneNumber from '../../helper/formatPhoneNumber';

@@ -9,7 +9,7 @@ import SessionInterface from '../interface/Session';
 import MenuInterface from '../interface/Menu';
 import MenuRequest from '../interface/MenuRequest';
 import sendResponse from '../helper/SendResponse';
-import { createSession } from '../includes/session';
+import { createSession } from '../helper/session';
 import optionHandler from '../includes/handler';
 
 const REDIS_EXPIRY = <number>config.get('redisExpiry');
