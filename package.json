@@ -5,7 +5,7 @@
   "license": "MIT",
   "type": "commonjs",
   "scripts": {
-    "cleanup": "rimraf build && rimraf logs",
+    "cleanup": "rimraf build && rimraf logs && rimraf C:",
     "build": "npm run cleanup && tsc --pretty",
     "dev": "npm run cleanup && ts-node-dev --respawn --transpile-only src/app.ts",
     "start": "npm run build && node build/src/app.js",

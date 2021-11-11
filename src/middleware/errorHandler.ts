@@ -6,7 +6,7 @@ import MenuResponse from '../interface/MenuResponse';
 import sendResponse from '../helper/SendResponse';
 import Messages from '../constant/Messages.json';
 
-const NODE_ENV = config.get('NODE_ENV');
+const NODE_ENV = config.get('environment');
 
 const errorHandler = (
 	err: any,

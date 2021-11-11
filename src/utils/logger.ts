@@ -6,11 +6,11 @@ import moment from 'moment';
 import winston, { format } from 'winston';
 
 const { timestamp, printf } = format;
-const NODE_ENV = config.get('NODE_ENV');
+const NODE_ENV = config.get('environment');
 const LOG_WINDOWS = config.get('logs.windows');
 const LOG_LINUX = config.get('logs.linux');
 
-let directory: any = os.platform() === 'linux' ? LOG_WINDOWS : LOG_LINUX;
+let directory: any = os.platform() === 'linux' ? LOG_LINUX : LOG_WINDOWS;
 directory = NODE_ENV === 'development' ? 'logs' : directory;
 directory = path.join(directory, moment().format('YYYYMMDD'));
 if (!fs.existsSync(directory)) {

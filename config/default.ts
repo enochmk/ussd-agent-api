@@ -8,8 +8,7 @@ const folderName: any = path.dirname(__dirname).split(path.sep).pop();
 export default {
 	appName: 'AGENT-USSD-MENU',
 	port: process.env.PORT ?? 5006,
-	environment: process.env.NODE_ENV ?? 'development',
-	NODE_ENV: process.env.NODE_ENV ?? 'development',
+	environment: process.env.NODE_ENV || 'development',
 	redisPort: process.env.REDIS_PORT ?? 6379,
 	redisExpiry: 60,
 	server: 'http://10.81.1.188:5002',
@@ -20,7 +19,7 @@ export default {
 	},
 	logs: {
 		windows: path.join('C:', 'logs', folderName),
-		linux: path.join('home', 'verification', 'logs', folderName),
+		linux: path.join('/', 'var', 'www', 'logs', 'ussd-agent-api-v2'),
 	},
 	database: {
 		host: process.env.DB_HOST,
