@@ -31,15 +31,17 @@ createConnection()
 		// start Express Server
 		app.listen(port, () => {
 			const message = `App is running in mode: ${mode} at http://localhost:${port}`;
-			logger.info(message);
 			logger.verbose(chalk.bgGreen.bold.black.underline(message));
-			logger.info(message);
 		});
 	})
 	.catch((err) => {
-		logger.verbose(
+		logger.error(
 			chalk.red.italic('Unable to connect to database: ', err.message)
 		);
-		logger.error(err.message);
+
+		if (mode === 'production') {
+			console.error(chalk.bgGreen.bold.black.underline(err.message));
+		}
+
 		process.exit(1);
 	});

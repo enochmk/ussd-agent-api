@@ -87,12 +87,12 @@ const options = {
 
 // supported transport
 const transports: any = [
-	new winston.transports.Console(options.console),
 	new winston.transports.File(options.error),
 	new winston.transports.File(options.combined),
 ];
 
 if (NODE_ENV === 'development') {
+	transports.push(new winston.transports.Console(options.console));
 	transports.push(new winston.transports.File(options.debug));
 }
 
