@@ -25,16 +25,21 @@ app.use(errorHandler);
 createConnection()
 	.then((_connection: any) => {
 		const DB_message = `Connection to database: ${_connection.options.host}/${_connection.options.database} has been established`;
-		logger.info(chalk.bgGreen.bold.black.underline(DB_message));
+		logger.verbose(chalk.bgGreen.bold.black.underline(DB_message));
+		logger.info(DB_message);
 
 		// start Express Server
 		app.listen(port, () => {
 			const message = `App is running in mode: ${mode} at http://localhost:${port}`;
-			logger.info(chalk.bgGreen.bold.black.underline(message));
+			logger.info(message);
+			logger.verbose(chalk.bgGreen.bold.black.underline(message));
+			logger.info(message);
 		});
 	})
 	.catch((err) => {
-		logger.error(chalk.red.italic('Unable to connect to database'));
-		logger.error(chalk.red.italic(err.message));
+		logger.verbose(
+			chalk.red.italic('Unable to connect to database: ', err.message)
+		);
+		logger.error(err.message);
 		process.exit(1);
 	});

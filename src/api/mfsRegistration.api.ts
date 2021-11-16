@@ -7,6 +7,7 @@ import MFSRegistrationInterface from '../interface/MFSRegistration';
 const PATH = config.get('api.registrationMFS');
 const SERVER = config.get('server');
 const URL = `${SERVER}${PATH}`;
+const NAMESPACE = 'MFS_REGISTRATION';
 
 export default (
 	requestID: string,
@@ -18,7 +19,7 @@ export default (
 			const response = await axios.post(URL, data);
 			logger.http({
 				message: response.data,
-				label: 'MFS_REGISTRATION',
+				label: NAMESPACE,
 				url: URL,
 				requestID,
 				data,
@@ -29,7 +30,7 @@ export default (
 			logger.error({
 				message: error.message,
 				stack: error.stack,
-				label: 'MFS_REGISTRATION',
+				label: NAMESPACE,
 				url: URL,
 				requestID,
 				data,

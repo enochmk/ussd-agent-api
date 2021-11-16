@@ -7,6 +7,7 @@ import RegistrationInterface from '../interface/Registration';
 const PATH = config.get('api.registration');
 const SERVER = config.get('server');
 const URL = `${SERVER}${PATH}`;
+const NAMESPACE = 'REGISTRATION';
 
 export default (
 	requestID: string,
@@ -17,23 +18,23 @@ export default (
 		try {
 			const response = await axios.post(URL, data);
 
-			logger.http({
+			logger.info({
 				message: response.data,
-				label: 'REGISTRATION',
+				label: NAMESPACE,
 				url: URL,
 				requestID,
-				data,
+				request: data,
 			});
 
 			resolve(response.data);
 		} catch (error: any) {
 			logger.error({
 				message: error.message,
-				label: 'REGISTRATION',
+				label: NAMESPACE,
 				url: URL,
 				requestID,
 				stack: error.stack,
-				data,
+				request: data,
 			});
 
 			reject(error.message);

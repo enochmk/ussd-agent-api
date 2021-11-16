@@ -4,6 +4,7 @@ import logger from '../utils/logger';
 
 const PATH = config.get('api.subscriberStatus');
 const SERVER = config.get('server');
+const NAMESPACE = 'GET_SUBSCRIBER_STATUS';
 
 export default (
 	requestID: string,
@@ -17,9 +18,9 @@ export default (
 		try {
 			const response = await axios.get(URL);
 
-			logger.http({
+			logger.info({
 				message: response.data,
-				label: 'GET_SUBSCRIBER_STATUS',
+				label: NAMESPACE,
 				url: URL,
 				requestID,
 			});
@@ -28,7 +29,7 @@ export default (
 		} catch (error: any) {
 			logger.error({
 				message: error.message,
-				label: 'GET_SUBSCRIBER_STATUS',
+				label: NAMESPACE,
 				url: URL,
 				stack: error.stack,
 			});

@@ -61,11 +61,11 @@ const customLogFormat = {
 // Transport Options
 const options = {
 	console: {
-		level: NODE_ENV === 'development' ? 'verbose' : 'info',
-		colorize: NODE_ENV === 'development' ? false : false,
+		level: 'verbose',
+		colorize: true,
 		format: format.combine(
 			customLogFormat.simple,
-			format.colorize({ all: false })
+			format.colorize({ all: true })
 		),
 	},
 	error: {
@@ -87,12 +87,12 @@ const options = {
 
 // supported transport
 const transports: any = [
+	new winston.transports.Console(options.console),
 	new winston.transports.File(options.error),
 	new winston.transports.File(options.combined),
 ];
 
 if (NODE_ENV === 'development') {
-	transports.push(new winston.transports.Console(options.console));
 	transports.push(new winston.transports.File(options.debug));
 }
 

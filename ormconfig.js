@@ -5,7 +5,7 @@ module.exports = {
 	password: process.env.DB_PASSWORD,
 	database: process.env.DB_DATABASE,
 	synchronize: true,
-	entities: ['src/enttiy/**/*.ts', 'build/src/entity/**/*.js'],
+	entities: ['src/entity/**/*.ts', 'build/src/entity/**/*.js'],
 	options: {
 		debug: true,
 		trustedConnection: true,
