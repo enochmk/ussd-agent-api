@@ -74,7 +74,7 @@ const options = {
 		filename: path.join(directory, 'error.log'),
 	},
 	combined: {
-		level: 'info',
+		level: 'verbose',
 		format: customLogFormat.json,
 		filename: path.join(directory, 'combined.log'),
 	},
