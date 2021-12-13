@@ -5,7 +5,7 @@
   "license": "MIT",
   "type": "commonjs",
   "scripts": {
-    "cleanup": "rm -fr build && rm -fr logs && rm -fr C:",
+    "cleanup": "rm -fr build && rm -fr logs && rm -fr C:/logs/",
     "build": "npm run cleanup && tsc --pretty",
     "dev": "npm run cleanup && ts-node-dev --respawn --transpile-only src/app.ts",
     "start": "npm run build && node build/src/app.js",
