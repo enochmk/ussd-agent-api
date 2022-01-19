@@ -9,6 +9,7 @@ interface Registration {
 	gender: string;
 	channelID: string;
 	dateOfBirth: string;
+	alternativeNumber: string;
 	cellID: string | null;
 	isMFS: boolean;
 	nextOfKin: string;

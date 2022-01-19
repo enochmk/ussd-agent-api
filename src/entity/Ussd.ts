@@ -51,6 +51,11 @@ export class USSD extends BaseEntity {
 	@Column({
 		nullable: true,
 	})
+	ALTERNATIVE_NUMBER!: string;
+
+	@Column({
+		nullable: true,
+	})
 	NEXTOFKIN!: string;
 
 	@Column({

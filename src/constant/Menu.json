@@ -8,8 +8,9 @@
     "5": "Enter the customer's surname.\n\n",
     "6": "Select customer's gender.\n1. Male\n2. Female\n",
     "7": "Enter the customer's date of birth (DDMMYYYY).\n\n",
-    "8": "Enter full name of Next Of Kin.\n\n",
-    "confirm": "MSISDN: (MSISDN)\nLast 6 Digit of ICCID: (ICCID)\nID: (ID)\nFirstName(s): (FORENAMES)\nSurname: (SURNAME)\nSex: (SEX)\nDOB: (DOB)\nNext Of Kin: (NOK)\n\n1. Confirm details\n2. Cancel"
+    "8": "Enter customer's Alternative number.\n\n",
+    "9": "Enter full name of Next Of Kin.\n\n",
+    "confirm": "MSISDN: (MSISDN)\nLast 6 Digit of ICCID: (ICCID)\nID: (ID)\nFirstName(s): (FORENAMES)\nSurname: (SURNAME)\nSex: (SEX)\nDOB: (DOB)\nAlt. No: (ALT_NUMBER)\nNext Of Kin: (NOK)\n\n1. Confirm details\n2. Cancel"
   },
   "2": {
     "1": "Enter customer's MSISDN\n\n.",

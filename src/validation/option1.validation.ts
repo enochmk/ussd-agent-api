@@ -63,6 +63,17 @@ export default (sessions: Array<object>) => {
 		}
 	}
 
+	/*5. Select customer's gender\n1. Male\n2. Female */
+	if (lastSession.page === '8') {
+		if (
+			lastSession.userdata.length !== 10 &&
+			lastSession.userdata.length !== 9
+		) {
+			success = false;
+			message = Messages.invalidMSISDNLength;
+		}
+	}
+
 	return {
 		success,
 		message,
