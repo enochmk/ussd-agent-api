@@ -61,16 +61,18 @@ const option2 = async (
 
 		if (page === 'confirm') {
 			let NOK = sessions[sessions.length - 1].userdata.toUpperCase();
-			let DOB = sessions[sessions.length - 2].userdata.toUpperCase();
-			let SEX = sessions[sessions.length - 3].userdata.toUpperCase();
-			let SURNAME = sessions[sessions.length - 4].userdata.toUpperCase();
-			let FORENAMES = sessions[sessions.length - 5].userdata.toUpperCase();
-			let PIN_NUMBER = sessions[sessions.length - 6].userdata.toUpperCase();
-			let MSISDN = sessions[sessions.length - 7].userdata.toUpperCase();
+			let ALT_NUMBER = sessions[sessions.length - 2].userdata.toUpperCase();
+			let DOB = sessions[sessions.length - 3].userdata.toUpperCase();
+			let SEX = sessions[sessions.length - 4].userdata.toUpperCase();
+			let SURNAME = sessions[sessions.length - 5].userdata.toUpperCase();
+			let FORENAMES = sessions[sessions.length - 6].userdata.toUpperCase();
+			let PIN_NUMBER = sessions[sessions.length - 7].userdata.toUpperCase();
+			let MSISDN = sessions[sessions.length - 8].userdata.toUpperCase();
 
 			SEX = SEX === '1' ? 'Male' : 'Female';
 			DOB = moment(DOB, 'DDMMYYYY').format('DD-MM-YYYY');
 			MSISDN = formatPhoneNumber(MSISDN);
+			ALT_NUMBER = formatPhoneNumber(ALT_NUMBER);
 			PIN_NUMBER = formatPinNumber(PIN_NUMBER);
 
 			/* Modify the confirmation question */
@@ -81,6 +83,7 @@ const option2 = async (
 			message = message.replace('(SEX)', SEX);
 			message = message.replace('(DOB)', DOB);
 			message = message.replace('(NOK)', NOK);
+			message = message.replace('(ALT_NUMBER)', ALT_NUMBER);
 		}
 
 		// create the session for this question
@@ -126,7 +129,8 @@ const option2 = async (
 				gender:
 					answers[5] === '1' ? 'Male'.toUpperCase() : 'Female'.toUpperCase(),
 				dateOfBirth: answers[6].toUpperCase(),
-				nextOfKin: answers[7].toUpperCase(),
+				alternative_number: answers[7].toUpperCase(),
+				nextOfKin: answers[8].toUpperCase(),
 			};
 
 			// Save to database
@@ -142,6 +146,7 @@ const option2 = async (
 			ussd.NEXTOFKIN = data.nextOfKin;
 			ussd.PIN_NUMBER = data.nationalID;
 			ussd.GENDER = data.gender;
+			ussd.ALTERNATIVE_NUMBER = data.alternative_number;
 
 			const record = await ussd.save();
 
