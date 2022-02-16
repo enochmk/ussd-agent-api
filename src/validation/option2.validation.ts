@@ -52,6 +52,19 @@ export default (sessions: Array<object>) => {
 		}
 	}
 
+	/*7. Enter the Alternative number */
+	if (lastSession.page === '7') {
+		if (lastSession.userdata.trim() !== '1') {
+			if (
+				lastSession.userdata.length !== 10 &&
+				lastSession.userdata.length !== 9
+			) {
+				success = false;
+				message = Messages.invalidMSISDNLength;
+			}
+		}
+	}
+
 	return {
 		success,
 		message,

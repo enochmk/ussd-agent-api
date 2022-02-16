@@ -63,14 +63,16 @@ export default (sessions: Array<object>) => {
 		}
 	}
 
-	/*5. Select customer's gender\n1. Male\n2. Female */
+	/*7. Enter customer's Alternative number.\n\n1. Skip */
 	if (lastSession.page === '8') {
-		if (
-			lastSession.userdata.length !== 10 &&
-			lastSession.userdata.length !== 9
-		) {
-			success = false;
-			message = Messages.invalidMSISDNLength;
+		if (lastSession.userdata.trim() !== '1') {
+			if (
+				lastSession.userdata.length !== 10 &&
+				lastSession.userdata.length !== 9
+			) {
+				success = false;
+				message = Messages.invalidMSISDNLength;
+			}
 		}
 	}
 

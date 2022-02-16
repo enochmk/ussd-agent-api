@@ -86,7 +86,11 @@ const option1 = async (
 			message = message.replace('(DOB)', DOB);
 			message = message.replace('(NOK)', NOK);
 			message = message.replace('(ICCID)', ICCID);
-			message = message.replace('(ALT_NUMBER)', ALT_NUMBER);
+			if (ALT_NUMBER === '1') {
+				message = message.replace('Alt. No: (ALT_NUMBER)\n', '');
+			} else {
+				message = message.replace('(ALT_NUMBER)', ALT_NUMBER);
+			}
 		}
 
 		// create the session for this question
@@ -114,7 +118,7 @@ const option1 = async (
 		// user has CONFIRMED *
 		if (lastSession.userdata === '1') {
 			message = Messages.onSubmit;
-			flag = 2;
+			flag = 1;
 
 			const answers = sessions.map(
 				(session: SessionInterface) => session.userdata
@@ -134,7 +138,7 @@ const option1 = async (
 				gender:
 					answers[6] === '1' ? 'Male'.toUpperCase() : 'Female'.toUpperCase(),
 				dateOfBirth: answers[7],
-				alternativeNumber: answers[8],
+				alternativeNumber: answers[8] === '1' ? '' : answers[8],
 				nextOfKin: answers[9].toUpperCase(),
 			};
 

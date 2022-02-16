@@ -83,7 +83,11 @@ const option2 = async (
 			message = message.replace('(SEX)', SEX);
 			message = message.replace('(DOB)', DOB);
 			message = message.replace('(NOK)', NOK);
-			message = message.replace('(ALT_NUMBER)', ALT_NUMBER);
+			if (ALT_NUMBER === '1') {
+				message = message.replace('Alt. No: (ALT_NUMBER)\n', '');
+			} else {
+				message = message.replace('(ALT_NUMBER)', ALT_NUMBER);
+			}
 		}
 
 		// create the session for this question
@@ -129,7 +133,7 @@ const option2 = async (
 				gender:
 					answers[5] === '1' ? 'Male'.toUpperCase() : 'Female'.toUpperCase(),
 				dateOfBirth: answers[6].toUpperCase(),
-				alternative_number: answers[7].toUpperCase(),
+				alternative_number: answers[7] === '1' ? '' : answers[7],
 				nextOfKin: answers[8].toUpperCase(),
 			};
 
