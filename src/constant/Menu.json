@@ -13,7 +13,7 @@
 		"confirm": "MSISDN: (MSISDN)\nLast 6 Digit of ICCID: (ICCID)\nID: (ID)\nFirstName(s): (FORENAMES)\nSurname: (SURNAME)\nSex: (SEX)\nDOB: (DOB)\nAlt. No: (ALT_NUMBER)\nNext Of Kin: (NOK)\n\n1. Confirm details\n2. Cancel"
 	},
 	"2": {
-		"1": "Enter customer's MSISDN\n\n.",
+		"1": "Enter customer's MSISDN.\n\n",
 		"2": "Enter customer's Pin Number(Eg: GHA-712456789-9).\n\n",
 		"3": "Enter the customer's first names.\n\n",
 		"4": "Enter the customer's surname.\n\n",
