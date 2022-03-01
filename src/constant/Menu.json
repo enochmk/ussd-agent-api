@@ -10,7 +10,7 @@
 		"7": "Enter the customer's date of birth (DDMMYYYY).\n\n",
 		"8": "Enter 1 to skip this step or enter customer's alternative number",
 		"9": "Enter full name of Next Of Kin.\n\n",
-		"confirm": "MSISDN: (MSISDN)\nLast 6 Digit of ICCID: (ICCID)\nID: (ID)\nFirstName(s): (FORENAMES)\nSurname: (SURNAME)\nSex: (SEX) \n\n\nDOB: (DOB)\nAlt. No: (ALT_NUMBER)\nNext Of Kin: (NOK)\n\n1. Confirm details\n2. Cancel"
+		"confirm": "MSISDN: (MSISDN)\nLast 6 Digit of ICCID: (ICCID)\nID: (ID)\nFirstName(s): (FORENAMES)\nSurname: (SURNAME)\nSex: (SEX)\nDOB: (DOB)\nAlt. No: (ALT_NUMBER)\nNext Of Kin: (NOK)\n\n1. Confirm details\n2. Cancel"
 	},
 	"2": {
 		"1": "Enter customer's MSISDN\n\n.",
@@ -21,7 +21,7 @@
 		"6": "Enter the customer's date of birth (DDMMYYYY).\n\n",
 		"7": "Enter 1 to skip this step or enter customer's alternative number",
 		"8": "Enter full name of Next Of Kin.\n\n",
-		"confirm": "MSISDN: (MSISDN)\nID: (ID)\nFirstNames: (FORENAMES)\nSurname: (SURNAME)\nSex: (SEX) \n\n\nDOB: (DOB)\nAlt.No: (ALT_NUMBER)\nNext Of Kin: (NOK)\n\n1. Confirm details\n2. Cancel\n"
+		"confirm": "MSISDN: (MSISDN)\nID: (ID)\nFirstNames: (FORENAMES)\nSurname: (SURNAME)\nSex: (SEX)\nDOB: (DOB)\nAlt.No: (ALT_NUMBER)\nNext Of Kin: (NOK)\n\n1. Confirm details\n2. Cancel\n"
 	},
 	"3": {
 		"1": "Enter customer's MSISDN. (eg: 05XXXXXXX): \n\n",
