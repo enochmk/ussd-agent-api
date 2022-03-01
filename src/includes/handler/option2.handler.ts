@@ -133,7 +133,7 @@ const option2 = async (
 				gender:
 					answers[5] === '1' ? 'Male'.toUpperCase() : 'Female'.toUpperCase(),
 				dateOfBirth: answers[6].toUpperCase(),
-				alternative_number: answers[7] === '1' ? '' : answers[7],
+				alternativeNumber: answers[7] === '1' ? '' : answers[7],
 				nextOfKin: answers[8].toUpperCase(),
 			};
 
@@ -150,7 +150,7 @@ const option2 = async (
 			ussd.NEXTOFKIN = data.nextOfKin;
 			ussd.PIN_NUMBER = data.nationalID;
 			ussd.GENDER = data.gender;
-			ussd.ALTERNATIVE_NUMBER = data.alternative_number;
+			ussd.ALTERNATIVE_NUMBER = data.alternativeNumber;
 
 			const record = await ussd.save();
 

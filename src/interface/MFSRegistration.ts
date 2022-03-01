@@ -3,7 +3,7 @@ interface MFSRegistration {
 	cellID: string | null;
 	agentID: string;
 	msisdn: string;
-	alternative_number: string;
+	alternativeNumber: string;
 	nationalID: string;
 	forenames: string;
 	surname: string;
