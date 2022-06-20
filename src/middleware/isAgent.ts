@@ -1,5 +1,5 @@
-import { getManager } from 'typeorm';
 import { Request, Response, NextFunction } from 'express';
+import { getAgentByMsisdn } from '../models/Agent.model';
 
 import logger from '../utils/logger';
 import Messages from '../constant/Messages.json';
@@ -18,7 +18,7 @@ const isAgent = asyncHandler(
 		const timestamp = body.timestamp[0];
 
 		msisdn = msisdn.substr(msisdn.length - 9);
-		const found = await get(msisdn);
+		const found = await getAgentByMsisdn(msisdn);
 
 		if (!found.length) {
 			logger.info({
@@ -44,14 +44,5 @@ const isAgent = asyncHandler(
 		next();
 	}
 );
-
-// ? Query if the MSISDN is in table
-const get = async (MSISDN: string) => {
-	const manager = getManager(); // you can also get it via getConnection().manager
-	const stmt = `SELECT ACTIVATORMSISDN FROM [dms2].[dbo].[DMS_JOB_SIMREG_TBL_ENGRAFI_AUTHENTICATION] WITH (NOLOCK) WHERE ACTIVATORMSISDN = '${MSISDN}'`;
-	const agent = await manager.query(stmt);
-
-	return agent;
-};
 
 export default isAgent;

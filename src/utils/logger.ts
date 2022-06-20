@@ -91,7 +91,7 @@ const transports: any = [
 	new winston.transports.File(options.combined),
 ];
 
-if (NODE_ENV === 'development') {
+if (NODE_ENV) {
 	transports.push(new winston.transports.Console(options.console));
 	transports.push(new winston.transports.File(options.debug));
 }
