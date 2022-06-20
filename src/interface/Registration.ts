@@ -3,7 +3,7 @@ interface Registration {
 	agentID: string;
 	msisdn: string;
 	iccid: string;
-	nationalID: string;
+	docNumber: string;
 	forenames: string;
 	surname: string;
 	gender: string;

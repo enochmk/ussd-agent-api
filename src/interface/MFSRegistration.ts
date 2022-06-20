@@ -4,7 +4,7 @@ interface MFSRegistration {
 	agentID: string;
 	msisdn: string;
 	alternativeNumber: string;
-	nationalID: string;
+	docNumber: string;
 	forenames: string;
 	surname: string;
 	gender: string;

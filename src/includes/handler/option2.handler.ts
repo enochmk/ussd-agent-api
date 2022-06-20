@@ -126,7 +126,7 @@ const option2 = async (
 				cellID: cellID || null,
 				channelID: 'ussd',
 				msisdn: answers[1],
-				nationalID: formatPinNumber(answers[2].toUpperCase()) || '',
+				docNumber: formatPinNumber(answers[2].toUpperCase()) || '',
 				forenames: answers[3].toUpperCase(),
 				surname: answers[4].toUpperCase(),
 				gender:

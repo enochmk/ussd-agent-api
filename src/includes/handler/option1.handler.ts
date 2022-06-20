@@ -131,7 +131,7 @@ const option1 = async (
 				isMFS: true,
 				msisdn: answers[1],
 				iccid: answers[2],
-				nationalID: answers[3].toUpperCase(),
+				docNumber: answers[3].toUpperCase(),
 				forenames: answers[4].toUpperCase(),
 				surname: answers[5].toUpperCase(),
 				gender:
