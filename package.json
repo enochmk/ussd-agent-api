@@ -7,7 +7,7 @@
 	"scripts": {
 		"cleanup": "rm -fr build && rm -fr logs && rm -fr C:/logs/",
 		"build": "npm run cleanup && tsc --pretty",
-		"dev": "npm run cleanup && ts-node-dev --respawn --transpile-only src/app.ts",
+		"dev": "npm run cleanup && ts-node-dev --respawn --transpile-only src/server.ts",
 		"start": "npm run build && node build/src/app.js",
 		"pm2": "pm2 flush USSD-AGENT-MENU && pm2 restart USSD-AGENT-MENU && pm2 logs USSD-AGENT-MENU",
 		"buildAndPm2": "npm run build"

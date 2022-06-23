@@ -14,6 +14,14 @@ const errorHandler = (
 	res: Response,
 	next: NextFunction
 ) => {
+	logger.info({
+		message: 'ussdynmeurequest',
+		label: `request`,
+		requestID: Date.now().toString(),
+		agentID: '',
+		request: req.body.ussddynmenurequest,
+	});
+
 	const body = req.body.ussddynmenurequest;
 	const msisdn = body.msisdn[0];
 	const sessionID = body.requestid[0];
