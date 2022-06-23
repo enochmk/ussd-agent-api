@@ -14,17 +14,17 @@ const ussd = asyncHandler(
 			request: req.body.ussddynmenurequest,
 		});
 
-		const body = req.body.ussddynmenurequest;
-		const msisdn = body.msisdn[0];
-		const sessionID = body.requestid[0];
-		const starcode = body.starcode[0];
-		const timestamp = body.timestamp[0];
-		const cellID = body.dataset[0]['param'][1]['value'][0];
-		let userdata = body.userdata[0].trim();
+		const body: any = req.body.ussddynmenurequest;
+		const msisdn: string = body.msisdn[0];
+		const sessionID: string = body.requestid[0];
+		const starcode: string = body.starcode[0];
+		const timestamp: string = body.timestamp[0];
+		const cellID: string = body.dataset[0]['param'][1]['value'][0];
+		let userdata: string = body.userdata[0].trim();
 
 		// forward request to session Manager
 		const data: MenuRequest = {
-			msisdn,
+			msisdn: msisdn.substr(msisdn.length - 9),
 			sessionID,
 			starcode,
 			timestamp,

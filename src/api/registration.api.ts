@@ -15,6 +15,12 @@ export default (
 	data: RegistrationInterface
 ): Promise<string> => {
 	return new Promise(async (resolve, reject) => {
+		data.alternativeNumber = data.alternativeNumber.substr(
+			data.alternativeNumber.length - 9
+		);
+
+		data.msisdn = data.msisdn.substr(data.msisdn.length - 9);
+
 		try {
 			const response = await axios.post(URL, data);
 

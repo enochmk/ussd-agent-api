@@ -3,7 +3,7 @@ interface IObjectKeys {
 }
 
 interface MenuRequest extends IObjectKeys {
-	msisdn: number;
+	msisdn: string;
 	sessionID: string;
 	starcode: string;
 	userdata: string;

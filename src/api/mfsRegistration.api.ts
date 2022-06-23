@@ -14,6 +14,8 @@ export default (
 	agentID: string,
 	data: MFSRegistrationInterface
 ): Promise<string> => {
+	data.msisdn = data.msisdn.substr(data.msisdn.length - 9);
+
 	return new Promise(async (resolve, reject) => {
 		try {
 			const response = await axios.post(URL, data);
