@@ -146,7 +146,9 @@ const option1 = async (
 				const text = await RegistrationAPI(sessionID, msisdn, data);
 				message = text;
 			} catch (error: any) {
-				message = Messages.unknownError;
+				console.log(error);
+
+				message = error;
 			}
 		}
 

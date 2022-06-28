@@ -132,7 +132,7 @@ const option2 = async (
 				gender:
 					answers[5] === '1' ? 'Male'.toUpperCase() : 'Female'.toUpperCase(),
 				dateOfBirth: answers[6].toUpperCase(),
-				alternativeNumber: answers[7] === '1' ? '' : answers[7],
+				alternativeNumber: answers[7] === '1' ? ' ' : answers[7],
 				nextOfKin: answers[8].toUpperCase(),
 			};
 

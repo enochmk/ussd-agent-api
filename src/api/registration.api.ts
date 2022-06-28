@@ -19,6 +19,7 @@ export default (
 			data.alternativeNumber.length - 9
 		);
 
+		data.alternativeNumber = data.alternativeNumber || ' ';
 		data.msisdn = data.msisdn.substr(data.msisdn.length - 9);
 
 		try {
@@ -32,10 +33,12 @@ export default (
 				request: data,
 			});
 
-			resolve(response.data);
+			resolve(response.data.message);
 		} catch (error: any) {
+			const message = error.response?.data?.message || error.message;
+
 			logger.error({
-				message: error.message,
+				message: message,
 				label: NAMESPACE,
 				url: URL,
 				requestID,
@@ -43,7 +46,7 @@ export default (
 				request: data,
 			});
 
-			reject(error.message);
+			reject(message);
 		}
 	});
 };
