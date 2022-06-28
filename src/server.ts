@@ -24,7 +24,7 @@ app.use(errorHandler);
 app.listen(port, async () => {
 	await DmsDatabase.initialize();
 
-	logger.info('Connected to BI Database');
+	logger.info('Connected to DMS Database');
 	const message = `App is running in mode: ${mode} at http://localhost:${port}`;
 	logger.verbose(message);
 });
