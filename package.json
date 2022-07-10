@@ -1,6 +1,6 @@
 {
-	"name": "ussd-agent-ts-api",
-	"version": "1.0.0",
+	"name": "ussd-agent-api",
+	"version": "2.0.0",
 	"main": "app.js",
 	"license": "MIT",
 	"type": "commonjs",
