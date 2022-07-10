@@ -13,7 +13,6 @@ import formatPinNumber from '../../helper/formatPinNumber';
 import RegistrationAPI from '../../api/registration.api';
 import RegistrationInterface from '../../interface/Registration';
 import SessionInterface from '../../interface/Session';
-import { USSD } from '../../entity/Ussd';
 
 const OPTION_NUMBER = '1';
 const Menu: MenuInterface = MainMenuJson[OPTION_NUMBER];
@@ -132,7 +131,7 @@ const option1 = async (
 				isMFS: true,
 				msisdn: answers[1],
 				iccid: answers[2],
-				nationalID: answers[3].toUpperCase(),
+				docNumber: answers[3].toUpperCase(),
 				forenames: answers[4].toUpperCase(),
 				surname: answers[5].toUpperCase(),
 				gender:
@@ -142,31 +141,14 @@ const option1 = async (
 				nextOfKin: answers[9].toUpperCase(),
 			};
 
-			// Save to database
-			const ussd = new USSD();
-			ussd.OPTION = NAMESPACE;
-			ussd.SESSION_ID = data.requestID;
-			ussd.AGENT_ID = data.agentID;
-			ussd.MSISDN = data.msisdn.substr(data.msisdn.length - 9);
-			ussd.DOB = data.dateOfBirth;
-			ussd.FORENAMES = data.forenames;
-			ussd.SURNAME = data.surname;
-			ussd.CELLID = data.cellID || ' ';
-			ussd.NEXTOFKIN = data.nextOfKin;
-			ussd.PIN_NUMBER = data.nationalID;
-			ussd.GENDER = data.gender;
-			ussd.ALTERNATIVE_NUMBER = data.alternativeNumber;
-
-			const record = await ussd.save();
-
 			// Call external API and handle error exception
 			try {
 				const text = await RegistrationAPI(sessionID, msisdn, data);
 				message = text;
-				await USSD.update(record.ID, { RESPONSE: text });
 			} catch (error: any) {
-				message = Messages.unknownError;
-				await USSD.update(record.ID, { RESPONSE: error.message });
+				console.log(error);
+
+				message = error;
 			}
 		}
 

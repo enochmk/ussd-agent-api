@@ -14,6 +14,13 @@ export default (
 	agentID: string,
 	data: MFSRegistrationInterface
 ): Promise<string> => {
+	data.msisdn = data.msisdn.substr(data.msisdn.length - 9);
+	data.alternativeNumber = data.alternativeNumber.substr(
+		data.alternativeNumber.length - 9
+	);
+
+	data.alternativeNumber = data.alternativeNumber || ' ';
+
 	return new Promise(async (resolve, reject) => {
 		try {
 			const response = await axios.post(URL, data);
@@ -25,10 +32,12 @@ export default (
 				data,
 			});
 
-			resolve(response.data);
+			resolve(response.data.message);
 		} catch (error: any) {
+			const message = error.response?.data?.message || error.message;
+
 			logger.error({
-				message: error.message,
+				message: message,
 				stack: error.stack,
 				label: NAMESPACE,
 				url: URL,
@@ -36,7 +45,7 @@ export default (
 				data,
 			});
 
-			reject(error.message);
+			reject(message);
 		}
 	});
 };

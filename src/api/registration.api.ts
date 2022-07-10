@@ -15,6 +15,13 @@ export default (
 	data: RegistrationInterface
 ): Promise<string> => {
 	return new Promise(async (resolve, reject) => {
+		data.alternativeNumber = data.alternativeNumber.substr(
+			data.alternativeNumber.length - 9
+		);
+
+		data.alternativeNumber = data.alternativeNumber || ' ';
+		data.msisdn = data.msisdn.substr(data.msisdn.length - 9);
+
 		try {
 			const response = await axios.post(URL, data);
 
@@ -26,10 +33,12 @@ export default (
 				request: data,
 			});
 
-			resolve(response.data);
+			resolve(response.data.message);
 		} catch (error: any) {
+			const message = error.response?.data?.message || error.message;
+
 			logger.error({
-				message: error.message,
+				message: message,
 				label: NAMESPACE,
 				url: URL,
 				requestID,
@@ -37,7 +46,7 @@ export default (
 				request: data,
 			});
 
-			reject(error.message);
+			reject(message);
 		}
 	});
 };

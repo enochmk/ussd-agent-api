@@ -13,9 +13,9 @@ export default {
 	redisExpiry: 60000,
 	server: 'http://localhost:5002',
 	api: {
-		subscriberStatus: '/v1/subscriber/check-kyc-status',
-		registration: '/v1/nonbiometric/registration',
-		registrationMFS: '/v1/nonbiometric/registrationMfs',
+		subscriberStatus: '/v2/subscriber/check-kyc-status',
+		registration: '/v2/nationalId/register',
+		registrationMFS: '/v2/nationalId/register/mfs',
 	},
 	logs: {
 		windows: path.join('C:', 'logs', folderName),

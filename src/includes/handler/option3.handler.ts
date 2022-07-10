@@ -9,7 +9,6 @@ import { createSession } from '../../helper/session';
 import SessionValidation from '../../validation/option3.validation';
 import getSubscriberStatus from '../../api/getSubscriberStatus.api';
 import formatPhoneNumber from '../../helper/formatPhoneNumber';
-import { USSD } from '../../entity/Ussd';
 
 const OPTION_NUMBER = '3';
 const Menu: MenuInterface = MainMenuJson[OPTION_NUMBER];
@@ -91,15 +90,6 @@ const option3 = async (
 			// get the subscriber's MSISDN from the session
 			const subscriberMSISDN: string = sessions[sessions.length - 2].userdata;
 
-			// Save to database
-			const ussd = new USSD();
-			ussd.SESSION_ID = sessionID;
-			ussd.AGENT_ID = msisdn;
-			ussd.MSISDN = subscriberMSISDN.substr(subscriberMSISDN.length - 9);
-			ussd.OPTION = NAMESPACE;
-			ussd.CELLID = cellID;
-			const record = await ussd.save();
-
 			try {
 				const text = await getSubscriberStatus(
 					sessionID,
@@ -109,10 +99,8 @@ const option3 = async (
 				);
 
 				message = text;
-				await USSD.update(record.ID, { RESPONSE: text });
 			} catch (error: any) {
 				message = Messages.unknownError;
-				await USSD.update(record.ID, { RESPONSE: error.message });
 			}
 		}
 

@@ -12,6 +12,8 @@ export default (
 	msisdn: string,
 	cellID: string | null = null
 ): Promise<string> => {
+	msisdn = msisdn.substr(msisdn.length - 9);
+	// agentID = agentID.substr(agentID.length - 9);
 	const URL = `${SERVER}${PATH}?agentID=${agentID}&msisdn=${msisdn}&channelID=ussd&cellID=${cellID}`;
 
 	return new Promise(async (resolve, reject) => {
