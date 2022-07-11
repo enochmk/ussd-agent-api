@@ -19,7 +19,7 @@ export default {
 	},
 	logs: {
 		windows: path.join('C:', 'logs', folderName),
-		linux: path.join('/', 'var', 'www', 'logs', 'ussd-agent-api-v2'),
+		linux: path.join('/', 'var', 'www', 'logs', 'ussd-agent-api'),
 	},
 	database: {
 		host: process.env.DB_HOST,
